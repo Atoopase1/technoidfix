@@ -1260,7 +1260,40 @@ h4 {
   .hero h1 {
     font-size: 1.75rem;
   }
+
+  /* Mobile overflow safety */
+  .project-card,
+  .comments-section,
+  .comment-input-row {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .projects-feed {
+    grid-template-columns: 1fr !important;
+  }
 }
+
+/* ── btn-dark ── */
+.btn-dark {
+  background: var(--dark);
+  color: #fff;
+}
+
+.btn-dark:hover {
+  background: #1e1e2e;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+}
+
+[data-theme="dark"] .btn-dark {
+  background: #2a2a3a;
+  border: 1px solid #3a3a5a;
+}
+
+[data-theme="dark"] .btn-dark:hover {
+  background: #3a3a5a;
+}
+
 
 /* ── Animations ── */
 @keyframes fadeUp {
@@ -1597,10 +1630,16 @@ h4 {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform .2s, box-shadow .2s;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.project-card .project-media {
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .project-card:hover {
@@ -1767,33 +1806,57 @@ h4 {
   display: flex;
   gap: 8px;
   margin-top: 10px;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-items: flex-end;
+  flex-wrap: wrap;
 }
 
-.comment-input-row input {
-  flex: 1;
-  padding: 7px 12px;
+.comment-input-row input,
+.comment-input-row textarea {
+  padding: 10px 14px;
   border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-size: .85rem;
+  border-radius: 10px;
+  font-size: .88rem;
   font-family: inherit;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
-[data-theme="dark"] .comment-input-row input {
+.comment-name-input {
+  flex: 0 1 140px;
+  min-width: 100px;
+}
+
+.comment-text-input {
+  flex: 1 1 160px;
+  min-width: 120px;
+  resize: vertical;
+  min-height: 38px;
+  max-height: 120px;
+  line-height: 1.4;
+  overflow-y: auto;
+}
+
+[data-theme="dark"] .comment-input-row input,
+[data-theme="dark"] .comment-input-row textarea {
   background: #0f0f17;
   border-color: #2a2a3a;
   color: #e5e7eb;
 }
 
 .comment-input-row button {
-  padding: 7px 14px;
+  padding: 10px 16px;
   background: var(--brand);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: .82rem;
+  border-radius: 10px;
+  font-size: .85rem;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Upload panel */
@@ -2153,6 +2216,7 @@ h4 {
 [data-theme="dark"] .niche-desc {
   color: #9ca3af;
 }
+
 /* ============================================================
    ADDITIONAL THEME FIXES — DARK & LIGHT COMPLETENESS
    ============================================================ */
@@ -2307,7 +2371,7 @@ h4 {
   max-height: 90vh;
   background: #000;
   border-radius: var(--radius);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
 
@@ -2335,4 +2399,3 @@ h4 {
 .cv-modal-close:hover {
   color: var(--brand);
 }
-

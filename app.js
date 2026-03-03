@@ -134,3 +134,14 @@ window.toggleTheme = function() {
     }
   });
 })();
+
+// ── Global toast notification ────────────────────────────
+window.toast = function(msg, type) {
+  const el = document.querySelector('.toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.background = type === 'error' ? '#991b1b' : type === 'success' ? '#166534' : 'var(--dark)';
+  el.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+};
