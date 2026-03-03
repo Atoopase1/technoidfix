@@ -1700,6 +1700,31 @@ h4 {
   margin-bottom: 14px;
 }
 
+.project-caption.clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.caption-toggle {
+  background: none;
+  border: none;
+  color: var(--brand);
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 14px;
+  font-family: inherit;
+  display: block;
+  transition: opacity .15s;
+}
+
+.caption-toggle:hover {
+  opacity: .7;
+}
+
 [data-theme="dark"] .project-caption {
   color: #d1d5db;
 }

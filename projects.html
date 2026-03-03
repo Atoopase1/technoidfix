@@ -526,7 +526,8 @@
       <article class="project-card" data-id="${p.id}">
         <div class="project-media">${mediaHTML}</div>
         <div class="project-body">
-          <p class="project-caption">${escHtml(p.caption)}</p>
+          <p class="project-caption clamped" id="caption-${p.id}">${escHtml(p.caption)}</p>
+          <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="toggleCaption('${p.id}')" style="display:none;">More</button>
           <div class="project-meta">Posted ${fmt(p.created_at)}</div>
         </div>
         <div class="project-actions">
@@ -555,12 +556,38 @@
       </article>`;
         }).join('');
 
+        /* Show More/Less toggles for long captions */
+        requestAnimationFrame(initCaptionToggles);
+
       } catch (err) {
         console.error('Feed load error:', err);
         loading.style.display = 'none';
         errBan.style.display = 'block';
         window.toast('Could not load projects. Check connection.', 'error');
       }
+    }
+
+    /* ── Caption More / Less ─────────────────────────────────── */
+    function toggleCaption(id) {
+      const cap = document.getElementById('caption-' + id);
+      const btn = document.getElementById('caption-toggle-' + id);
+      if (!cap || !btn) return;
+      const isClipped = cap.classList.contains('clamped');
+      cap.classList.toggle('clamped', !isClipped);
+      btn.textContent = isClipped ? 'Less' : 'More';
+    }
+
+    function initCaptionToggles() {
+      document.querySelectorAll('.project-caption.clamped').forEach(el => {
+        const id = el.id.replace('caption-', '');
+        const btn = document.getElementById('caption-toggle-' + id);
+        if (!btn) return;
+        /* Show toggle only if text is actually overflowing */
+        if (el.scrollHeight > el.clientHeight + 2) {
+          btn.style.display = 'block';
+          btn.textContent = 'More';
+        }
+      });
     }
 
     /* ── Auto-grow textarea ───────────────────────────────────── */
