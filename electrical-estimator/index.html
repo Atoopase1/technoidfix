@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="AI Professional Electrical Wiring Designer — IEC 60364 compliant residential wiring calculator with load analysis, cable sizing, protection coordination, and full diagram generation.">
+  <title>AI Professional Electrical Wiring Designer — IEC Compliant</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div class="loader-ring"></div>
+    <div class="loader-txt">INITIALIZING SYSTEM...</div>
+  </div>
+
+  <!-- Header -->
+  <header id="hdr" role="banner">
+    <a href="../index.html" class="btn btn-secondary btn-sm"
+      style="margin-right:12px; font-family: 'Rajdhani', sans-serif;"><i class="fas fa-arrow-left"></i> Back</a>
+    <div class="logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="40" height="40" rx="8" fill="#001a33" />
+        <path d="M20 4L8 22H18L16 36L32 18H22L20 4Z" fill="none" stroke="#00d4ff" stroke-width="2"
+          stroke-linejoin="round" />
+        <path d="M20 4L8 22H18L16 36L32 18H22L20 4Z" fill="#00d4ff" opacity="0.15" />
+        <circle cx="20" cy="20" r="3" fill="#00d4ff" />
+      </svg>
+      <h1>AI PROFESSIONAL ELECTRICAL WIRING DESIGNER<span>FULL DIAGRAM GENERATOR · IEC COMPLIANT · PRODUCTION
+          GRADE</span></h1>
+    </div>
+    <div class="badge" aria-label="Standards compliance">
+      <span class="b-iec">IEC 60364</span>
+      <span class="b-230">230V / 400V</span>
+    </div>
+  </header>
+
+  <!-- Step Navigation -->
+  <nav id="stepnav" role="navigation" aria-label="Design steps">
+    <button class="step-btn active" onclick="goStep(1)" id="sbtn1" aria-label="Step 1: Supply and Building"><span
+        class="sn">1</span>SUPPLY & BUILDING</button>
+    <span class="step-sep" aria-hidden="true">›</span>
+    <button class="step-btn" onclick="goStep(2)" id="sbtn2" aria-label="Step 2: Room Builder"><span
+        class="sn">2</span>ROOM BUILDER</button>
+    <span class="step-sep" aria-hidden="true">›</span>
+    <button class="step-btn" onclick="goStep(3)" id="sbtn3" aria-label="Step 3: Load Selection"><span
+        class="sn">3</span>LOAD SELECTION</button>
+    <span class="step-sep" aria-hidden="true">›</span>
+    <button class="step-btn" onclick="goStep(4)" id="sbtn4" aria-label="Step 4: Results and Diagrams"><span
+        class="sn">4</span>RESULTS & DIAGRAMS</button>
+  </nav>
+
+  <main id="main" role="main">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- STEP 1: SUPPLY & BUILDING -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="step-page active" id="step1">
+      <div class="sc">
+        <div class="sc-hdr">
+          <div class="ic">⚡</div>
+          <h2>SUPPLY CONFIGURATION</h2>
+        </div>
+        <div class="sc-body">
+          <div class="fg fg-3">
+            <div class="ff">
+              <label>Supply Type</label>
+              <select id="s_type" onchange="updateSupplyType()">
+                <option value="single">Single Phase (230V L-N)</option>
+                <option value="three">Three Phase (400V L-L)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Supply Voltage</label>
+              <select id="s_voltage">
+                <option value="230">230V (IEC Standard)</option>
+                <option value="240">240V (Legacy UK)</option>
+                <option value="220">220V</option>
+                <option value="400">400V (3-phase)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Earthing System</label>
+              <select id="s_earth">
+                <option value="TN-C-S">TN-C-S (PME/PEN)</option>
+                <option value="TN-S">TN-S (Separate PE)</option>
+                <option value="TT">TT (Earth Rod)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Meter → Main DB Distance</label>
+              <input type="number" id="s_meter_dist" value="5" min="1" max="500">
+              <span class="unit">meters</span>
+            </div>
+            <div class="ff">
+              <label>Ambient Temperature</label>
+              <select id="s_temp">
+                <option value="25">25°C</option>
+                <option value="30" selected>30°C (Standard)</option>
+                <option value="35">35°C</option>
+                <option value="40">40°C</option>
+                <option value="45">45°C</option>
+                <option value="50">50°C</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Installation Type</label>
+              <select id="s_install">
+                <option value="conduit">Conduit (Concealed)</option>
+                <option value="trunking">Surface Trunking</option>
+                <option value="cable-tray">Cable Tray</option>
+                <option value="free-air">Free Air</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Supply Frequency</label>
+              <select id="s_freq">
+                <option value="50">50 Hz (Europe/Asia/Africa)</option>
+                <option value="60">60 Hz (Americas)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Maximum Demand Budget</label>
+              <input type="number" id="s_max_demand" value="100" min="10" max="1000">
+              <span class="unit">Amps (upstream fuse/meter limit)</span>
+            </div>
+            <div class="ff">
+              <label>Supply Cable Material</label>
+              <select id="s_cable_mat">
+                <option value="copper">Copper (Standard)</option>
+                <option value="aluminium">Aluminium</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc">
+        <div class="sc-hdr">
+          <div class="ic">🏠</div>
+          <h2>BUILDING CONFIGURATION</h2>
+        </div>
+        <div class="sc-body">
+          <div class="fg fg-3">
+            <div class="ff">
+              <label>Building Type</label>
+              <select id="b_type">
+                <option value="house">Residential House</option>
+                <option value="apartment">Apartment / Flat</option>
+                <option value="villa">Villa</option>
+                <option value="office">Office Building</option>
+                <option value="shop">Shop / Retail</option>
+                <option value="warehouse">Warehouse / Industrial</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Number of Floors</label>
+              <input type="number" id="b_floors" value="1" min="1" max="10" onchange="updateFloorCount()">
+            </div>
+            <div class="ff">
+              <label>Main DB Location</label>
+              <select id="b_db_loc">
+                <option value="ground">Ground Floor / Entrance</option>
+                <option value="basement">Basement</option>
+                <option value="top">Top Floor</option>
+                <option value="external">External / Meter Room</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>DB Installation Method</label>
+              <select id="b_db_install">
+                <option value="flush">Flush Mounted (Recessed)</option>
+                <option value="surface">Surface Mounted</option>
+                <option value="floor">Floor Standing</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Consumer Unit Enclosure</label>
+              <select id="b_cu_type">
+                <option value="metal">Metal Enclosure (Recommended)</option>
+                <option value="plastic">Plastic Enclosure</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Has Sub-Distribution Board?</label>
+              <div class="tog-row" style="margin-top:8px">
+                <input type="checkbox" class="tog" id="b_sub_db">
+                <label class="tog-lbl" for="b_sub_db">Yes — add sub-DB for upper floors</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sc">
+        <div class="sc-hdr">
+          <div class="ic">🔒</div>
+          <h2>PROTECTION PREFERENCES</h2>
+        </div>
+        <div class="sc-body">
+          <div class="fg fg-3">
+            <div class="ff">
+              <label>RCD Type</label>
+              <select id="p_rcd_type">
+                <option value="AC">Type AC (Basic)</option>
+                <option value="A" selected>Type A (Recommended)</option>
+                <option value="B">Type B (EV/Industrial)</option>
+                <option value="F">Type F (High Freq)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>RCD Sensitivity</label>
+              <select id="p_rcd_sense">
+                <option value="30">30mA (Standard/Life Protection)</option>
+                <option value="100">100mA (Fire Protection)</option>
+                <option value="300">300mA (Selectivity)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>MCB Curve Type</label>
+              <select id="p_mcb_curve">
+                <option value="B">Curve B (Residential — Resistive)</option>
+                <option value="C" selected>Curve C (General Purpose)</option>
+                <option value="D">Curve D (Motors/Transformers)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>SPD Type</label>
+              <select id="p_spd_type">
+                <option value="2">Type 2 (Main Board — Required)</option>
+                <option value="1+2">Type 1+2 (With Overhead Lines)</option>
+                <option value="2+3">Type 2+3 (Enhanced)</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label>Include AFDD (Arc Fault)?</label>
+              <div class="tog-row" style="margin-top:8px">
+                <input type="checkbox" class="tog" id="p_afdd">
+                <label class="tog-lbl" for="p_afdd">Yes — AFDD on bedroom circuits</label>
+              </div>
+            </div>
+            <div class="ff">
+              <label>Emergency Isolator?</label>
+              <div class="tog-row" style="margin-top:8px">
+                <input type="checkbox" class="tog" id="p_emerg_iso" checked>
+                <label class="tog-lbl" for="p_emerg_iso">Yes — Fire/Emergency isolator</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary btn-lg" onclick="goStep(2)">CONTINUE TO ROOM BUILDER →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- STEP 2: ROOM BUILDER -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="step-page" id="step2">
+      <div class="alert-bar">⚡ Add all rooms/areas. Accurate dimensions improve wire length estimates and voltage drop
+        calculations.</div>
+
+      <div id="rooms-container"></div>
+
+      <div class="sc">
+        <div class="sc-body">
+          <button class="btn btn-amber" onclick="addRoom()">+ ADD ROOM / AREA</button>
+          <span style="color:var(--tx2);font-size:.85rem;margin-left:12px">Click to add kitchen, bedroom, bathroom,
+            living room, garage, etc.</span>
+        </div>
+      </div>
+
+      <div class="sc" id="quick-rooms-sc">
+        <div class="sc-hdr">
+          <div class="ic">⚡</div>
+          <h2>QUICK ADD — COMMON ROOM TEMPLATES</h2>
+        </div>
+        <div class="sc-body">
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Living Room',6,4,2.8)">🛋 Living Room</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Kitchen',4,3.5,2.8)">🍳 Kitchen</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Master Bedroom',5,4,2.8)">🛏 Master
+              Bedroom</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Bedroom 2',4,3.5,2.8)">🛏 Bedroom 2</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Bathroom',3,2,2.4)">🚿 Bathroom</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Utility Room',3,2.5,2.4)">🔧 Utility
+              Room</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Garage',6,5,2.5)">🚗 Garage</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Home Office',4,3,2.8)">💻 Home Office</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Hallway',6,1.5,2.8)">🚪 Hallway</button>
+            <button class="btn btn-secondary btn-sm" onclick="quickAdd('Garden/External',10,8,0)">🌿
+              Garden/External</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goStep(1)">← BACK</button>
+        <button class="btn btn-primary btn-lg" onclick="goStep(3)">CONTINUE TO LOAD SELECTION →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- STEP 3: LOAD SELECTION -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="step-page" id="step3">
+      <div class="alert-bar">⚡ Enter all electrical loads for each room. Leave at 0 if not applicable. Be accurate —
+        under-specifying creates undersized circuits.</div>
+
+      <div id="load-selection-container"></div>
+
+      <div class="btn-row" id="calc-btn-row">
+        <button class="btn btn-secondary" onclick="goStep(2)">← BACK</button>
+        <button class="btn btn-success btn-lg" onclick="runCalculations()">
+          ⚡ CALCULATE & GENERATE FULL DESIGN
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- STEP 4: RESULTS & DIAGRAMS -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="step-page" id="step4">
+      <div id="results-container"></div>
+    </div>
+
+  </main><!-- /main -->
+
+  <footer id="ftr" role="contentinfo" class="tech-footer">
+    <div class="container">
+      <div class="footer-brand">Technoid<span style="color:#00d4ff">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="../design.html">Design</a>
+        <a href="../web.html">Web Dev</a>
+        <a href="../projects.html">Projects</a>
+        <a href="../contact.html">Contact</a>
+        <a href="mailto:atoopase@gmail.com">atoopase@gmail.com</a>
+        <a href="tel:+233544833571">+233 54 483 3571</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year">2026</span> Technoid — Chris</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
