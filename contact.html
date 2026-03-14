@@ -12,28 +12,35 @@
 
   <link rel="stylesheet" href="assets/css/styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
 </head>
 
 <body>
 
   <!-- ── Navigation ── -->
   <header class="nav" role="banner">
-    <div class="nav-logo">
-      <span class="brand">Technoid<span class="brand-dot">Fix</span></span>
-
-    </div>
-    <nav role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+        <div class="nav-inline">
       <a href="index.html" data-page="home">Home</a>
       <a href="design.html" data-page="design">Design</a>
-      <a href="web.html" data-page="web">Web Development</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="projects.html" data-page="projects">Projects</a>
-      <a href="contact.html" data-page="contact" class="nav-cta"><span>Book</span>
-        Electrical Service</a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
     </nav>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i
-        class="fas fa-moon"></i></button>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
 
   <main class="container" style="padding-top:36px;padding-bottom:0;">
@@ -254,3 +261,12 @@
         <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
             data-cfemail="5130253e3e2130223411363c30383d7f323e3c">atoopase@gmail.com</span></a>
         <a href="tel:+233544833571">+233544833571</a>
+<!-- ── Settings Modal (admin only) ── -->
+<div id="settings-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+  <div id="settings-panel" style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+    <button onclick="closeSettingsModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+    <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog" style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+    <div id="settings-slots"></div>
+    <p style="font-size:.75rem;color:#9ca3af;margin-top:14px;">Images are saved to your browser. Upload a new image to replace the current one on this page.</p>
+  </div>
+</div>

@@ -9,41 +9,94 @@ const state = {
 };
 
 // ═══════════════════════════════════════════════════════════════════
-// ENGINEERING DATA TABLES
+// ENGINEERING DATA TABLES  (IEC 60364 / BS 7671)
 // ═══════════════════════════════════════════════════════════════════
 
-// Cable ampacity in conduit at 30°C (IEC 60364-5-52)
+// Cable ampacity in conduit at 30°C (IEC 60364-5-52 Table B.52.3)
 const CABLE_AMPACITY = {
   1.5: { conduit: 13.5, trunking: 14.5, 'cable-tray': 17.5, 'free-air': 20 },
-  2.5: { conduit: 18, trunking: 19.5, 'cable-tray': 24, 'free-air': 27 },
-  4: { conduit: 24, trunking: 26, 'cable-tray': 32, 'free-air': 37 },
-  6: { conduit: 31, trunking: 34, 'cable-tray': 41, 'free-air': 47 },
-  10: { conduit: 42, trunking: 46, 'cable-tray': 57, 'free-air': 65 },
-  16: { conduit: 56, trunking: 61, 'cable-tray': 76, 'free-air': 87 },
-  25: { conduit: 73, trunking: 80, 'cable-tray': 96, 'free-air': 114 },
-  35: { conduit: 89, trunking: 99, 'cable-tray': 119, 'free-air': 141 },
-  50: { conduit: 108, trunking: 119, 'cable-tray': 144, 'free-air': 175 },
-  70: { conduit: 136, trunking: 151, 'cable-tray': 184, 'free-air': 222 },
-  95: { conduit: 164, trunking: 182, 'cable-tray': 223, 'free-air': 269 }
+  2.5: { conduit: 18,   trunking: 19.5, 'cable-tray': 24,   'free-air': 27 },
+  4:   { conduit: 24,   trunking: 26,   'cable-tray': 32,   'free-air': 37 },
+  6:   { conduit: 31,   trunking: 34,   'cable-tray': 41,   'free-air': 47 },
+  10:  { conduit: 42,   trunking: 46,   'cable-tray': 57,   'free-air': 65 },
+  16:  { conduit: 56,   trunking: 61,   'cable-tray': 76,   'free-air': 87 },
+  25:  { conduit: 73,   trunking: 80,   'cable-tray': 96,   'free-air': 114 },
+  35:  { conduit: 89,   trunking: 99,   'cable-tray': 119,  'free-air': 141 },
+  50:  { conduit: 108,  trunking: 119,  'cable-tray': 144,  'free-air': 175 },
+  70:  { conduit: 136,  trunking: 151,  'cable-tray': 184,  'free-air': 222 },
+  95:  { conduit: 164,  trunking: 182,  'cable-tray': 223,  'free-air': 269 }
 };
 
-// Temperature correction factors
+// Temperature correction factors (IEC 60364-5-52 Table B.52.14, XLPE/PVC 70°C)
 const TEMP_FACTORS = { 25: 1.03, 30: 1.00, 35: 0.94, 40: 0.87, 45: 0.79, 50: 0.71 };
 
-// Voltage drop mV/A/m for copper two-core (IEC)
+// Voltage drop mV/A/m for copper two-core single-phase (IEC 60364-5-52 Table I)
+// For three-phase use VD × √3 / (√3) — same table applies per phase conductor
 const VD_MV_AM = {
   1.5: 29, 2.5: 18, 4: 11, 6: 7.3, 10: 4.4, 16: 2.8, 25: 1.75, 35: 1.25, 50: 0.93, 70: 0.64, 95: 0.47
 };
 
-// Standard cable sizes
+// Standard cable sizes (mm²)
 const CABLE_SIZES = [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95];
 
-// Standard MCB ratings
+// Standard MCB ratings (A)
 const MCB_RATINGS = [6, 10, 13, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200];
 
-// ═══════════════════════════════════════════════════════════════════
-// UTILITY FUNCTIONS
-// ═══════════════════════════════════════════════════════════════════
+// Power factor for different load types
+// Residential standard: Curve B or C only — no Curve D in IEC 60364 domestic.
+// AC/pump: PF = 0.85 to correctly size cable for true current draw.
+const LOAD_PF = {
+  lighting: 1.0,
+  socket:   1.0,
+  heavy:    1.0,   // resistive: water heater, shower, cooker
+  ac:       0.85,  // inverter/compressor — PF correction only, still Curve C
+  pump:     0.85,  // pump motor — PF correction only, still Curve C
+  shower:   1.0,
+  '3phase': 0.85
+};
+
+// ── CABLE → BREAKER BINDING TABLE (IEC 60364 residential, conduit install) ──
+// Rule: MCB rating In must never exceed cable current capacity Iz.
+// Iz values at 30°C in conduit (IEC 60364-5-52 Table B.52.3):
+//   1.5mm² Iz=13.5A → permitted MCBs: 6A, 10A   (In ≤ 13.5A ✓)
+//   2.5mm² Iz=18A   → permitted MCBs: 16A        (In=16A ≤ 18A ✓)
+//   4mm²   Iz=24A   → permitted MCBs: 20A        (In=20A ≤ 24A ✓) [25A would exceed Iz]
+//   6mm²   Iz=31A   → permitted MCBs: 25A        (In=25A ≤ 31A ✓) [32A would exceed Iz]
+//   10mm²  Iz=42A   → permitted MCBs: 32A, 40A   (In ≤ 42A ✓)
+//   16mm²  Iz=56A   → permitted MCBs: 50A        (In=50A ≤ 56A ✓)
+//
+// NOTE: 32A breaker requires 10mm² cable (not 6mm²) in conduit installation.
+//       6mm² is limited to 25A maximum in conduit.
+const CABLE_MCB_MAP = {
+  1.5:  { permitted: [6, 10],   max: 10 },
+  2.5:  { permitted: [16],      max: 16 },
+  4:    { permitted: [20],      max: 20 },   // 25A would exceed 24A Iz — not permitted
+  6:    { permitted: [25],      max: 25 },   // 32A would exceed 31A Iz — not permitted
+  10:   { permitted: [32, 40],  max: 40 },   // 10mm² needed for 32A and above
+  16:   { permitted: [50],      max: 50 },
+  25:   { permitted: [63, 80],  max: 80 },
+  35:   { permitted: [100],     max: 100 }
+};
+
+// ── CABLE GROUPING DERATING FACTORS (IEC 60364-5-52 Table B.52.17) ──
+// Applied when multiple circuits share the same conduit/trunking/surface.
+// Number of circuits → derating factor applied to cable ampacity.
+const GROUPING_FACTORS = { 1: 1.00, 2: 0.80, 3: 0.70, 4: 0.65, 5: 0.60, 6: 0.57, 7: 0.54, 8: 0.52, 9: 0.50 };
+function getGroupingFactor(n) {
+  if (n <= 1) return 1.00;
+  if (n >= 9) return 0.50;
+  return GROUPING_FACTORS[n] || 0.50;
+}
+
+// ── MOTOR vs RESISTIVE LOAD RULES ────────────────────────────────────
+// IEC 60364-4-43: For motor circuits, cable must be sized for starting current
+// (typically 6× FLC for DOL start). Cable sizing uses 1.25× FLC as minimum.
+// For resistive loads, cable is sized directly for operating current — no multiplier.
+// Motor starting current for breaker selection = FLC × starting factor:
+//   DOL start:    6–8× FLC → Curve C handles up to 10× In (adequate for ≤8×)
+//   Star-delta:   2–3× FLC → Curve C handles easily
+const MOTOR_TYPES = new Set(['ac', 'pump', 'fridge_motor']); // load types that are motors
+const MOTOR_START_FACTOR = 6; // worst-case DOL inrush multiplier for Curve C selection
 function getSetting(id) { return document.getElementById(id)?.value || ''; }
 /** Parse a numeric value from an input element, returning `def` for NaN/empty/negative */
 function getNum(id, def = 0) {
@@ -79,23 +132,27 @@ function selectCableForLoad(amperes, installType, temp) {
 }
 
 /** Calculate voltage drop as a percentage (IEC 60364-5-52)
- *  Formula: VD(V) = mV/A/m × I × L / 1000; VD% = VD / V × 100 */
-function calcVDpercent(size, amps, lengthM, voltage) {
-  if (!voltage || voltage <= 0) return 0; // guard against division by zero
+ *  Single-phase:  VD(V) = mV/A/m × I × L / 1000
+ *  Three-phase:   VD(V) = mV/A/m × I × L × √3 / 1000  (line-to-line voltage)
+ *  VD% = VD(V) / V_nominal × 100
+ *  Limits: 3% lighting, 5% other (IEC 60364-5-52 cl.525) */
+function calcVDpercent(size, amps, lengthM, voltage, threePhase = false) {
+  if (!voltage || voltage <= 0) return 0;
   const mVperAm = getVD(size);
-  const vdV = (mVperAm * amps * lengthM) / 1000;
+  const factor = threePhase ? Math.sqrt(3) : 1;
+  const vdV = (mVperAm * amps * lengthM * factor) / 1000;
   return (vdV / voltage) * 100;
 }
 
-function autoUpsizeCable(size, amps, lengthM, voltage, maxVDpercent, installType, temp) {
+function autoUpsizeCable(size, amps, lengthM, voltage, maxVDpercent, installType, temp, threePhase = false) {
   let s = size;
   let iter = 0;
   while (iter++ < 10) {
-    const vd = calcVDpercent(s, amps, lengthM, voltage);
+    const vd = calcVDpercent(s, amps, lengthM, voltage, threePhase);
     if (vd <= maxVDpercent) break;
     s = nextCableSize(s);
   }
-  // Also check ampacity
+  // Also check ampacity after temperature derating
   const tf = getTempFactor(temp);
   while (getAmpacity(s, installType) * tf < amps && CABLE_SIZES.indexOf(s) < CABLE_SIZES.length - 1) {
     s = nextCableSize(s);
@@ -115,8 +172,12 @@ function addRoom(name = 'New Room', L = 5, W = 4, H = 2.8, dist = 10, floor = 1)
     id, name, length: L, width: W, height: H, distanceFromDB: dist, floor,
     loads: {
       lighting: { ledQty: 4, ledWatt: 9, spots: 0, chandelier: 0, chandelierWatt: 60, outdoor: 0, emergency: 0, fans: 0 },
-      sockets: { std13A: 4, usb: 2, fridge: false, tv: false },
-      appliances: { cooker: 0, waterHeater: 0, shower: 0, ac: 0, washing: 0, microwave: 0, pump: 0, custom: [] }
+      sockets: { std13A: 4, usb: 2, fridge: false, tv: false, outdoor: 0, garage: 0 },
+      appliances: {
+        cooker: 0, oven: 0, waterHeater: 0, shower: 0,
+        ac: 0, washing: 0, dishwasher: 0, microwave: 0,
+        pump: 0, custom1: 0, custom2: 0
+      }
     }
   };
   state.rooms.push(room);
@@ -248,6 +309,8 @@ function renderLoadSelection() {
         <div class="fg fg-4">
           <div class="ff"><label>13A Sockets</label><input type="number" id="rl${room.id}_std13A" value="${room.loads.sockets.std13A}" min="0" oninput="syncLoad(${room.id})"><span class="unit">outlets</span></div>
           <div class="ff"><label>USB Sockets</label><input type="number" id="rl${room.id}_usb" value="${room.loads.sockets.usb}" min="0" oninput="syncLoad(${room.id})"><span class="unit">outlets</span></div>
+          <div class="ff"><label>Outdoor Sockets</label><input type="number" id="rl${room.id}_outdoor_sock" value="${room.loads.sockets.outdoor||0}" min="0" oninput="syncLoad(${room.id})"><span class="unit">IP44+ weatherproof</span></div>
+          <div class="ff"><label>Garage Sockets</label><input type="number" id="rl${room.id}_garage_sock" value="${room.loads.sockets.garage||0}" min="0" oninput="syncLoad(${room.id})"><span class="unit">outlets</span></div>
           <div class="ff">
             <label>Dedicated Fridge Socket</label>
             <div class="tog-row" style="margin-top:8px">
@@ -269,14 +332,16 @@ function renderLoadSelection() {
         <h3>⚡ HEAVY APPLIANCES</h3>
         <div class="fg fg-3">
           <div class="ff"><label>Cooker / Hob</label><input type="number" id="rl${room.id}_cooker" value="${room.loads.appliances.cooker}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW (0 = none)</span></div>
+          <div class="ff"><label>Built-in Oven</label><input type="number" id="rl${room.id}_oven" value="${room.loads.appliances.oven||0}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW (2–3kW typical)</span></div>
           <div class="ff"><label>Water Heater (Geyser)</label><input type="number" id="rl${room.id}_waterHeater" value="${room.loads.appliances.waterHeater}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
           <div class="ff"><label>Electric Shower</label><input type="number" id="rl${room.id}_shower" value="${room.loads.appliances.shower}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW (7.5 / 10.5 typical)</span></div>
           <div class="ff"><label>Air Conditioner</label><input type="number" id="rl${room.id}_ac" value="${room.loads.appliances.ac}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW cooling</span></div>
           <div class="ff"><label>Washing Machine</label><input type="number" id="rl${room.id}_washing" value="${room.loads.appliances.washing}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
+          <div class="ff"><label>Dishwasher</label><input type="number" id="rl${room.id}_dishwasher" value="${room.loads.appliances.dishwasher||0}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW (1.5–2.5kW typical)</span></div>
           <div class="ff"><label>Microwave</label><input type="number" id="rl${room.id}_microwave" value="${room.loads.appliances.microwave}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
           <div class="ff"><label>Pump (Water / Sump)</label><input type="number" id="rl${room.id}_pump" value="${room.loads.appliances.pump}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
-          <div class="ff"><label>Custom Appliance 1</label><input type="number" id="rl${room.id}_custom1_kw" value="0" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
-          <div class="ff"><label>Custom Appliance 2</label><input type="number" id="rl${room.id}_custom2_kw" value="0" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
+          <div class="ff"><label>Custom Appliance 1</label><input type="number" id="rl${room.id}_custom1_kw" value="${room.loads.appliances.custom1||0}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
+          <div class="ff"><label>Custom Appliance 2</label><input type="number" id="rl${room.id}_custom2_kw" value="${room.loads.appliances.custom2||0}" min="0" step="0.1" oninput="syncLoad(${room.id})"><span class="unit">kW</span></div>
         </div>
       </div>
     </div>
@@ -293,11 +358,16 @@ function syncLoad(id) {
     chandelier: g('chandelier'), chandelierWatt: g('chandelierWatt'),
     outdoor: g('outdoor'), emergency: g('emergency'), fans: g('fans')
   };
-  room.loads.sockets = { std13A: g('std13A'), usb: g('usb'), fridge: gb('fridge'), tv: gb('tv') };
+  room.loads.sockets = {
+    std13A: g('std13A'), usb: g('usb'),
+    fridge: gb('fridge'), tv: gb('tv'),
+    outdoor: g('outdoor_sock'), garage: g('garage_sock')
+  };
   room.loads.appliances = {
-    cooker: g('cooker'), waterHeater: g('waterHeater'), shower: g('shower'),
-    ac: g('ac'), washing: g('washing'), microwave: g('microwave'), pump: g('pump'),
-    custom1: g('custom1_kw'), custom2: g('custom2_kw')
+    cooker: g('cooker'), oven: g('oven'), waterHeater: g('waterHeater'),
+    shower: g('shower'), ac: g('ac'), washing: g('washing'),
+    dishwasher: g('dishwasher'), microwave: g('microwave'),
+    pump: g('pump'), custom1: g('custom1_kw'), custom2: g('custom2_kw')
   };
 }
 
@@ -358,143 +428,331 @@ function calcRoomLoads(room) {
 
   // Lighting watts
   const lightingW =
-    l.ledQty * l.ledWatt +
-    l.spots * 7 +
-    l.chandelier * l.chandelierWatt +
-    l.outdoor * 20 +
-    l.emergency * 3 +
-    l.fans * 75;
+    l.ledQty * l.ledWatt + l.spots * 7 + l.chandelier * l.chandelierWatt +
+    l.outdoor * 20 + l.emergency * 3 + l.fans * 75;
 
-  // Socket load (assume 200W average socket)
-  const socketW = s.std13A * 200 + s.usb * 50 + (s.fridge ? 200 : 0);
+  // Socket load — 300W per 13A socket (IEC 60364-4 diversity allowance)
+  const socketW = s.std13A * 300 + s.usb * 50 + (s.fridge ? 200 : 0) +
+                  (s.outdoor || 0) * 300 + (s.garage || 0) * 300;
 
-  // Heavy appliances
-  const cookerW = a.cooker * 1000;
-  const waterW = a.waterHeater * 1000;
-  const showerW = a.shower * 1000;
-  const acW = a.ac * 1000;
-  const washingW = a.washing * 1000;
-  const microwaveW = a.microwave * 1000;
-  const pumpW = a.pump * 1000;
-  const custom1W = (a.custom1 || 0) * 1000;
-  const custom2W = (a.custom2 || 0) * 1000;
+  // Heavy appliances (all in watts)
+  const cookerW     = a.cooker     * 1000;
+  const ovenW       = (a.oven      || 0) * 1000;
+  const waterW      = a.waterHeater * 1000;
+  const showerW     = a.shower     * 1000;
+  const acW         = a.ac         * 1000;
+  const washingW    = a.washing    * 1000;
+  const dishwasherW = (a.dishwasher || 0) * 1000;
+  const microwaveW  = a.microwave  * 1000;
+  const pumpW       = a.pump       * 1000;
+  const custom1W    = (a.custom1   || 0) * 1000;
+  const custom2W    = (a.custom2   || 0) * 1000;
 
-  const heavyW = cookerW + waterW + showerW + acW + washingW + microwaveW + pumpW + custom1W + custom2W;
+  const heavyW = cookerW + ovenW + waterW + showerW + acW + washingW +
+                 dishwasherW + microwaveW + pumpW + custom1W + custom2W;
 
   return {
-    lightingW, socketW, cookerW, waterW, showerW, acW, washingW, microwaveW, pumpW, heavyW,
+    lightingW, socketW, cookerW, ovenW, waterW, showerW, acW,
+    washingW, dishwasherW, microwaveW, pumpW, heavyW,
     totalW: lightingW + socketW + heavyW,
     details: { l, s, a }
   };
 }
 
 function applyDiversity(loads, voltage) {
+  if (!voltage || voltage <= 0) voltage = 230;
   let div = 0;
-  // Lighting 90%
+  // Lighting: 90% diversity (IEC 60364 Table 4A)
   div += loads.lightingW * 0.90;
-  // Sockets 75%
+  // Sockets: 75% diversity for general radial circuits
   div += loads.socketW * 0.75;
-  // Cooker diversity: first 10A full + 30% remainder
+  // Cooker diversity (BS 7671 Table 4B): first 10A full + 30% remainder
   if (loads.cookerW > 0) {
     const cookerA = loads.cookerW / voltage;
     const first10 = Math.min(cookerA, 10) * voltage;
-    const rest = Math.max(0, cookerA - 10) * voltage * 0.30;
+    const rest    = Math.max(0, cookerA - 10) * voltage * 0.30;
     div += first10 + rest;
   }
-  // Water heater / shower / heating 100%
-  div += loads.waterW;
-  div += loads.showerW;
-  // AC 100%
-  div += loads.acW;
-  // Other appliances at 75%
+  // Oven: 100% (typically runs continuously when on, thermostatic but not diversity-reducible)
+  div += (loads.ovenW || 0) * 1.0;
+  // Water heater / shower: resistive, 100%
+  div += loads.waterW * 1.0;
+  div += loads.showerW * 1.0;
+  // AC: motor load, 100% diversity + PF correction (apparent power = real / PF)
+  div += (loads.acW > 0) ? (loads.acW / 0.85) : 0;
+  // Washing machine: 75%
   div += loads.washingW * 0.75;
+  // Dishwasher: 75%
+  div += (loads.dishwasherW || 0) * 0.75;
+  // Microwave: 75%
   div += loads.microwaveW * 0.75;
-  div += loads.pumpW * 1.0;
-  // Custom appliances at 75% diversity
+  // Pump: motor load, 100% + PF correction
+  div += (loads.pumpW > 0) ? (loads.pumpW / 0.85) : 0;
+  // Custom: 75%
   const custom1W = (loads.details?.a?.custom1 || 0) * 1000;
   const custom2W = (loads.details?.a?.custom2 || 0) * 1000;
   div += (custom1W + custom2W) * 0.75;
   return div;
 }
 
-function buildCircuits(room, voltage, installType, temp) {
+function buildCircuits(room, voltage, installType, temp, circuitsInConduit) {
   const lo = room.loads;
   const l = lo.lighting;
   const s = lo.sockets;
   const a = lo.appliances;
   const circuits = [];
   let cktNum = 1;
+  const V = (voltage === 400) ? 230 : (voltage || 230);
 
-  /** Build a single circuit object with cable sizing, MCB selection, and VD check */
-  const makeCircuit = (name, type, watts, maxVD, cableHint) => {
-    // Standard room circuits are almost always 230V L-N even on a 400V 3-phase board.
-    // If the main supply is 400V but it's not a specific 3-phase load, use 230V.
-    const circuitVoltage = (voltage === 400 && type !== '3phase') ? 230 : voltage;
-    if (!circuitVoltage || circuitVoltage <= 0) return null; // guard division by zero
-    const amps = watts / circuitVoltage;
-    if (amps <= 0) return null;
+  // ── Cable grouping derating (Fix 9) ──────────────────────────────
+  // circuitsInConduit = total circuits sharing same conduit run (estimated from total)
+  const gf = getGroupingFactor(circuitsInConduit || 1);
+
+  function selectCableAndMCB(amps, isMotor, forceCable, forceMCB) {
+    // Fix 2: Only motor loads use 1.25× multiplier for cable sizing.
+    // Resistive loads (heaters, lighting, sockets) size cable directly for operating current.
+    const cableSizingAmps = isMotor ? (amps * 1.25) : amps;
+
+    // Apply grouping derating: cable must carry current even when derated
+    const deRatedReq = cableSizingAmps / gf;
+
+    let cable = forceCable || null;
+    if (!cable) {
+      for (const sz of [1.5, 2.5, 4, 6, 10, 16, 25, 35]) {
+        const iz = getAmpacity(sz, installType) * getTempFactor(temp) * gf;
+        if (iz >= cableSizingAmps) { cable = sz; break; }
+      }
+      cable = cable || 35;
+    }
+
+    // Enforce cable→MCB binding
+    const iz = getAmpacity(cable, installType) * getTempFactor(temp) * gf;
+    const map = CABLE_MCB_MAP[cable];
+    let mcbA;
+    if (forceMCB) {
+      mcbA = forceMCB <= iz ? forceMCB : (map ? map.max : forceMCB);
+    } else if (map) {
+      mcbA = map.permitted.filter(r => r <= iz).slice(-1)[0] || map.permitted[0];
+    } else {
+      mcbA = nextMCB(cableSizingAmps);
+    }
+
+    // Fix 7: Motor starting current check
+    // Curve C MCB handles up to 10× In inrush. For DOL motors (6× FLC):
+    // Verify: In (MCB) × 10 ≥ startingCurrent = FLC × MOTOR_START_FACTOR
+    // i.e. In ≥ FLC × 6 / 10 = 0.6 × FLC
+    // Since our MCB ≥ 1.25 × FLC already, and 1.25 > 0.6 → always satisfied for Curve C.
+    // But flag if starting current would exceed 10× MCB (i.e. motor FLC > 1.67 × In):
+    let startingCurrentWarning = null;
+    if (isMotor) {
+      const startI = amps * MOTOR_START_FACTOR; // 6× FLC starting
+      if (startI > mcbA * 10) {
+        startingCurrentWarning = `Starting current ${startI.toFixed(1)}A may cause nuisance tripping on ${mcbA}A Curve C MCB. Consider Curve D or soft starter.`;
+      }
+    }
+
+    return { cable, mcbA, startingCurrentWarning };
+  }
+
+  const makeCircuit = (name, type, watts, maxVD, forceCable, forceMCB, lightPoints) => {
+    if (!watts || watts <= 0) return null;
+    const isMotor = MOTOR_TYPES.has(type);
+    const pf    = LOAD_PF[type] || 1.0;
+    // True operating current
+    const amps  = watts / (V * pf);
     const distM = room.distanceFromDB;
-    let cable = selectCableForLoad(amps * 1.25, installType, temp);
-    // Ensure minimum for type
-    if (type === 'lighting' && cable < 1.5) cable = 1.5;
-    if (type === 'socket' && cable < 2.5) cable = 2.5;
-    if (type === 'heavy' && cable < 4.0) cable = 4;
-    if (cableHint && cableHint > cable) cable = cableHint;
-    // Voltage drop check
-    cable = autoUpsizeCable(cable, amps, distM, circuitVoltage, maxVD, installType, temp);
-    const vdPct = calcVDpercent(cable, amps, distM, circuitVoltage);
-    const mcbA = nextMCB(amps * 1.25);
-    const needsRCD = (type === 'socket' || type === 'bathroom' || type === 'outdoor');
-    const needsRCBO = (type === 'heavy' || type === 'ac' || type === 'shower');
+
+    let { cable, mcbA, startingCurrentWarning } = selectCableAndMCB(amps, isMotor, forceCable, forceMCB);
+
+    // Fix 4: Total VD = feeder VD (meter→DB) + final circuit VD (DB→point of use)
+    // We have meterDist stored per doFullCalc. For circuit-level check, use distM only,
+    // but store feederVDpct for totaling in doFullCalc.
+    cable = autoUpsizeCable(cable, amps, distM, V, maxVD, installType, temp, false);
+
+    // Re-validate MCB after VD upsize
+    const newIz = getAmpacity(cable, installType) * getTempFactor(temp) * gf;
+    const newMap = CABLE_MCB_MAP[cable];
+    if (newMap && mcbA > newIz) {
+      mcbA = newMap.permitted.filter(r => r <= newIz).slice(-1)[0] || newMap.permitted[0];
+    }
+
+    const circuitVDpct = calcVDpercent(cable, amps, distM, V, false);
+
+    // Fix 5 & 10: Clear protection labeling
+    // Determine protection device type unambiguously:
+    const isSocket   = (type === 'socket'  || type === 'outdoor_socket' || type === 'garage_socket');
+    const needsRCBO  = (type === 'heavy'   || type === 'ac' || type === 'shower' ||
+                        type === 'pump'    || type === 'oven' || type === 'dishwasher' || type === 'washing');
+    const needsRCD   = isSocket;
+    // Protection device label:
+    // RCBO = combined MCB+RCD in one unit (heavy/motor dedicated circuits)
+    // RCBO (socket) = socket circuit gets its own RCBO for maximum discrimination
+    // MCB = lighting and non-protected circuits (backed by main RCD)
+    let deviceLabel, deviceType;
+    if (needsRCBO) {
+      deviceLabel = `RCBO ${mcbA}A/30mA Type A, Curve C — ${name}`;
+      deviceType  = 'RCBO';
+    } else if (needsRCD) {
+      deviceLabel = `RCBO ${mcbA}A/30mA Type A, Curve C — ${name}`;
+      deviceType  = 'RCBO';
+    } else {
+      deviceLabel = `MCB ${mcbA}A Curve C — ${name} (protected by main 30mA RCD)`;
+      deviceType  = 'MCB';
+    }
+
+    const mcbCurve = 'C'; // Residential: Curve C only
+
     return {
-      id: cktNum++, room: room.name, name, type, watts, amps: +amps.toFixed(2),
-      cable, mcbA, distM, vdPct: +vdPct.toFixed(2),
-      needsRCD, needsRCBO, mcbCurve: getSetting('p_mcb_curve') || 'C'
+      id: cktNum++, room: room.name, name, type, watts,
+      amps: +amps.toFixed(2),
+      designAmps: +(isMotor ? amps * 1.25 : amps).toFixed(2),
+      cable, mcbA, mcbCurve, distM,
+      circuitVDpct: +circuitVDpct.toFixed(2),
+      vdPct: +circuitVDpct.toFixed(2), // kept for compatibility
+      needsRCD, needsRCBO, deviceType, deviceLabel,
+      lightPoints: lightPoints || null,
+      pf, isMotor,
+      startingCurrentWarning
     };
   };
 
-  // --- LIGHTING CIRCUIT(S) ---
+  // ── LIGHTING (Fix 1) ─────────────────────────────────────────────
+  // Primary split criterion: lighting POINTS (not just watts).
+  // Max 12 points per circuit. Also check watts limit (1200W / 10A circuit).
   const lightW = l.ledQty * l.ledWatt + l.spots * 7 + l.chandelier * l.chandelierWatt +
-    l.outdoor * 20 + l.emergency * 3 + l.fans * 75;
-  if (lightW > 0) {
-    // Split if >1000W (10×100W equivalent)
-    const lightCircuits = Math.ceil(lightW / 1000);
-    const wEach = lightW / lightCircuits;
+                 l.outdoor * 20 + l.emergency * 3 + l.fans * 75;
+  const lightPoints = l.ledQty + l.spots + l.chandelier + l.outdoor + l.fans + l.emergency;
+  if (lightW > 0 || lightPoints > 0) {
+    const byPoints = Math.ceil(lightPoints / 12);       // max 12 points per circuit
+    const byWatts  = Math.ceil(lightW / 1200);          // 10A × 230V × ~52% = 1200W limit
+    const lightCircuits = Math.max(byPoints, byWatts, 1);
+    const wEach    = lightW / lightCircuits;
+    const ptEach   = Math.ceil(lightPoints / lightCircuits);
     for (let i = 0; i < lightCircuits; i++) {
-      const c = makeCircuit(`${room.name} Lighting L${i + 1}`, 'lighting', wEach, 3, 1.5);
+      const forcedMCB = wEach <= 800 ? 6 : 10;
+      const c = makeCircuit(
+        `${room.name} Lighting L${i + 1}`, 'lighting', wEach, 3, 1.5, forcedMCB,
+        ptEach
+      );
       if (c) circuits.push(c);
     }
   }
 
-  // --- SOCKET CIRCUITS ---
-  // Fridge intentionally excluded here — it gets its own dedicated circuit below
-  const sockW = s.std13A * 200 + s.usb * 50;
-  if (sockW > 0) {
-    const sockCircuits = Math.ceil(s.std13A / 10);
-    const wEach = sockW / Math.max(1, sockCircuits);
-    for (let i = 0; i < Math.max(1, sockCircuits); i++) {
-      const c = makeCircuit(`${room.name} Sockets S${i + 1}`, 'socket', wEach, 5, 2.5);
+  // ── SOCKETS ──────────────────────────────────────────────────────
+  // Max 8 outlets per circuit; 2.5mm²/16A RCBO each
+  if (s.std13A > 0) {
+    const sockCircuits = Math.max(1, Math.ceil(s.std13A / 8));
+    const totalW = s.std13A * 300 + s.usb * 50;
+    const wEach = totalW / sockCircuits;
+    for (let i = 0; i < sockCircuits; i++) {
+      const c = makeCircuit(`${room.name} Sockets S${i + 1}`, 'socket', wEach, 5, 2.5, 16);
       if (c) circuits.push(c);
     }
   }
+  // Dedicated fridge: 2.5mm²/16A RCBO (fridge has compressor motor — motor starting applies)
   if (s.fridge) {
-    const c = makeCircuit(`${room.name} Fridge`, 'socket', 200, 5, 2.5);
+    const c = makeCircuit(`${room.name} Fridge (Dedicated)`, 'ac', 200, 5, 2.5, 16);
+    if (c) circuits.push(c);
+  }
+  // Fix 8: Outdoor sockets — IP44, dedicated circuit, 30mA RCBO mandatory
+  if ((s.outdoor || 0) > 0) {
+    const c = makeCircuit(`${room.name} Outdoor Sockets`, 'outdoor_socket', s.outdoor * 300, 5, 2.5, 16);
+    if (c) circuits.push(c);
+  }
+  // Fix 8: Garage sockets — dedicated circuit (tool loads can be heavy)
+  if ((s.garage || 0) > 0) {
+    const c = makeCircuit(`${room.name} Garage Sockets`, 'garage_socket', s.garage * 300, 5, 2.5, 16);
     if (c) circuits.push(c);
   }
 
-  // --- HEAVY APPLIANCES ---
-  if (a.cooker > 0) { const c = makeCircuit(`${room.name} Cooker`, 'heavy', a.cooker * 1000, 5, 6); if (c) circuits.push(c); }
-  if (a.waterHeater > 0) { const c = makeCircuit(`${room.name} Water Heater`, 'heavy', a.waterHeater * 1000, 5, 4); if (c) circuits.push(c); }
-  if (a.shower > 0) { const c = makeCircuit(`${room.name} Electric Shower`, 'shower', a.shower * 1000, 5, 6); if (c) circuits.push(c); }
-  if (a.ac > 0) { const c = makeCircuit(`${room.name} Air Conditioner`, 'ac', a.ac * 1000, 5, 4); if (c) circuits.push(c); }
-  if (a.washing > 0) { const c = makeCircuit(`${room.name} Washing Machine`, 'heavy', a.washing * 1000, 5, 2.5); if (c) circuits.push(c); }
-  if (a.microwave > 0) { const c = makeCircuit(`${room.name} Microwave`, 'heavy', a.microwave * 1000, 5, 2.5); if (c) circuits.push(c); }
-  if (a.pump > 0) { const c = makeCircuit(`${room.name} Pump`, 'heavy', a.pump * 1000, 5, 4); if (c) circuits.push(c); }
-  if (a.custom1 > 0) { const c = makeCircuit(`${room.name} Appliance 1`, 'heavy', a.custom1 * 1000, 5, 2.5); if (c) circuits.push(c); }
-  if (a.custom2 > 0) { const c = makeCircuit(`${room.name} Appliance 2`, 'heavy', a.custom2 * 1000, 5, 2.5); if (c) circuits.push(c); }
+  // ── WATER HEATER ─────────────────────────────────────────────────
+  if (a.waterHeater > 0) {
+    const whW = a.waterHeater * 1000;
+    const whI = whW / V;
+    const cable = whI <= 20 ? 4 : 6;
+    const mcb   = whI <= 20 ? 20 : 25;
+    const c = makeCircuit(`${room.name} Water Heater`, 'heavy', whW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // ── COOKER ───────────────────────────────────────────────────────
+  if (a.cooker > 0) {
+    const ckW = a.cooker * 1000; const ckI = ckW / V;
+    const cable = ckI <= 20 ? 4 : ckI <= 25 ? 6 : 10;
+    const mcb   = ckI <= 20 ? 20 : ckI <= 25 ? 25 : 32;
+    const c = makeCircuit(`${room.name} Cooker/Hob`, 'heavy', ckW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // Fix 8: Built-in oven (separate from hob, dedicated circuit)
+  if ((a.oven || 0) > 0) {
+    const ovW = a.oven * 1000; const ovI = ovW / V;
+    const cable = ovI <= 20 ? 4 : 6;
+    const mcb   = ovI <= 20 ? 20 : 25;
+    const c = makeCircuit(`${room.name} Built-in Oven`, 'oven', ovW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // ── ELECTRIC SHOWER ──────────────────────────────────────────────
+  if (a.shower > 0) {
+    const shW = a.shower * 1000; const shI = shW / V;
+    const cable = shI <= 20 ? 4 : shI <= 25 ? 6 : 10;
+    const mcb   = shI <= 20 ? 20 : shI <= 25 ? 25 : shI <= 32 ? 32 : 40;
+    const c = makeCircuit(`${room.name} Electric Shower`, 'shower', shW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // ── AIR CONDITIONER (motor) ───────────────────────────────────────
+  if (a.ac > 0) {
+    const acW = a.ac * 1000;
+    const acI = acW / (V * 0.85); // true current with PF
+    const cable = acI <= 12.8 ? 2.5 : acI <= 20 ? 4 : 6;
+    const mcb   = acI <= 12.8 ? 16  : acI <= 20 ? 20 : 25;
+    const c = makeCircuit(`${room.name} Air Conditioner`, 'ac', acW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // ── WASHING MACHINE ──────────────────────────────────────────────
+  if (a.washing > 0) {
+    const c = makeCircuit(`${room.name} Washing Machine`, 'washing', a.washing * 1000, 5, 4, 20);
+    if (c) circuits.push(c);
+  }
+
+  // Fix 8: Dishwasher — dedicated circuit (water + heat load)
+  if ((a.dishwasher || 0) > 0) {
+    const c = makeCircuit(`${room.name} Dishwasher`, 'dishwasher', a.dishwasher * 1000, 5, 4, 20);
+    if (c) circuits.push(c);
+  }
+
+  // ── MICROWAVE ────────────────────────────────────────────────────
+  if (a.microwave > 0) {
+    const c = makeCircuit(`${room.name} Microwave`, 'heavy', a.microwave * 1000, 5, 2.5, 16);
+    if (c) circuits.push(c);
+  }
+
+  // ── PUMP (motor) ─────────────────────────────────────────────────
+  if (a.pump > 0) {
+    const pmpW = a.pump * 1000;
+    const pmpI = pmpW / (V * 0.85);
+    const cable = pmpI <= 12.8 ? 2.5 : 4;
+    const mcb   = pmpI <= 12.8 ? 16  : 20;
+    const c = makeCircuit(`${room.name} Pump`, 'pump', pmpW, 5, cable, mcb);
+    if (c) circuits.push(c);
+  }
+
+  // ── CUSTOM APPLIANCES ────────────────────────────────────────────
+  if ((a.custom1 || 0) > 0) {
+    const c = makeCircuit(`${room.name} Appliance 1`, 'heavy', a.custom1 * 1000, 5, 2.5, 16);
+    if (c) circuits.push(c);
+  }
+  if ((a.custom2 || 0) > 0) {
+    const c = makeCircuit(`${room.name} Appliance 2`, 'heavy', a.custom2 * 1000, 5, 2.5, 16);
+    if (c) circuits.push(c);
+  }
 
   return circuits;
 }
+
 
 function calcWireLength(room, installType) {
   const L = room.length, W = room.width, H = room.height || 2.8;
@@ -515,55 +773,70 @@ function calcWireLength(room, installType) {
 }
 
 function doFullCalc() {
-  const voltage = getNum('s_voltage', 230);
+  const voltage     = getNum('s_voltage', 230);
   const installType = getSetting('s_install') || 'conduit';
-  const temp = getNum('s_temp', 30);
-  const meterDist = getNum('s_meter_dist', 5);
-  const earthing = getSetting('s_earth') || 'TN-C-S';
-  const supplyType = getSetting('s_type') || 'single';
-  const maxDemand = getNum('s_max_demand', 100);
+  const temp        = getNum('s_temp', 30);
+  const meterDist   = getNum('s_meter_dist', 5);
+  const earthing    = getSetting('s_earth') || 'TN-C-S';
+  const supplyType  = getSetting('s_type') || 'single';
+  const maxDemand   = getNum('s_max_demand', 100);
 
-  // Gather all loads
+  // First pass: count total circuits to estimate grouping derating
+  // (shared conduit from DB outward — conservatively assume all cables share conduit)
+  const totalCircuitEstimate = state.rooms.reduce((sum, r) => {
+    const l = r.loads.lighting, s = r.loads.sockets, a = r.loads.appliances;
+    const lightPts = l.ledQty + l.spots + l.chandelier + l.outdoor + l.fans;
+    return sum +
+      Math.max(1, Math.ceil(lightPts / 12)) +
+      Math.max(1, Math.ceil(s.std13A / 8)) +
+      (s.fridge ? 1 : 0) + (s.outdoor ? 1 : 0) + (s.garage ? 1 : 0) +
+      (a.cooker > 0 ? 1 : 0) + (a.oven > 0 ? 1 : 0) +
+      (a.waterHeater > 0 ? 1 : 0) + (a.shower > 0 ? 1 : 0) +
+      (a.ac > 0 ? 1 : 0) + (a.washing > 0 ? 1 : 0) +
+      (a.dishwasher > 0 ? 1 : 0) + (a.pump > 0 ? 1 : 0);
+  }, 0);
+  // Grouping: cables leaving DB share conduit for first few metres — use actual count
+  const circuitsInConduit = Math.min(totalCircuitEstimate, 9);
+
   let totalConnectedW = 0, totalDiversifiedW = 0;
   const allCircuits = [];
   const wireLengths = { 1.5: 0, 2.5: 0, 4: 0, 6: 0, 10: 0, 16: 0, 25: 0, 35: 0 };
-  const warnings = [];
+  const warnings    = [];
 
   state.rooms.forEach(room => {
     const loads = calcRoomLoads(room);
-    const divW = applyDiversity(loads, voltage);
-    totalConnectedW += loads.totalW;
+    const divW  = applyDiversity(loads, voltage);
+    totalConnectedW   += loads.totalW;
     totalDiversifiedW += divW;
-    const ckts = buildCircuits(room, voltage, installType, temp);
+    const ckts = buildCircuits(room, voltage, installType, temp, circuitsInConduit);
     allCircuits.push(...ckts);
     const wl = calcWireLength(room, installType);
-    // Attribute wire lengths to cable sizes
     ckts.forEach(c => {
-      const sz = c.cable;
+      const sz  = c.cable;
       const key = sz <= 1.5 ? 1.5 : sz <= 2.5 ? 2.5 : sz <= 4 ? 4 : sz <= 6 ? 6 : sz <= 10 ? 10 : sz <= 16 ? 16 : sz <= 25 ? 25 : 35;
-      const dist = c.distM;
-      if (c.type === 'lighting') wireLengths[key] = (wireLengths[key] || 0) + wl.lightM;
-      else if (c.type === 'socket') wireLengths[key] = (wireLengths[key] || 0) + wl.sockM;
-      else wireLengths[key] = (wireLengths[key] || 0) + wl.heavyM * 2;
+      if (c.type === 'lighting')     wireLengths[key] = (wireLengths[key] || 0) + wl.lightM;
+      else if (c.type === 'socket' || c.type === 'outdoor_socket' || c.type === 'garage_socket')
+                                     wireLengths[key] = (wireLengths[key] || 0) + wl.sockM;
+      else                           wireLengths[key] = (wireLengths[key] || 0) + wl.heavyM * 2;
     });
   });
 
-  // Apply 15% spare capacity
-  const designW = totalDiversifiedW * 1.15;
+  const designW = totalDiversifiedW * 1.15; // 15% spare capacity
 
-  // Calculate total design current for the incoming supply
+  // Supply current
   let designA;
   if (supplyType === 'three' || voltage === 400) {
-    // For 3-phase, P = sqrt(3) * V_line * I_line * PF. Assuming PF=1:
-    // I_line = P / (400 * 1.732)
-    designA = designW / (voltage * Math.sqrt(3));
+    designA = designW / (400 * Math.sqrt(3) * 0.9);
   } else {
-    // Single phase
     designA = designW / voltage;
   }
 
-  // Main breaker
-  const mainBreakerA = nextMCB(designA * 1.25);
+  // Fix 3: Main breaker — 63A, 80A, or 100A only for residential single-phase
+  // (80A is a standard size used in many markets; added here)
+  let mainBreakerStd;
+  if (designA * 1.25 <= 63)       mainBreakerStd = 63;
+  else if (designA * 1.25 <= 80)  mainBreakerStd = 80;
+  else                             mainBreakerStd = 100;
 
   // Main supply cable
   const mainCableSize = autoUpsizeCable(
@@ -571,60 +844,98 @@ function doFullCalc() {
     designA, meterDist, voltage, 1.5, 'free-air', temp
   );
 
-  // Earth conductor per IEC 60364-5-54 Table 54.1:
-  // Phase ≤16mm² → earth = phase size; 16–35mm² → earth = 16mm²; >35mm² → earth = phase/2
-  // Then snap to the nearest standard cable size, min 6mm²
+  // Earth conductor (IEC 60364-5-54 Table 54.1)
   let rawEarth;
   if (mainCableSize <= 16) rawEarth = mainCableSize;
   else if (mainCableSize <= 35) rawEarth = 16;
   else rawEarth = mainCableSize / 2;
   const earthCableSize = CABLE_SIZES.find(s => s >= Math.max(6, rawEarth)) || 95;
 
-  // Voltage drop on main supply
-  const mainVD = calcVDpercent(mainCableSize, designA, meterDist, voltage);
+  // Feeder voltage drop (meter → DB)
+  const feederVDpct = calcVDpercent(mainCableSize, designA, meterDist, voltage);
 
-  // Earthing system requirements
-  const earthRodLength = earthing === 'TT' ? 3 : earthing === 'TN-S' ? 2 : 1.5;
-
-  // Check against max demand
-  if (designA > maxDemand) {
-    warnings.push({ type: 'error', msg: `Calculated demand ${designA.toFixed(1)}A exceeds meter limit of ${maxDemand}A. Load reduction or supply upgrade required.` });
-  }
-  if (mainVD > 3) {
-    warnings.push({ type: 'warn', msg: `Supply cable voltage drop ${mainVD.toFixed(2)}% — supply cable upsized to ${mainCableSize}mm² to compensate.` });
-  }
-
-  // Check individual circuits
+  // Fix 4: Total VD check = feederVD + circuitVD for each circuit
+  // IEC 60364-5-52 cl.525: total from origin to furthest point
   allCircuits.forEach(c => {
-    if (c.vdPct > 5) warnings.push({ type: 'warn', msg: `Circuit "${c.name}": Voltage drop ${c.vdPct.toFixed(2)}% exceeds 5% limit — cable upsized.` });
-    if (c.mcbA > 63) warnings.push({ type: 'warn', msg: `Circuit "${c.name}": MCB rating ${c.mcbA}A is large — verify overcurrent coordination.` });
+    const totalVD = feederVDpct + c.circuitVDpct;
+    const limit   = c.type === 'lighting' ? 3 : 5;
+    if (totalVD > limit) {
+      warnings.push({
+        type: 'warn',
+        msg: `Circuit "${c.name}": Total VD ${totalVD.toFixed(2)}% (feeder ${feederVDpct.toFixed(2)}% + circuit ${c.circuitVDpct.toFixed(2)}%) exceeds ${limit}% limit. Increase cable to next size.`
+      });
+    }
   });
 
-  // Count protection devices
-  const rcdCircuits = allCircuits.filter(c => c.needsRCD);
-  const rcboCircuits = allCircuits.filter(c => c.needsRCBO);
-  const mcbCircuits = allCircuits.filter(c => !c.needsRCBO);
+  // Fix 6: Earthing — earth resistance targets, not just rod length
+  // IEC 60364-4-41 / IEC 60364-5-54:
+  //   TT system:    Ra ≤ 50 / I∆n = 50 / 0.03 = 1666Ω (but practical target ≤ 100Ω)
+  //   TN-S system:  Ra ≤ 1Ω (bonded to supply neutral)
+  //   TN-C-S (PME): Ra ≤ 1Ω, main protective bonding required
+  const earthRodLength = earthing === 'TT' ? 3 : 2;
+  const earthResTarget = earthing === 'TT' ? '≤ 100Ω (IEC 60364-4-41: Ra ≤ 50/I∆n = 1666Ω, practical target ≤ 100Ω)' :
+                         earthing === 'TN-S' ? '≤ 1Ω (bonded to supply neutral)' :
+                         '≤ 1Ω (PME — main equipotential bonding required)';
 
-  // DB size
-  const totalWays = allCircuits.length + 4; // spare ways
+  if (designA > maxDemand) {
+    warnings.push({ type: 'error', msg: `Demand ${designA.toFixed(1)}A exceeds meter limit ${maxDemand}A. Load reduction or upgrade required.` });
+  }
+  if (designA * 1.25 > 100 && supplyType === 'single') {
+    warnings.push({ type: 'error', msg: `Total demand ${designA.toFixed(1)}A exceeds 100A single-phase maximum. Consider load reduction or three-phase supply.` });
+  }
+  if (feederVDpct > 1.5) {
+    warnings.push({ type: 'warn', msg: `Feeder VD ${feederVDpct.toFixed(2)}% is high — leaves only ${(3 - feederVDpct).toFixed(2)}% budget for lighting circuits. Consider upsizing supply cable.` });
+  }
+
+  // Cable→MCB compliance check
+  allCircuits.forEach(c => {
+    const iz = getAmpacity(c.cable, installType) * getTempFactor(temp);
+    if (c.mcbA > iz) {
+      warnings.push({ type: 'error', msg: `Circuit "${c.name}": MCB ${c.mcbA}A > cable ${c.cable}mm² Iz (${iz.toFixed(1)}A). Cable must be upsized.` });
+    }
+    if (c.startingCurrentWarning) {
+      warnings.push({ type: 'warn', msg: `Motor circuit "${c.name}": ${c.startingCurrentWarning}` });
+    }
+  });
+
+  // Fix 5: RCD coordination — split-load board model
+  // Two RCDs on split-load board OR individual RCBOs per circuit.
+  // Here we count: RCBOs for all heavy/motor/shower circuits (individual protection).
+  // Socket circuits get either group RCD + MCB, or individual RCBOs.
+  // Recommendation: use split-load board with 2× 63A/30mA RCDs for socket groups.
+  const rcboCircuits   = allCircuits.filter(c => c.deviceType === 'RCBO');
+  const mcbCircuits    = allCircuits.filter(c => c.deviceType === 'MCB');
+  const socketRCBOs    = allCircuits.filter(c => c.type === 'socket' || c.type === 'outdoor_socket' || c.type === 'garage_socket');
+  // For split-load board: all socket/lighting circuits → 2 group RCDs (one per half-board)
+  // Group 1: lighting circuits (MCB + main RCD)
+  // Group 2: socket circuits (MCB + second RCD) OR individual RCBOs
+  const groupRCDCount  = 2; // split-load: 2× 63A/30mA Type A RCDs
+  const rcboCount      = rcboCircuits.length;
+
+  const totalWays = allCircuits.length + 4; // +4 spare
   const dbWays = [8, 12, 16, 20, 24, 32, 40].find(w => w >= totalWays) || 40;
 
-  // Material list
-  const materials = buildMaterialList(allCircuits, wireLengths, mainCableSize, earthCableSize, dbWays, mainBreakerA, earthRodLength, earthing);
+  const materials = buildMaterialList(
+    allCircuits, wireLengths, mainCableSize, earthCableSize,
+    dbWays, mainBreakerStd, earthRodLength, earthing,
+    groupRCDCount, earthResTarget
+  );
 
   return {
     voltage, installType, temp, meterDist, earthing, supplyType,
     totalConnectedW, totalDiversifiedW, designW, designA,
-    mainBreakerA, mainCableSize, earthCableSize, mainVD, earthRodLength,
+    mainBreakerA: mainBreakerStd, mainCableSize, earthCableSize,
+    feederVDpct: +feederVDpct.toFixed(2), mainVD: +feederVDpct.toFixed(2),
+    earthRodLength, earthResTarget,
     allCircuits, wireLengths, warnings, materials, dbWays,
-    rcdCount: Math.ceil(rcdCircuits.length / 4) + 1,
-    rcboCount: rcboCircuits.length,
-    mcbCount: allCircuits.length,
-    spd: getSetting('p_spd_type') || '2'
+    groupRCDCount, rcboCount, mcbCount: allCircuits.length,
+    spd: getSetting('p_spd_type') || '2',
+    circuitsInConduit,
+    groupingFactor: getGroupingFactor(circuitsInConduit)
   };
 }
 
-function buildMaterialList(circuits, wireLengths, mainCable, earthCable, dbWays, mainBreaker, earthRodLen, earthing) {
+function buildMaterialList(circuits, wireLengths, mainCable, earthCable, dbWays, mainBreaker, earthRodLen, earthing, groupRCDCount, earthResTarget) {
   const install = getSetting('s_install') || 'conduit';
   const mat = {};
   const add = (cat, item, qty, unit, spec = '') => {
@@ -632,80 +943,78 @@ function buildMaterialList(circuits, wireLengths, mainCable, earthCable, dbWays,
     mat[cat].push({ item, qty: Math.ceil(qty), unit, spec });
   };
 
-  // CABLES (in yards, with 15% wastage)
+  // CABLES
   const toYd = (m) => Math.ceil(metersToYards(m) * 1.15);
   [1.5, 2.5, 4, 6, 10, 16, 25, 35].forEach(sz => {
     const m = wireLengths[sz] || 0;
-    if (m > 0) {
-      const yd = toYd(m);
-      add('CABLES', `${sz}mm² Twin & Earth Cable`, yd, 'yards', `Copper, 230V, Thermoplastic`);
-    }
+    if (m > 0) add('CABLES', `${sz}mm² Twin & Earth Cable`, toYd(m), 'yards', 'Copper, 230V, Thermoplastic');
   });
-  // Main supply cable
   add('CABLES', `${mainCable}mm² Single Core SWA Cable`, toYd(getNum('s_meter_dist', 5) * 3), 'yards', 'Armoured, Utility to DB');
-  // Earth cable
   add('CABLES', `${Math.max(6, earthCable)}mm² Green/Yellow Earth Cable`, toYd(20), 'yards', 'Main earthing conductor');
   add('CABLES', '4mm² Green/Yellow Earth Cable', toYd(15), 'yards', 'Supplementary bonding');
 
   // MAIN PROTECTION
   add('MAIN PROTECTION', 'Utility Meter Tails', 2, 'set', `${mainCable}mm²`);
-  add('MAIN PROTECTION', 'Main Isolator Switch', 1, 'unit', `${mainBreaker}A DP`);
-  add('MAIN PROTECTION', `Main MCB`, 1, 'unit', `${mainBreaker}A, Curve C, 10kA`);
-  add('MAIN PROTECTION', `SPD Type ${getSetting('p_spd_type') || '2'}`, 1, 'unit', '40kA, Class II');
-  add('MAIN PROTECTION', 'Main RCD (100mA)', 1, 'unit', '63A, Type A, 100mA');
+  add('MAIN PROTECTION', `Main Isolator — ${mainBreaker}A DP Switch`, 1, 'unit', `${mainBreaker}A Double Pole, emergency disconnect`);
+  add('MAIN PROTECTION', `Main MCB — ${mainBreaker}A Curve C`, 1, 'unit', `${mainBreaker}A, Curve C, 10kA breaking capacity`);
+  add('MAIN PROTECTION', `SPD Type ${getSetting('p_spd_type') || '2'} — with dedicated MCB`, 1, 'unit', '40kA Class II, dedicated 6A MCB, one DB way');
+
+  // Fix 5: RCD coordination — split-load board with 2 group RCDs
+  // Recommendation: split-load consumer unit with 2× 63A/30mA Type A RCDs
+  // Group A (left): lighting + general MCBs under RCD 1
+  // Group B (right): socket MCBs + dedicated appliance RCBOs under RCD 2
+  add('MAIN PROTECTION', `RCD Group A — 63A/30mA Type A (Split-load half 1)`, 1, 'unit', '30mA, Type A — lighting + general circuits');
+  add('MAIN PROTECTION', `RCD Group B — 63A/30mA Type A (Split-load half 2)`, 1, 'unit', '30mA, Type A — sockets + dedicated circuits');
 
   // DISTRIBUTION BOARD
-  add('DISTRIBUTION BOARD', `Consumer Unit / DB (${dbWays}-way)`, 1, 'unit', `Metal, ${dbWays}-way, DIN rail`);
+  add('DISTRIBUTION BOARD', `Split-Load Consumer Unit / DB — ${dbWays}-way`, 1, 'unit', `Metal, ${dbWays}-way, DIN rail, dual RCD split-load`);
   add('DISTRIBUTION BOARD', 'DIN Rail', 2, 'meter', '35mm');
-  add('DISTRIBUTION BOARD', 'Neutral Bar', 1, 'unit', '24-way Busbar');
-  add('DISTRIBUTION BOARD', 'Earth Bar', 1, 'unit', '24-way Busbar');
-  add('DISTRIBUTION BOARD', 'DB Busbar Linker', 1, 'set', 'Phase busbar');
+  add('DISTRIBUTION BOARD', 'Neutral Bar (Main)', 1, 'unit', '24-way insulated busbar — N');
+  add('DISTRIBUTION BOARD', 'Earth Bar (PE)', 1, 'unit', '24-way busbar — PE (green/yellow)');
+  add('DISTRIBUTION BOARD', 'Phase Busbar Linker', 1, 'set', 'Live distribution link');
 
-  // MCBs (by rating)
+  // Fix 10: MCBs — clearly labeled by type and function
   const mcbGroups = {};
   circuits.forEach(c => {
-    if (!c.needsRCBO) {
-      const k = `${c.mcbA}A Curve ${c.mcbCurve}`;
+    if (c.deviceType === 'MCB') {
+      const k = `MCB ${c.mcbA}A Curve C`;
       mcbGroups[k] = (mcbGroups[k] || 0) + 1;
     }
   });
   Object.entries(mcbGroups).forEach(([k, qty]) => {
-    add('MCBs & RCDs', `MCB ${k}`, qty, 'unit', '6kA/10kA breaking capacity');
+    add('MCBs & RCBOs', k, qty, 'unit', '6kA/10kA breaking capacity — backed by group RCD');
   });
 
-  // RCDs
-  add('MCBs & RCDs', `RCD ${getSetting('p_rcd_sense') || 30}mA Type ${getSetting('p_rcd_type') || 'A'}`, Math.ceil(circuits.filter(c => c.needsRCD).length / 4) + 1, 'unit', '63A');
-
-  // RCBOs
-  circuits.filter(c => c.needsRCBO).forEach(c => {
-    add('MCBs & RCDs', `RCBO ${c.mcbA}A 30mA`, 1, 'unit', `Type A, Curve C — ${c.name}`);
+  // Fix 10: RCBOs — clearly labeled per circuit
+  circuits.filter(c => c.deviceType === 'RCBO').forEach(c => {
+    add('MCBs & RCBOs', `RCBO ${c.mcbA}A/30mA Type A Curve C`, 1, 'unit', `${c.name} — self-contained MCB+RCD`);
   });
 
-  // EARTHING
+  // EARTHING — Fix 6: include earth resistance target
   if (earthing === 'TT' || earthing === 'TN-S') {
     add('EARTHING', `Earth Rod (${earthRodLen}m)`, 2, 'unit', 'Copper-clad Steel, 16mm dia');
     add('EARTHING', 'Earth Rod Clamp', 2, 'unit', 'Copper, 16mm');
-    add('EARTHING', 'Earth Pit (inspection cover)', 1, 'unit', '300×300mm Concrete');
-    add('EARTHING', 'Earth Pit Frame', 1, 'unit', 'GI');
+    add('EARTHING', 'Earth Pit Inspection Cover', 1, 'unit', '300×300mm Concrete');
+    add('EARTHING', 'Earth Resistance Test (on completion)', 1, 'test', earthResTarget || '≤ 100Ω for TT system');
   }
-  add('EARTHING', 'Main Earth Terminal Bar', 1, 'unit', 'Brass, 25mm²');
-  add('EARTHING', 'Equipotential Bonding Clamps', 4, 'unit', 'Gas/water pipe bonding');
+  add('EARTHING', 'Main Earth Terminal Bar (MET)', 1, 'unit', 'Brass, 25mm² — connects DB earth bar to earthing system');
+  add('EARTHING', 'Main Equipotential Bonding Clamps', 4, 'unit', 'Gas pipe, water pipe, structural steel, building frame');
   add('EARTHING', 'Earth Electrode Inspection Box', 1, 'unit', 'Plastic, UV resistant');
-  add('EARTHING', 'Anti-corrosion Tape', 1, 'roll', 'For buried conductors');
+  add('EARTHING', 'Anti-corrosion Tape (buried conductors)', 1, 'roll', 'For buried earth conductors');
 
   // CONDUIT
   if (install === 'conduit' || install === 'trunking') {
     const totalConLen = Object.values(wireLengths).reduce((a, b) => a + b, 0) * 0.3;
     const conduitYd = toYd(totalConLen);
-    add('CONDUIT & TRUNKING', '20mm PVC Conduit', Math.ceil(conduitYd * 0.6), 'yards', 'Concealed wiring');
+    add('CONDUIT & TRUNKING', '20mm PVC Conduit', Math.ceil(conduitYd * 0.6), 'yards', 'Concealed wiring runs');
     add('CONDUIT & TRUNKING', '25mm PVC Conduit', Math.ceil(conduitYd * 0.4), 'yards', 'Heavy circuit routes');
-    add('CONDUIT & TRUNKING', 'Conduit Boxes (Round)', Math.ceil(circuits.length * 1.5), 'units', 'Junction/switch boxes');
-    add('CONDUIT & TRUNKING', 'Conduit Boxes (Rectangular)', circuits.length, 'units', 'Socket/light boxes');
-    add('CONDUIT & TRUNKING', '20mm Conduit Saddles', Math.ceil(conduitYd * 3), 'units', 'Every 0.3m spacing');
+    add('CONDUIT & TRUNKING', 'Conduit Junction Boxes (Round)', Math.ceil(circuits.length * 1.5), 'units', 'Junction/switch boxes');
+    add('CONDUIT & TRUNKING', 'Conduit Back Boxes (Rectangular)', circuits.length, 'units', 'Socket/light fitting boxes');
+    add('CONDUIT & TRUNKING', '20mm Conduit Saddles', Math.ceil(conduitYd * 3), 'units', '300mm spacing per IEC');
     add('CONDUIT & TRUNKING', '25mm Conduit Saddles', Math.ceil(conduitYd * 2), 'units');
-    add('CONDUIT & TRUNKING', 'Conduit Elbows 20mm', Math.ceil(conduitYd * 0.5), 'units');
-    add('CONDUIT & TRUNKING', 'Conduit Tees 20mm', Math.ceil(conduitYd * 0.3), 'units');
-    add('CONDUIT & TRUNKING', 'Conduit Glue / Solvent', 2, 'cans', '250ml');
+    add('CONDUIT & TRUNKING', '20mm Conduit Elbows', Math.ceil(conduitYd * 0.5), 'units');
+    add('CONDUIT & TRUNKING', '20mm Conduit Tees', Math.ceil(conduitYd * 0.3), 'units');
+    add('CONDUIT & TRUNKING', 'Conduit Solvent / Glue', 2, 'cans', '250ml');
   }
   if (install === 'trunking') {
     add('CONDUIT & TRUNKING', '50×50mm Cable Trunking', toYd(Object.values(wireLengths).reduce((a, b) => a + b, 0) * 0.2), 'yards');
@@ -713,42 +1022,43 @@ function buildMaterialList(circuits, wireLengths, mainCable, earthCable, dbWays,
   }
 
   // ACCESSORIES
-  const totalSockets = state.rooms.reduce((a, r) => a + r.loads.sockets.std13A + r.loads.sockets.usb + (r.loads.sockets.fridge ? 1 : 0), 0);
+  const totalSockets  = state.rooms.reduce((a, r) => a + r.loads.sockets.std13A + r.loads.sockets.usb + (r.loads.sockets.fridge ? 1 : 0), 0);
   const totalSwitches = state.rooms.reduce((a, r) => a + Math.ceil((r.loads.lighting.ledQty + r.loads.lighting.fans) / 2 + r.loads.lighting.spots / 4), 0);
-  const totalFans = state.rooms.reduce((a, r) => a + r.loads.lighting.fans, 0);
+  const totalFans     = state.rooms.reduce((a, r) => a + r.loads.lighting.fans, 0);
 
   add('WIRING ACCESSORIES', '13A Single Socket Outlet', Math.ceil(totalSockets * 0.4), 'units', 'White, switched, BS 1363');
   add('WIRING ACCESSORIES', '13A Twin Socket Outlet', Math.ceil(totalSockets * 0.3), 'units', 'White, switched, BS 1363');
   add('WIRING ACCESSORIES', '13A Triple Socket Outlet', Math.ceil(totalSockets * 0.1), 'units');
-  add('WIRING ACCESSORIES', 'USB-A/C Charger Socket', state.rooms.reduce((a, r) => a + r.loads.sockets.usb, 0), 'units', '13A with dual USB');
+  add('WIRING ACCESSORIES', 'USB-A/C Charger Socket', state.rooms.reduce((a, r) => a + r.loads.sockets.usb, 0), 'units', '13A with dual USB 5V/3A');
+  add('WIRING ACCESSORIES', 'IP44 Outdoor Socket Outlet', state.rooms.reduce((a, r) => a + (r.loads.sockets.outdoor || 0), 0), 'units', 'Weatherproof, switched');
   add('WIRING ACCESSORIES', '1-Gang 1-Way Light Switch', Math.ceil(totalSwitches * 0.5), 'units', 'White, 10A');
   add('WIRING ACCESSORIES', '2-Gang 1-Way Light Switch', Math.ceil(totalSwitches * 0.3), 'units', 'White, 10A');
-  add('WIRING ACCESSORIES', '2-Gang 2-Way Light Switch', Math.ceil(totalSwitches * 0.2), 'units', 'For 2-way switching');
+  add('WIRING ACCESSORIES', '2-Gang 2-Way Light Switch', Math.ceil(totalSwitches * 0.2), 'units', '2-way switching (stairs/halls)');
   add('WIRING ACCESSORIES', 'Fan Speed Controller', totalFans, 'units', '3-speed rotary');
-  add('WIRING ACCESSORIES', 'Cooker Control Unit', circuits.filter(c => c.name.includes('Cooker')).length, 'units', '45A DP switch with neon');
-  add('WIRING ACCESSORIES', 'Fused Connection Unit', circuits.filter(c => c.type === 'heavy').length, 'units', '13A FCU, switched');
+  add('WIRING ACCESSORIES', 'Cooker Control Unit (45A DP)', circuits.filter(c => c.name.includes('Cooker')).length, 'units', '45A DP switch with neon indicator');
+  add('WIRING ACCESSORIES', 'Fused Connection Unit (FCU)', circuits.filter(c => c.type === 'heavy' && c.watts <= 3000).length, 'units', '13A FCU, switched, with flex outlet');
   add('WIRING ACCESSORIES', 'TV Aerial Socket', state.rooms.reduce((a, r) => a + (r.loads.sockets.tv ? 1 : 0), 0), 'units', 'IEC coax + data');
-  add('WIRING ACCESSORIES', 'Data RJ45 Socket (Cat6)', state.rooms.reduce((a, r) => a + (r.loads.sockets.tv ? 1 : 0), 0), 'units', 'Cat6, keystone');
+  add('WIRING ACCESSORIES', 'Data RJ45 Socket (Cat6)', state.rooms.reduce((a, r) => a + (r.loads.sockets.tv ? 1 : 0), 0), 'units', 'Cat6 keystone');
 
   // FIXINGS
-  add('FIXINGS & HARDWARE', 'M3.5 × 25mm Round Head Screws', 200, 'units', 'For accessories');
-  add('FIXINGS & HARDWARE', 'M4 × 50mm Wall Plugs (Brown)', 100, 'units');
-  add('FIXINGS & HARDWARE', 'Cable Ties 200mm', 2, 'bags', '100/bag, UV resistant');
+  add('FIXINGS & HARDWARE', 'M3.5 × 25mm Round Head Screws', 200, 'units', 'Accessory fixing');
+  add('FIXINGS & HARDWARE', 'M4 × 50mm Wall Plugs', 100, 'units');
+  add('FIXINGS & HARDWARE', 'Cable Ties 200mm UV-resistant', 2, 'bags', '100/bag');
   add('FIXINGS & HARDWARE', 'Cable Clips 5mm', 200, 'units', 'Flat twin & earth');
   add('FIXINGS & HARDWARE', 'Cable Clips 6mm', 100, 'units');
-  add('FIXINGS & HARDWARE', 'Junction Box 30A', Math.ceil(circuits.length * 0.5), 'units', '5-way connector');
-  add('FIXINGS & HARDWARE', 'Wago Lever Connectors (5-way)', Math.ceil(circuits.length * 3), 'units', 'Pack of 25');
-  add('FIXINGS & HARDWARE', 'Back Boxes (Single 35mm)', Math.ceil(totalSockets * 0.4 + totalSwitches * 0.7), 'units', 'Steel, galvanised');
-  add('FIXINGS & HARDWARE', 'Back Boxes (Twin 35mm)', Math.ceil(totalSockets * 0.4), 'units', 'Steel, galvanised');
+  add('FIXINGS & HARDWARE', 'Junction Box 30A (5-way)', Math.ceil(circuits.length * 0.5), 'units');
+  add('FIXINGS & HARDWARE', 'Wago 5-way Lever Connectors', Math.ceil(circuits.length * 3), 'units', 'Pack of 25');
+  add('FIXINGS & HARDWARE', 'Back Boxes Single 35mm (steel)', Math.ceil(totalSockets * 0.4 + totalSwitches * 0.7), 'units');
+  add('FIXINGS & HARDWARE', 'Back Boxes Twin 35mm (steel)', Math.ceil(totalSockets * 0.4), 'units');
 
   // LABELS & SAFETY
-  add('LABELS & SAFETY', 'Circuit Identification Labels', 1, 'set', 'Self-adhesive, UV stable');
-  add('LABELS & SAFETY', 'Warning Labels (Danger 230V)', 10, 'units', 'IEC standard');
-  add('LABELS & SAFETY', 'RCD Test Label', 2, 'units', 'Quarterly test reminder');
-  add('LABELS & SAFETY', 'Main Isolator Label', 1, 'unit', 'Emergency isolator sign');
-  add('LABELS & SAFETY', 'Earth Electrode Warning Label', 2, 'units');
-  add('LABELS & SAFETY', 'As-Built Drawing Pouch', 1, 'unit', 'Inside DB door');
-  add('LABELS & SAFETY', 'Electrical Installation Certificate', 1, 'set', 'Completion documentation');
+  add('LABELS & SAFETY', 'Circuit Directory Card (DB schedule)', 1, 'unit', 'Identifies each way: device type, circuit name, rating');
+  add('LABELS & SAFETY', 'Warning Labels — Danger 230V AC', 10, 'units', 'IEC 60417 standard');
+  add('LABELS & SAFETY', 'RCD Monthly Test Reminder Label', groupRCDCount || 2, 'units', 'Press test button monthly');
+  add('LABELS & SAFETY', 'Main Isolator Emergency Label', 1, 'unit', '"ISOLATE HERE IN EMERGENCY"');
+  add('LABELS & SAFETY', 'Earth Electrode Warning Label', 2, 'units', '"DO NOT REMOVE — EARTH CONNECTION"');
+  add('LABELS & SAFETY', 'As-Built Drawing Pouch (inside DB door)', 1, 'unit', 'Holds circuit schedule + SLD');
+  add('LABELS & SAFETY', 'Electrical Installation Certificate (EIC)', 1, 'set', 'IEC 60364 completion documentation');
 
   return mat;
 }

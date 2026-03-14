@@ -7,11 +7,22 @@
   <meta name="description"
     content="AI Professional Electrical Wiring Designer — IEC 60364 compliant residential wiring calculator with load analysis, cable sizing, protection coordination, and full diagram generation.">
   <title>AI Professional Electrical Wiring Designer — IEC Compliant</title>
+  <link rel="icon" type="image/jpeg" href="../assets/favicon.jpeg" />
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  <link rel="manifest" href="../manifest.json" />
+  <meta name="theme-color" content="#1a1a2e" />
   <link
     href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
 </head>
 
 <body>

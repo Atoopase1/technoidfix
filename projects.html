@@ -172,29 +172,32 @@
       }
     }
   </style>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
 </head>
 
 <body>
 
   <header class="nav" role="banner">
-    <div class="nav-logo">
-      <span class="brand">Technoid<span class="brand-dot">Fix</span></span>
-
-    </div>
-    <nav role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+        <div class="nav-inline">
       <a href="index.html" data-page="home">Home</a>
       <a href="design.html" data-page="design">Design</a>
-      <a href="web.html" data-page="web">Web Development</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="projects.html" data-page="projects">Projects</a>
-      <a href="contact.html" data-page="contact" class="nav-cta">
-        <p>
-          <span style="color: rgb(80, 83, 80);">Book</span> Electrical Service
-        </p>
-      </a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
     </nav>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i
-        class="fas fa-moon"></i></button>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
 
   <main class="container" style="padding-top:32px;padding-bottom:60px;">
@@ -291,6 +294,39 @@
     </div>
   </div>
 
+  <!-- Edit Project Modal -->
+  <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:480px;">
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+      <h3><i class="fas fa-pencil-alt"></i> Edit Project Caption</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;">Update the description, tools used, or outcome for this project.</p>
+      <input type="hidden" id="edit-project-id" />
+      <textarea id="edit-caption-input" rows="6"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;box-sizing:border-box;"
+        placeholder="Describe this project — what was done, tools used, outcome…"></textarea>
+      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn" id="edit-save-btn" onclick="saveEditCaption()"><i class="fas fa-check-circle"></i> Save Changes</button>
+        <button class="btn btn-light" onclick="closeEditModal()">Cancel</button>
+      </div>
+      <div id="edit-status" style="font-size:.85rem;color:var(--muted);margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="delete-confirm-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:340px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">🗑️</div>
+      <h3 style="margin-bottom:8px;">Delete Project?</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px;">This cannot be undone. The image and all its likes and comments will be permanently removed.</p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn" id="delete-confirm-btn" onclick="confirmDeleteProject()" style="background:#ef4444;">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+        <button class="btn btn-light" onclick="closeDeleteConfirm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Password Reset Modal -->
   <div class="modal-overlay" id="reset-password-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:420px;">
@@ -369,6 +405,7 @@
     /* ── Auth state ───────────────────────────────────────────── */
     let currentUser = null;   // null | { id, email }
     let isAdmin = false;
+    const captionStore = {};  // id -> raw caption string for edit modal
 
     function getDisplayName() {
       if (currentUser) return currentUser.email.split('@')[0];
@@ -385,6 +422,11 @@
 
     /* ── Helpers ───────────────────────────────────────────── */
     function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function formatCaption(s) {
+      return escHtml(s)
+        .replace(/\n/g, '<br>')
+        .replace(/(https?:\/\/[^\s<&"]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--brand);word-break:break-all;">$1</a>');
+    }
     function fmt(iso) { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
     /* ── Auth UI ──────────────────────────────────────────────── */
@@ -646,6 +688,9 @@
         loading.style.display = 'none';
         feed.style.display = 'grid';
 
+        /* Store raw captions for edit modal */
+        projects.forEach(p => { captionStore[p.id] = p.caption; });
+
         feed.innerHTML = projects.map(p => {
           const liked = likedSet.has(p.id);
           const cCount = countMap[p.id] || 0;
@@ -654,9 +699,12 @@
            <span class="project-media-type">VIDEO</span>`
             : `<img src="${escHtml(p.file_url)}" alt="${escHtml(p.caption)}" loading="lazy" />`;
 
-          /* Delete button: only render for admins */
+          /* Delete + Edit buttons: only render for admins */
           const deleteBtnHTML = isAdmin
-            ? `<button class="proj-btn" onclick="deleteProject('${p.id}')" style="color:#ef4444;border-color:#fca5a5;" title="Delete project">
+            ? `<button class="proj-btn" onclick="openEditModal('${p.id}')" style="color:#2563eb;border-color:#93c5fd;" title="Edit caption">
+             <i class="fas fa-pencil-alt"></i>
+           </button>
+           <button class="proj-btn" onclick="deleteProject('${p.id}')" style="color:#ef4444;border-color:#fca5a5;" title="Delete project">
              <i class="fas fa-trash"></i>
            </button>`
             : '';
@@ -670,7 +718,7 @@
       <article class="project-card" data-id="${p.id}">
         <div class="project-media">${mediaHTML}</div>
         <div class="project-body">
-          <p class="project-caption clamped" id="caption-${p.id}">${escHtml(p.caption)}</p>
+          <p class="project-caption clamped" id="caption-${p.id}">${formatCaption(p.caption)}</p>
           <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="toggleCaption('${p.id}')" style="display:none;">More</button>
           <div class="project-meta">Posted ${fmt(p.created_at)}</div>
         </div>
@@ -970,21 +1018,108 @@
       }
     }
 
-    /* ── Delete ─────────────────────────────────────────────── */
-    async function deleteProject(id) {
+    /* ── Edit Caption ───────────────────────────────────────── */
+    function openEditModal(id) {
       if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
-      if (!confirm('Delete this project? This cannot be undone.')) return;
+      const currentText = captionStore[id] || '';
+      document.getElementById('edit-project-id').value = id;
+      document.getElementById('edit-caption-input').value = currentText;
+      document.getElementById('edit-status').textContent = '';
+      const btn = document.getElementById('edit-save-btn');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Save Changes';
+      document.getElementById('edit-modal').classList.add('open');
+      setTimeout(() => document.getElementById('edit-caption-input').focus(), 100);
+    }
 
-      /* Get file_url to delete from storage */
-      const { data: proj } = await sb.from('projects').select('file_url').eq('id', id).single();
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.remove('open');
+      document.getElementById('edit-caption-input').value = '';
+      document.getElementById('edit-project-id').value = '';
+      document.getElementById('edit-status').textContent = '';
+    }
 
+    async function saveEditCaption() {
+      if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
+      const id = document.getElementById('edit-project-id').value;
+      const newCaption = document.getElementById('edit-caption-input').value.trim();
+      if (!newCaption) { window.toast('Caption cannot be empty.', 'error'); return; }
+
+      const btn = document.getElementById('edit-save-btn');
+      const status = document.getElementById('edit-status');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+      status.textContent = 'Updating…';
+
+      const { error } = await sb.from('projects').update({ caption: newCaption }).eq('id', id);
+      if (error) {
+        window.toast('Could not save changes.', 'error');
+        status.textContent = 'Save failed. Try again.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Save Changes';
+        return;
+      }
+
+      window.toast('Caption updated!', 'success');
+      captionStore[id] = newCaption;
+      closeEditModal();
+      loadFeed();
+    }
+
+    /* ── Delete ─────────────────────────────────────────────── */
+    let _pendingDeleteId = null;
+
+    async function deleteProject(id) {
+      /* Re-verify admin from live session — fixes Spck session persistence issues */
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session?.user || !ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
+        window.toast('Admin access required. Please sign in again.', 'error');
+        return;
+      }
+      /* Keep isAdmin in sync */
+      currentUser = { id: session.user.id, email: session.user.email };
+      isAdmin = true;
+
+      _pendingDeleteId = id;
+      document.getElementById('delete-confirm-modal').classList.add('open');
+    }
+
+    function closeDeleteConfirm() {
+      _pendingDeleteId = null;
+      document.getElementById('delete-confirm-modal').classList.remove('open');
+    }
+
+    async function confirmDeleteProject() {
+      const id = _pendingDeleteId;
+      if (!id) return;
+      closeDeleteConfirm();
+
+      const btn = document.getElementById('delete-confirm-btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…'; }
+
+      /* Get file_url before deleting */
+      const { data: proj, error: fetchErr } = await sb.from('projects').select('file_url').eq('id', id).single();
+      if (fetchErr) { window.toast('Could not fetch project: ' + fetchErr.message, 'error'); return; }
+
+      /* Delete related rows first to avoid FK constraint errors */
+      await sb.from('likes').delete().eq('project_id', id);
+      await sb.from('comments').delete().eq('project_id', id);
+
+      /* Delete the project row */
       const { error } = await sb.from('projects').delete().eq('id', id);
-      if (error) { window.toast('Could not delete project.', 'error'); return; }
+      if (error) {
+        window.toast('Delete failed: ' + error.message, 'error');
+        return;
+      }
 
-      /* Try to delete file from storage */
+      /* Delete media file from storage */
       if (proj?.file_url) {
-        const parts = proj.file_url.split('/' + BUCKET + '/');
-        if (parts[1]) await sb.storage.from(BUCKET).remove([parts[1]]);
+        try {
+          const urlObj = new URL(proj.file_url);
+          const parts = urlObj.pathname.split('/' + BUCKET + '/');
+          const filePath = parts[1] ? decodeURIComponent(parts[1].split('?')[0]) : null;
+          if (filePath) await sb.storage.from(BUCKET).remove([filePath]);
+        } catch (_) {}
       }
 
       window.toast('Project deleted.', 'success');
@@ -1017,6 +1152,8 @@
 
       /* Close modals on overlay click */
       document.getElementById('share-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeShareModal(); });
+      document.getElementById('edit-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeEditModal(); });
+      document.getElementById('delete-confirm-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDeleteConfirm(); });
     });
   </script>
 </body>

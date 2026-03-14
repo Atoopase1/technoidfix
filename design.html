@@ -14,27 +14,35 @@
 
   <link rel="stylesheet" href="assets/css/styles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
 </head>
 
-<body>
+<body class="page-tinted-cards">
 
   <!-- ── Navigation ── -->
   <header class="nav" role="banner">
-    <div class="nav-logo">
-      <span class="brand">Technoid<span class="brand-dot">Fix</span></span>
-
-    </div>
-    <nav role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+        <div class="nav-inline">
       <a href="index.html" data-page="home">Home</a>
       <a href="design.html" data-page="design">Design</a>
-      <a href="web.html" data-page="web">Web Development</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
       <a href="projects.html" data-page="projects">Projects</a>
-      <a href="contact.html" data-page="contact" class="nav-cta"><span>Book</span> Electrical Service</a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
     </nav>
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i
-        class="fas fa-moon"></i></button>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </header>
 
   <main class="container" style="padding-top:28px;">
@@ -129,123 +137,6 @@
       </div>
     </section>
 
-    <!-- ── Case Studies ── -->
-    <section class="section" aria-labelledby="cases-heading">
-      <div class="section-header anim">
-        <span class="pill">Portfolio Highlights</span>
-        <h2 id="cases-heading">Featured Design Projects</h2>
-        <p>Real projects with measurable outcomes — here's a look at the work Technoid delivers.</p>
-      </div>
-
-      <div style="display:grid;gap:24px;">
-
-        <div class="case-study anim anim-delay-1">
-          <div class="case-study-header">
-            <span class="pill pill-green" style="margin-bottom:12px;">Branding Project</span>
-            <h3>Local Restaurant Brand Identity</h3>
-            <p style="color:#9ca3af;font-size:.9rem;">Complete visual identity for a Kumasi-based restaurant launching a
-              new brand.</p>
-          </div>
-          <div class="case-study-body">
-            <div class="case-row">
-              <div class="case-item">
-                <label>The Problem</label>
-                <p>The client had no consistent visual identity — different fonts and colors across menus, signage, and
-                  social media created a disjointed customer experience.</p>
-              </div>
-              <div class="case-item">
-                <label>My Role</label>
-                <p>Lead designer — responsible for logo design, color palette, typography selection, menu layout, and
-                  social media templates.</p>
-              </div>
-              <div class="case-item">
-                <label>Tools Used</label>
-                <p>Adobe Illustrator, Photoshop, Canva Pro, PDF export for print production.</p>
-              </div>
-              <div class="case-item">
-                <label>Process</label>
-                <p>Discovery interview → mood board → 3 logo concepts → client review → refinement → full brand kit
-                  delivery.</p>
-              </div>
-            </div>
-            <label
-              style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--brand);display:block;margin-bottom:8px;">Measurable
-              Results</label>
-            <div>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>40% increase
-                in social media engagement</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Consistent
-                brand across 4 touchpoints</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Client
-                reported 25% more foot traffic after rebrand</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Delivered in
-                5 days</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="case-study anim anim-delay-2">
-          <div class="case-study-header">
-            <span class="pill pill-green" style="margin-bottom:12px;">AutoCAD Project</span>
-            <h3>Residential Floor Plan — 4-Bedroom House</h3>
-            <p style="color:#9ca3af;font-size:.9rem;">Precise architectural drawings for a new construction project in
-              Kumasi.</p>
-          </div>
-          <div class="case-study-body">
-            <div class="case-row">
-              <div class="case-item">
-                <label>The Problem</label>
-                <p>The client had a rough hand-drawn layout but needed professional, permit-ready architectural drawings
-                  before construction could begin.</p>
-              </div>
-              <div class="case-item">
-                <label>My Role</label>
-                <p>Sole drafter — converted client sketches into fully dimensioned 2D floor plans, elevation views, and
-                  site layout drawings.</p>
-              </div>
-              <div class="case-item">
-                <label>Tools Used</label>
-                <p>AutoCAD 2023 (2D drafting), PDF & DWG delivery, scale printing coordination.</p>
-              </div>
-              <div class="case-item">
-                <label>Process</label>
-                <p>Client sketch analysis → scaled redraw → review meeting → final dimensions → permit-ready export in
-                  DWG and PDF.</p>
-              </div>
-            </div>
-            <label
-              style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--brand);display:block;margin-bottom:8px;">Measurable
-              Results</label>
-            <div>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Drawings
-                approved first submission</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Delivered 3
-                days ahead of schedule</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Zero
-                revision requests from the engineer</span>
-              <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Client saved
-                2 weeks vs. competitor quote</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ── CTA ── -->
-    <section class="section-sm" aria-label="Design call to action">
-      <div class="cta-banner anim">
-        <h2>Let's Create Something Remarkable</h2>
-        <p>Tell us about your project and we'll get back to you within 24 hours with a plan and quote.</p>
-        <div class="cta-actions">
-          <a class="btn btn-lg" href="contact.html">Start Your Project</a>
-          <a class="btn btn-lg" href="https://wa.me/233544833571" target="_blank" rel="noopener"
-            style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);">
-            <i class="fab fa-whatsapp"></i> WhatsApp Us
-          </a>
-        </div>
-      </div>
-    </section>
 
   </main>
 
@@ -286,3 +177,12 @@
       </div>
       <hr class="footer-divider" />
       <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris
+<!-- ── Settings Modal (admin only) ── -->
+<div id="settings-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+  <div id="settings-panel" style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+    <button onclick="closeSettingsModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+    <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog" style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+    <div id="settings-slots"></div>
+    <p style="font-size:.75rem;color:#9ca3af;margin-top:14px;">Images are saved to your browser. Upload a new image to replace the current one on this page.</p>
+  </div>
+</div>
