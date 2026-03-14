@@ -2819,6 +2819,31 @@ h4 {
   color: #fcd34d;
 }
 
+/* ── Comment delete button (admin only) ── */
+.comment-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d1d5db;
+  font-size: .72rem;
+  padding: 2px 5px;
+  border-radius: 5px;
+  transition: color .15s, background .15s;
+  line-height: 1;
+}
+.comment-delete-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+[data-theme="dark"] .comment-delete-btn {
+  color: #4b5563;
+}
+[data-theme="dark"] .comment-delete-btn:hover {
+  color: #f87171;
+  background: #2a1010;
+}
+
 /* ── Card background: home, design, web match contact "What Happens Next" ── */
 .page-tinted-cards .card {
   background: #f8fafc;

@@ -309,6 +309,12 @@
         <!-- Comments list -->
         <div id="home-comments-list" class="comments-list" style="margin-top:20px;"></div>
         <p id="home-comments-empty" class="comments-empty" style="display:none;">No comments yet. Be the first to share your experience!</p>
+        <!-- Toggle button -->
+        <div id="home-comments-toggle-wrap" style="display:none;text-align:center;margin-top:12px;">
+          <button id="home-comments-toggle-btn" class="btn btn-light" onclick="toggleHomeComments()" style="font-size:.78rem;padding:6px 18px;">
+            <i class="fas fa-chevron-down"></i> View all comments
+          </button>
+        </div>
       </div>
     </section>
 
@@ -390,12 +396,24 @@
     (function () {
       const SUPABASE_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
       const SUPABASE_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
-      const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const ADMIN_EMAILS = ['atoopase@gmail.com', 'atoopasechristopher@gmail.com'];
 
-      /* Check login state */
+      let sb = null;
+      function getSb() {
+        if (!sb && typeof window.supabase !== 'undefined')
+          sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        return sb;
+      }
+
+      let _allComments = [];
+      let _isExpanded = false;
+      let _isAdmin = false;
+
       async function getUser() {
-        const { data } = await sb.auth.getSession();
-        return data?.session?.user || null;
+        try {
+          const { data } = await getSb().auth.getSession();
+          return data?.session?.user || null;
+        } catch (e) { return null; }
       }
 
       function escHtml(s) {
@@ -411,43 +429,100 @@
       }
 
       function initials(email) {
-        const name = email.split('@')[0];
-        return name.slice(0, 2).toUpperCase();
+        return (email || 'AN').split('@')[0].slice(0, 2).toUpperCase();
       }
 
-      function renderComments(comments) {
-        const list = document.getElementById('home-comments-list');
-        const empty = document.getElementById('home-comments-empty');
-        if (!list) return;
-        if (!comments || comments.length === 0) {
-          list.innerHTML = '';
-          if (empty) empty.style.display = '';
-          return;
-        }
-        if (empty) empty.style.display = 'none';
-        list.innerHTML = comments.map(c => `
-          <div class="comment-card">
-            <div class="comment-avatar">${initials(c.user_email || 'AN')}</div>
+      function renderCommentCard(c) {
+        const deleteBtn = _isAdmin
+          ? `<button class="comment-delete-btn" onclick="deleteHomeComment('${c.id}')" title="Delete comment" aria-label="Delete comment">
+               <i class="fas fa-trash-alt"></i>
+             </button>`
+          : '';
+        return `
+          <div class="comment-card" id="hc-${c.id}">
+            <div class="comment-avatar">${initials(c.user_email)}</div>
             <div class="comment-body">
               <div class="comment-meta">
                 <span class="comment-name">${escHtml((c.user_email || 'anon').split('@')[0])}</span>
                 <span class="comment-time">${timeAgo(c.created_at)}</span>
+                ${deleteBtn}
               </div>
               <p class="comment-text">${escHtml(c.content)}</p>
             </div>
-          </div>`).join('');
+          </div>`;
+      }
+
+      function renderComments() {
+        const list = document.getElementById('home-comments-list');
+        const empty = document.getElementById('home-comments-empty');
+        const toggleWrap = document.getElementById('home-comments-toggle-wrap');
+        if (!list) return;
+
+        if (!_allComments || _allComments.length === 0) {
+          list.innerHTML = '';
+          if (empty) empty.style.display = '';
+          if (toggleWrap) toggleWrap.style.display = 'none';
+          return;
+        }
+
+        if (empty) empty.style.display = 'none';
+
+        const toShow = _isExpanded ? _allComments : [_allComments[0]];
+        list.innerHTML = toShow.map(renderCommentCard).join('');
+
+        // Show/hide toggle button
+        if (toggleWrap) {
+          if (_allComments.length > 1) {
+            toggleWrap.style.display = '';
+            const btn = document.getElementById('home-comments-toggle-btn');
+            if (btn) {
+              if (_isExpanded) {
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> Show less';
+              } else {
+                btn.innerHTML = `<i class="fas fa-chevron-down"></i> View all ${_allComments.length} comments`;
+              }
+            }
+          } else {
+            toggleWrap.style.display = 'none';
+          }
+        }
       }
 
       async function loadComments() {
         try {
-          const { data } = await sb
+          const { data, error } = await getSb()
             .from('home_comments')
             .select('*')
             .order('created_at', { ascending: false })
-            .limit(50);
-          renderComments(data || []);
-        } catch (e) { /* table may not exist yet */ }
+            .limit(100);
+          if (error) throw error;
+          _allComments = data || [];
+          renderComments();
+        } catch (e) {
+          const list = document.getElementById('home-comments-list');
+          if (list) list.innerHTML = `<p style="color:#ef4444;font-size:.8rem;padding:8px 0;">Could not load comments: ${e?.message || e}</p>`;
+        }
       }
+
+      window.toggleHomeComments = function () {
+        _isExpanded = !_isExpanded;
+        renderComments();
+      };
+
+      window.deleteHomeComment = async function (id) {
+        if (!_isAdmin) return;
+        if (!confirm('Delete this comment?')) return;
+        try {
+          const { error } = await getSb().from('home_comments').delete().eq('id', id);
+          if (error) throw error;
+          // Remove from local array and re-render without a full reload
+          _allComments = _allComments.filter(c => String(c.id) !== String(id));
+          if (_isExpanded && _allComments.length === 0) _isExpanded = false;
+          renderComments();
+        } catch (e) {
+          alert('Could not delete comment. Please try again.');
+        }
+      };
 
       window.submitHomeComment = async function () {
         const input = document.getElementById('home-comment-input');
@@ -468,29 +543,43 @@
         if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting…'; }
 
         try {
-          await sb.from('home_comments').insert({
+          const { error } = await getSb().from('home_comments').insert({
             content: text,
             user_id: user.id,
             user_email: user.email,
             created_at: new Date().toISOString()
           });
+
+          if (error) throw error;
+
           input.value = '';
-          document.getElementById('home-comment-char').textContent = '0 / 400';
+          const ctr = document.getElementById('home-comment-char');
+          if (ctr) ctr.textContent = '0 / 400';
+
+          _isExpanded = false;
           await loadComments();
+
         } catch (e) {
-          alert('Could not post comment. Please try again.');
+          alert('Could not post comment.\n\nReason: ' + (e?.message || e));
         }
 
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Comment'; }
       };
 
-      /* Char counter */
-      document.addEventListener('DOMContentLoaded', function () {
+      document.addEventListener('DOMContentLoaded', async function () {
+        // Char counter
         const inp = document.getElementById('home-comment-input');
         const ctr = document.getElementById('home-comment-char');
         if (inp && ctr) {
           inp.addEventListener('input', () => { ctr.textContent = inp.value.length + ' / 400'; });
         }
+
+        // Check admin
+        const user = await getUser();
+        if (user && ADMIN_EMAILS.includes(user.email)) {
+          _isAdmin = true;
+        }
+
         loadComments();
       });
     })();
