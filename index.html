@@ -1504,21 +1504,25 @@
     <!-- ── Comments / What Clients Say ── -->
     <section class="section" aria-labelledby="testimonials-heading">
       <div class="testimonials">
-        <div class="section-header anim"
+        <div class="section-header anim testimonials-header"
           style="margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:nowrap; text-align:left;">
-          <div style="flex:1 1 auto;">
+          <!-- Top row: title + lottie side by side -->
+          <div class="testimonials-title-col" style="flex:1 1 auto;">
             <div style="margin-bottom:8px;"><span class="pill">Client Feedback</span></div>
             <h2 id="testimonials-heading"
               style="margin:0 0 6px 0; font-size:clamp(1.6rem,4vw,2.4rem); line-height:1.15;">What Clients Say</h2>
-            <p style="margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted);">Leave a comment about your
+            <p class="testimonials-desc-desktop" style="margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted);">Leave a comment about your
               experience with Technoid, your feedback is import to us.</p>
           </div>
-          <div
+          <div class="testimonials-lottie-col"
             style="flex:0 0 auto; width:55%; max-width:245px; min-width:145px; display:flex; justify-content:center; margin-top:-40px; margin-bottom:-30px;">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
             <lottie-player src="assets/A.json" background="transparent" speed="1" style="width: 100%; height: auto;"
               loop autoplay></lottie-player>
           </div>
+          <!-- Description below both on mobile -->
+          <p class="testimonials-desc-mobile" style="display:none; margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted); width:100%; text-align:left;">Leave a comment about your
+            experience with Technoid, your feedback is import to us.</p>
         </div>
 
         <!-- Login required alert -->
