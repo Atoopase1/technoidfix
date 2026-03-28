@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technoid — Expert Device Repair & Digital Services | Kumasi, Ghana</title>
+  <meta name="description"
+    content="Technoid offers fast, professional repair services for smartphones, tablets, laptops and home appliances in Kumasi, Ghana. Also specializing in graphic design, web development, and AutoCAD drafting." />
+  <meta name="keywords"
+    content="phone repair Kumasi, laptop repair Ghana, graphic design, web development, AutoCAD, Technoid" />
+  <meta property="og:title" content="Technoid — Expert Device Repair & Digital Services" />
+  <meta property="og:description" content="Fast, reliable repair services and digital solutions in Kumasi, Ghana." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/jpeg" href="assets/favicon.jpeg" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <link rel="canonical" href="https://technoid.gh/" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="assets/js/app.js"></script>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"LocalBusiness",
+    "name":"Technoid",
+    "description":"Expert device repair and digital services in Kumasi, Ghana",
+    "address":{"@type":"PostalAddress","addressLocality":"Kumasi","addressRegion":"Ashanti","addressCountry":"GH"},
+    "telephone":"+233544833571",
+    "email":"atoopase@gmail.com",
+    "openingHours":"Mo-Sa 09:00-18:00",
+    "priceRange":"$$",
+    "founder":{"@type":"Person","name":"Chris Atoopase"}
+  }
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+  <!-- Supabase dynamic content loader -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (function () {
+      const _SB_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+      const _SB_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+      const _BUCKET = 'site-images';
+      let _sb = null;
+      function sb() { return _sb || (_sb = window.supabase.createClient(_SB_URL, _SB_KEY)); }
+
+      // Load images: data-sb-img="key" => sets src from Supabase storage public URL
+      // Load text:   data-sb-text="key" => replaces innerHTML from site_content table
+
+      async function loadContent() {
+        // ── Images ──
+        document.querySelectorAll('[data-sb-img]').forEach(el => {
+          const key = el.getAttribute('data-sb-img');
+          const { data } = sb().storage.from(_BUCKET).getPublicUrl(key);
+          if (data?.publicUrl) {
+            if (el.tagName === 'IMG') el.src = data.publicUrl;
+            else el.href = data.publicUrl;
+            el.setAttribute('data-sb-loaded', '1');
+          }
+        });
+
+        // ── Text / HTML content ──
+        const textEls = document.querySelectorAll('[data-sb-text]');
+        if (textEls.length) {
+          const keys = Array.from(textEls).map(el => el.getAttribute('data-sb-text'));
+          const { data } = await sb().from('site_content').select('key,value').in('key', keys);
+          if (data) {
+            data.forEach(row => {
+              document.querySelectorAll(`[data-sb-text="${row.key}"]`).forEach(el => {
+                el.innerHTML = row.value;
+              });
+            });
+          }
+        }
+      }
+
+      if (document.readyState === 'loading')
+        document.addEventListener('DOMContentLoaded', loadContent);
+      else
+        loadContent();
+    })();
+  </script>
+</head>
+
+<body class="page-tinted-cards">
+
+  <!-- ── Navigation ── -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+    <div class="nav-inline">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="design.html" data-page="design">Design</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;"
+        onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a>
+      <hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"
+        aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu"
+      aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main class="container" style="padding-top:28px; padding-bottom:0;">
+
+    <!-- ── Hero ── -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap');
+
+      .tx-hero-wrapper {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        min-height: unset;
+      }
+
+      .tx-hero {
+        position: relative;
+        flex: 1 1 auto;
+        min-height: unset;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #0c1324;
+        border: 1px solid rgba(0, 136, 204, .1);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, .4);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero {
+        background: #ffffff;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .06), 0 0 0 1px rgba(0, 136, 204, .12);
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__headline {
+        color: #111827;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__sub {
+        color: #4b5563;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__pill {
+        color: #4b5563;
+        background: #f3f4f6;
+        border-color: #e5e7eb;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__pill--hot {
+        color: #007bb5;
+        background: rgba(0, 136, 204, .08);
+        border-color: rgba(0, 136, 204, .25);
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__btn-secondary {
+        color: #111827;
+        background: #f3f4f6;
+        border-color: #e5e7eb;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__btn-secondary:hover {
+        background: #e5e7eb;
+        border-color: rgba(0, 136, 204, .4);
+      }
+
+      .tx-hero__canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .12;
+        pointer-events: none;
+      }
+
+      .tx-hero__stripe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #0088CC 0%, #3399dd 60%, transparent 100%);
+        z-index: 5;
+      }
+
+      /* HERO TWO-COLUMN LAYOUT */
+      .tx-hero__content-wrap {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        width: 100%;
+        position: relative;
+        z-index: 4;
+      }
+
+      .tx-hero__lottie {
+        position: absolute;
+        right: 14%;
+        top: 37%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30%;
+        max-width: 460px;
+        pointer-events: none;
+        z-index: 3;
+        opacity: 0.40;
+      }
+
+      /* LEFT TEXT */
+      .tx-hero__text {
+        flex: 1;
+        grid-column: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 28px 32px 24px 32px;
+        position: relative;
+        z-index: 4;
+      }
+
+      .tx-hero__corner-icon {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        width: 110px;
+        height: 110px;
+        pointer-events: none;
+        z-index: 6;
+      }
+
+      .tx-hero__location {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        color: #0088CC;
+        margin-bottom: 18px;
+        opacity: 0;
+        animation: txUp .4s .2s ease forwards;
+      }
+
+      .tx-hero__location::before {
+        content: "";
+        width: 18px;
+        height: 2px;
+        background: #0088CC;
+        flex-shrink: 0;
+      }
+
+      .tx-hero__location-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ff4444;
+        animation: txBlink 1.4s ease infinite;
+        margin-right: 2px;
+        flex-shrink: 0;
+      }
+
+      .tx-hero__headline {
+        font-family: "Exo 2", "Barlow Condensed", sans-serif;
+        font-weight: 800;
+        font-size: clamp(2.2rem, 5vw, 3.4rem);
+        line-height: .95;
+        text-transform: uppercase;
+        color: #f0f4ff;
+        letter-spacing: 0.01em;
+        margin-bottom: 14px;
+        opacity: 0;
+        animation: txUp .45s .35s ease forwards;
+        text-align: left;
+      }
+
+      .tx-hero__headline .tx-hl {
+        color: #0088CC;
+      }
+
+      .tx-hero__headline .tx-outline {
+        color: #0088CC;
+        font-size: clamp(2.8rem, 6.5vw, 4.4rem);
+        display: block;
+        margin-top: 4px;
+      }
+
+      .tx-hero__sub {
+        font-family: "Barlow", sans-serif;
+        font-size: .9rem;
+        font-weight: 400;
+        color: rgba(200, 215, 235, .62);
+        line-height: 1.65;
+        margin-bottom: 22px;
+        max-width: 340px;
+        opacity: 0;
+        animation: txUp .4s .5s ease forwards;
+      }
+
+      .tx-hero__pills {
+        overflow: hidden;
+        margin-bottom: 16px;
+        opacity: 0;
+        animation: txUp .4s .62s ease forwards;
+        mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      }
+
+      .tx-hero__pills-track {
+        display: flex;
+        gap: 8px;
+        width: max-content;
+        animation: pillsScroll 12s linear infinite;
+      }
+
+      .tx-hero__pills-track:hover {
+        animation-play-state: paused;
+      }
+
+      @keyframes pillsScroll {
+        0% {
+          transform: translateX(0);
+        }
+
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      .tx-hero__pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: .67rem;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        color: rgba(180, 205, 230, .72);
+        background: rgba(255, 255, 255, .05);
+        border: 1px solid rgba(255, 255, 255, .09);
+        border-radius: 6px;
+        padding: 5px 10px;
+        white-space: nowrap;
+      }
+
+      .tx-hero__pill--hot {
+        color: #4db8e8;
+        background: rgba(0, 136, 204, .1);
+        border-color: rgba(0, 136, 204, .28);
+      }
+
+      .tx-hero__btns {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        opacity: 0;
+        animation: txUp .4s .75s ease forwards;
+        align-items: center;
+      }
+
+      .tx-hero__btn-primary {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 800;
+        font-size: .92rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: #fff;
+        background: #0088CC;
+        border: none;
+        border-radius: 8px;
+        padding: 11px 22px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: background .2s, transform .15s;
+      }
+
+      .tx-hero__btn-primary:hover {
+        background: #006fa8;
+        transform: translateY(-1px);
+      }
+
+      .tx-hero__btn-secondary {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: .88rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: rgba(200, 220, 240, .8);
+        background: rgba(255, 255, 255, .07);
+        border: 1px solid rgba(255, 255, 255, .14);
+        border-radius: 8px;
+        padding: 11px 20px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: background .2s, border-color .2s;
+      }
+
+      .tx-hero__btn-secondary:hover {
+        background: rgba(255, 255, 255, .12);
+        border-color: rgba(0, 136, 204, .4);
+      }
+
+      /* RIGHT IMAGE - card matching neighboring stat cards */
+      .tx-hero__img {
+        position: relative;
+        align-self: flex-start;
+        opacity: 0;
+        animation: txFadeIn .7s .5s ease forwards;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tx-hero__img__frame {
+        position: relative;
+        border-radius: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        border: 1px solid var(--border, rgba(0, 0, 0, .08));
+        background: #0c1324;
+        overflow: hidden;
+        line-height: 0;
+      }
+
+      .tx-hero__img img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: brightness(.82) saturate(.88);
+        border-radius: 20px;
+      }
+
+      .tx-hero__img__frame::before {
+        display: none;
+      }
+
+      .tx-hero__img-caption {
+        font-family: "Barlow", sans-serif;
+        font-size: .78rem;
+        line-height: 1.75;
+        color: #6b7280;
+        margin: 12px 0 0;
+        padding: 12px 16px;
+        border-left: 3px solid #0088CC;
+        background: rgba(0, 136, 204, .04);
+        border-radius: 0 8px 8px 0;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Light mode card match */
+      :root:not([data-theme="dark"]) .tx-hero__img__frame {
+        background: #ffffff;
+        border-color: rgba(0, 0, 0, .08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+      }
+
+      /* Dark mode card match */
+      [data-theme="dark"] .tx-hero__img__frame {
+        background: #0c1324;
+        border-color: rgba(255, 255, 255, .1);
+      }
+
+      /* BELOW HERO: mid + image row */
+      .tx-below-hero {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        margin-top: 16px;
+      }
+
+      .tx-below-hero .tx-hero__mid {
+        flex: 1 1 auto;
+        overflow: hidden;
+      }
+
+      .tx-below-hero .tx-hero__img {
+        flex: 0 0 42%;
+        min-width: 0;
+      }
+
+      /* BOTTOM BAR */
+      .tx-hero__bar {
+        grid-column: 1 / -1;
+        background: rgba(0, 100, 160, .75);
+        border-top: 1px solid rgba(0, 136, 204, .2);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 32px;
+        gap: 12px;
+        position: relative;
+        z-index: 4;
+        opacity: 0;
+        animation: txUp .4s .88s ease forwards;
+      }
+
+      .tx-hero__bar-info {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: .7rem;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, .55);
+      }
+
+      .tx-hero__bar-checks {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .tx-hero__check {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, .88);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .tx-hero__check::before {
+        content: "✓";
+        color: #6dd4f0;
+        font-size: .85rem;
+        font-weight: 900;
+      }
+
+      @keyframes txUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px)
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0)
+        }
+      }
+
+      @keyframes txFadeIn {
+        from {
+          opacity: 0
+        }
+
+        to {
+          opacity: 1
+        }
+      }
+
+      @keyframes txBlink {
+
+        0%,
+        100% {
+          opacity: 1
+        }
+
+        50% {
+          opacity: .25
+        }
+      }
+
+      /* MIDDLE DESCRIPTION + STATS */
+      .tx-hero__mid {
+        flex: 0 0 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0;
+        padding: 0 4px;
+      }
+
+      .tx-hero__mid-desc {
+        font-family: "Barlow", sans-serif;
+        font-size: .82rem;
+        font-weight: 400;
+        line-height: 1.72;
+        color: var(--muted, rgba(100, 110, 130, .85));
+        margin: 0;
+      }
+
+      .tx-hero__mid-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .tx-mid-stat {
+        padding: 12px 16px;
+        border-radius: 10px;
+        background: var(--card-bg, rgba(255, 255, 255, .06));
+        border: 1px solid var(--border, rgba(0, 0, 0, .08));
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .tx-mid-stat__num {
+        font-family: "Exo 2", "Barlow Condensed", sans-serif;
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: var(--dark, #111827);
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      .tx-mid-stat__unit {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0088CC;
+      }
+
+      .tx-mid-stat__label {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: .68rem;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--muted, #6b7280);
+        line-height: 1.3;
+      }
+
+      .tx-mid-stat-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .tx-mid-stat__desc {
+        font-family: "Barlow", sans-serif;
+        font-size: .62rem;
+        font-weight: 500;
+        color: var(--muted, rgba(100, 110, 130, .85));
+        line-height: 1.25;
+      }
+
+      /* STAT CARDS — DARK MODE */
+      [data-theme="dark"] .tx-mid-stat {
+        background: rgba(255, 255, 255, .06);
+        border-color: rgba(255, 255, 255, .1);
+      }
+
+      [data-theme="dark"] .tx-mid-stat__num {
+        color: #f0f4ff;
+      }
+
+      [data-theme="dark"] .tx-mid-stat__label {
+        color: #9ca3af;
+      }
+
+      [data-theme="dark"] .tx-hero__mid-desc {
+        color: #9ca3af;
+      }
+
+      /* STAT CARDS — LIGHT MODE explicit */
+      :root:not([data-theme="dark"]) .tx-mid-stat {
+        background: #ffffff;
+        border-color: rgba(0, 0, 0, .08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+      }
+
+      :root:not([data-theme="dark"]) .tx-mid-stat__num {
+        color: #111827;
+      }
+
+      :root:not([data-theme="dark"]) .tx-mid-stat__label {
+        color: #6b7280;
+      }
+
+      :root:not([data-theme="dark"]) .tx-hero__mid-desc {
+        color: #374151;
+      }
+
+      /* MOBILE */
+      @media (max-width: 680px) {
+        .tx-hero__corner-icon {
+          width: 85px;
+          height: 85px;
+          top: 12px;
+          right: 14px;
+        }
+
+        .tx-hero__content-wrap {
+          flex-direction: column;
+          overflow: hidden;
+        }
+
+        .tx-hero__text {
+          padding: 20px 16px 16px;
+          width: 100%;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+
+        .tx-hero__headline {
+          font-size: clamp(1.6rem, 8vw, 2.2rem);
+          line-height: 1;
+          margin-bottom: 10px;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
+          padding-right: 55px;
+        }
+
+        .tx-hero__headline .tx-outline {
+          font-size: clamp(2rem, 10vw, 2.8rem);
+          margin-top: 2px;
+        }
+
+        .tx-hero__location {
+          font-size: .58rem;
+          margin-bottom: 12px;
+        }
+
+        .tx-hero__sub {
+          max-width: 100%;
+          font-size: .82rem;
+          margin-bottom: 14px;
+          line-height: 1.55;
+        }
+
+        .tx-hero__pills {
+          margin-bottom: 12px;
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .tx-hero__pill {
+          font-size: .6rem;
+          padding: 4px 8px;
+        }
+
+        .tx-hero__btns {
+          flex-wrap: wrap;
+          gap: 8px;
+          width: 100%;
+        }
+
+        .tx-hero__btn-primary,
+        .tx-hero__btn-secondary {
+          font-size: .82rem;
+          padding: 10px 16px;
+          flex: 1 1 auto;
+          justify-content: center;
+          text-align: center;
+        }
+
+        .tx-hero__lottie {
+          display: none;
+        }
+
+        .tx-hero-wrapper {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .tx-hero {
+          border-radius: 10px;
+          min-height: unset;
+          order: 1;
+          width: 100%;
+          flex: none;
+          overflow: hidden;
+        }
+
+        .tx-hero__mid-desc {
+          width: 100%;
+          font-size: .8rem;
+        }
+
+        .tx-hero__mid-stats {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 10px;
+          width: 100%;
+        }
+
+        .tx-mid-stat {
+          flex: 1 1 calc(33% - 10px);
+          min-width: 80px;
+          padding: 8px 10px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+        }
+
+        .tx-mid-stat__num {
+          font-size: 1.5rem;
+        }
+
+        .tx-mid-stat__unit {
+          font-size: .85rem;
+        }
+
+        .tx-mid-stat__label {
+          font-size: .55rem;
+          line-height: 1.2;
+        }
+
+        .tx-mid-stat__desc {
+          display: none;
+        }
+
+        .tx-hero__img {
+          order: 3;
+          flex: none;
+          width: 100%;
+          align-self: auto;
+          overflow: visible;
+        }
+
+        .tx-hero__img__frame {
+          border-radius: 10px;
+          min-height: unset;
+          width: 100%;
+          margin: 0;
+          flex: none;
+        }
+
+        .tx-hero__img img {
+          position: static;
+          width: 100%;
+          height: auto;
+          margin: 0;
+        }
+
+        .tx-hero__img-caption {
+          width: 100%;
+          margin: 12px 0 0;
+        }
+
+        .tx-below-hero {
+          flex-direction: column;
+        }
+
+        .tx-below-hero .tx-hero__mid {
+          flex: none;
+          width: 100%;
+        }
+
+        .tx-below-hero .tx-hero__img {
+          flex: none;
+          width: 100%;
+          overflow: visible;
+        }
+
+        .tx-hero__bar {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 12px 16px;
+          gap: 6px;
+        }
+
+        .tx-hero__bar-info {
+          display: none;
+        }
+
+        .tx-hero__bar-checks {
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .tx-hero__check {
+          font-size: .62rem;
+        }
+      }
+
+      /* TABLET */
+      @media (min-width: 681px) and (max-width: 900px) {
+        .tx-hero__text {
+          padding: 32px 22px 28px 28px;
+        }
+
+        .tx-hero__sub {
+          font-size: .84rem;
+        }
+
+        .tx-below-hero {
+          flex-direction: column;
+        }
+
+        .tx-below-hero .tx-hero__mid {
+          flex: none;
+          width: 100%;
+        }
+
+        .tx-below-hero .tx-hero__img {
+          flex: none;
+          width: 100%;
+        }
+
+        .tx-hero__img__frame {
+          min-height: unset;
+        }
+
+        .tx-hero__img img {
+          position: static;
+          width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+
+    <section aria-label="Introduction" style="margin-bottom:0;">
+      <div class="tx-hero-wrapper">
+        <div class="tx-hero">
+          <canvas class="tx-hero__canvas" id="txcv"></canvas>
+          <div class="tx-hero__stripe"></div>
+
+          <!-- Corner SVG Icon (on the card cover) -->
+          <svg class="tx-hero__corner-icon" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <g opacity="0.75">
+              <path
+                d="M82 18C72 18 64 26 64 36c0 3 .8 5.8 2.2 8.2L22 88a6 6 0 0 0 0 8.5l1.5 1.5a6 6 0 0 0 8.5 0l44.2-44.2C78.2 55.2 81 56 84 56c10 0 18-8 18-18 0-2-.3-4-.8-5.8L91 42.4a6 6 0 1 1-8.5-8.5L92.8 23.8C90.4 20.4 86.4 18 82 18z"
+                fill="#0088CC" />
+              <path d="M38 16l-8 8 6 6-18 18 10 10 18-18 6 6 8-8-10-10 2-2-4-4-2 2-8-8z" fill="#0088CC" />
+              <path d="M96 60l-14 22h12l-14 22 28-30h-14l16-14H96z" fill="#0088CC" />
+              <circle cx="20" cy="100" r="3" fill="#0088CC" />
+              <circle cx="30" cy="100" r="3" fill="#0088CC" />
+              <circle cx="100" cy="20" r="3" fill="#0088CC" />
+              <circle cx="100" cy="30" r="3" fill="#0088CC" />
+            </g>
+          </svg>
+
+          <div class="tx-hero__content-wrap">
+            <div class="tx-hero__text">
+
+              <div class="tx-hero__location">
+                <span class="tx-hero__location-dot"></span>
+                Est. 2020 — Kumasi, Ghana
+              </div>
+              <div class="tx-hero__headline">
+                We <span class="tx-hl">Fix.</span><br>
+                We <span class="tx-hl">Build.</span><br>
+                <span class="tx-outline">We Create.</span>
+              </div>
+              <p class="tx-hero__sub">
+                Kumasi's trusted team for device repairs, electrical installation, graphic design, and web development.
+              </p>
+              <div class="tx-hero__pills">
+                <div class="tx-hero__pills-track">
+                  <span class="tx-hero__pill tx-hero__pill--hot">📱 Same-Day Repairs</span>
+                  <span class="tx-hero__pill">⚡ Electrical</span>
+                  <span class="tx-hero__pill">🎨 Design</span>
+                  <span class="tx-hero__pill">🌐 Web Dev</span>
+                  <span class="tx-hero__pill">📐 AutoCAD</span>
+                  <span class="tx-hero__pill tx-hero__pill--hot">📱 Same-Day Repairs</span>
+                  <span class="tx-hero__pill">⚡ Electrical</span>
+                  <span class="tx-hero__pill">🎨 Design</span>
+                  <span class="tx-hero__pill">🌐 Web Dev</span>
+                  <span class="tx-hero__pill">📐 AutoCAD</span>
+                </div>
+              </div>
+              <div class="tx-hero__btns">
+                <a class="tx-hero__btn-primary" href="contact.html">
+                  <i class="fas fa-calendar-check"></i> Book a Service
+                </a>
+                <a class="tx-hero__btn-secondary" href="design.html">
+                  <i class="fas fa-palette"></i> Design Services
+                </a>
+              </div>
+            </div>
+
+            <div class="tx-hero__lottie">
+              <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+              <lottie-player src="assets/Engineer.json" background="transparent" speed="1"
+                style="width: 100%; height: auto;" loop autoplay></lottie-player>
+            </div>
+          </div>
+
+          <div class="tx-hero__bar">
+            <div class="tx-hero__bar-checks">
+              <span class="tx-hero__check">Same-day repairs</span>
+              <span class="tx-hero__check">Certified engineer</span>
+              <span class="tx-hero__check">Quality guarantee</span>
+            </div>
+            <div class="tx-hero__bar-info">+233 544 833 571 &nbsp;·&nbsp; technoid.gh</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Below hero: Description + Stats + Image ── -->
+      <div class="tx-below-hero">
+        <div class="tx-hero__mid">
+          <p class="tx-hero__mid-desc">Affordable, fast, and professional — we've been Kumasi's most trusted repair and
+            tech team since 2014, delivering same-day fixes without cutting corners. With over a decade of hands-on
+            experience across device repair, electrical work, design, and web development, we bring expert-level skill
+            to every single job.</p>
+          <div class="tx-hero__mid-stats">
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">2<span class="tx-mid-stat__unit"> hrs</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Avg. Repair Time</div>
+                <div class="tx-mid-stat__desc">Fast and reliable device restoration ensuring minimal downtime so you can
+                  stay fully connected.</div>
+              </div>
+            </div>
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">98<span class="tx-mid-stat__unit">%</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Customer Satisfaction</div>
+                <div class="tx-mid-stat__desc">Consistently delivering highly rated service experiences that exceed
+                  expectations for every single device repair.</div>
+              </div>
+            </div>
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">10<span class="tx-mid-stat__unit">yrs+</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Experience</div>
+                <div class="tx-mid-stat__desc">Over a decade of proven expertise handling complex repairs and
+                  professional electrical installations smoothly.</div>
+              </div>
+            </div>
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">97<span class="tx-mid-stat__unit">%</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Response Time Efficiency</div>
+                <div class="tx-mid-stat__desc">Providing quick replies and immediate attention to guarantee your
+                  technical issues are resolved promptly.</div>
+              </div>
+            </div>
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">94<span class="tx-mid-stat__unit">%</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Service Success Rate</div>
+                <div class="tx-mid-stat__desc">Delivering consistent and effective working solutions through meticulous
+                  diagnostics and precision technical repair strategies.</div>
+              </div>
+            </div>
+            <div class="tx-mid-stat">
+              <div class="tx-mid-stat__num">88<span class="tx-mid-stat__unit">%</span></div>
+              <div class="tx-mid-stat-text">
+                <div class="tx-mid-stat__label">Customer Retention Rate</div>
+                <div class="tx-mid-stat__desc">Building long-term loyalty because clients trust us repeatedly to handle
+                  their most valuable tech.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tx-hero__img">
+          <div class="tx-hero__img__frame">
+            <img src="assets/repair.jpeg" data-sb-img="repair.jpeg" alt="Technoid expert performing a device repair"
+              loading="eager" />
+          </div>
+          <p class="tx-hero__img-caption">Precision by certified engineers, your device or installation in
+            expert hands.</p>
+        </div>
+      </div>
+
+      <script>
+        (function () {
+          var cv = document.getElementById('txcv');
+          if (!cv) return;
+          var ctx = cv.getContext('2d');
+          var nodes = Array.from({ length: 22 }, function () {
+            return {
+              x: Math.random() * 800, y: Math.random() * 400,
+              vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3,
+              r: Math.random() * 1.6 + .6
+            };
+          });
+          function draw() {
+            cv.width = cv.offsetWidth; cv.height = cv.offsetHeight;
+            ctx.clearRect(0, 0, cv.width, cv.height);
+            nodes.forEach(function (n) {
+              n.x += n.vx; n.y += n.vy;
+              if (n.x < 0 || n.x > cv.width) n.vx *= -1;
+              if (n.y < 0 || n.y > cv.height) n.vy *= -1;
+            });
+            ctx.strokeStyle = '#0088CC'; ctx.lineWidth = .5;
+            for (var i = 0; i < nodes.length; i++) for (var j = i + 1; j < nodes.length; j++) {
+              var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+              var d = Math.sqrt(dx * dx + dy * dy);
+              if (d < 130) { ctx.globalAlpha = (1 - d / 130) * .5; ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke(); }
+            }
+            nodes.forEach(function (n) { ctx.globalAlpha = .65; ctx.fillStyle = '#0088CC'; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill(); });
+            requestAnimationFrame(draw);
+          }
+          draw();
+        })();
+      </script>
+    </section>
+
+
+    <!-- ── AI Electrical Wiring Designer Card ── -->
+    <section class="section" aria-labelledby="ec-heading">
+      <div class="ec-wrap anim anim-delay-1">
+        <div class="ec-card">
+          <div class="ec-stripe"></div>
+
+          <!-- CAROUSEL -->
+          <div class="ec-carousel">
+            <div class="ec-slide ec-active" data-label="Electrical Wiring">
+              <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="210" fill="#050a14" />
+                <line x1="30" y1="50" x2="390" y2="50" stroke="#00d4ff" stroke-width="2.5" stroke-opacity="0.55" />
+                <line x1="30" y1="160" x2="390" y2="160" stroke="#f59e0b" stroke-width="2.5" stroke-opacity="0.45" />
+                <line x1="30" y1="105" x2="390" y2="105" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.4"
+                  stroke-dasharray="6 4" />
+                <line x1="80" y1="50" x2="80" y2="160" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.3" />
+                <line x1="160" y1="50" x2="160" y2="160" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.3" />
+                <line x1="240" y1="50" x2="240" y2="160" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.3" />
+                <line x1="320" y1="50" x2="320" y2="160" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.3" />
+                <circle cx="80" cy="50" r="5" fill="#00d4ff" fill-opacity="0.9" />
+                <circle cx="160" cy="50" r="5" fill="#00d4ff" fill-opacity="0.9" />
+                <circle cx="240" cy="50" r="5" fill="#00d4ff" fill-opacity="0.9" />
+                <circle cx="320" cy="50" r="5" fill="#00d4ff" fill-opacity="0.9" />
+                <circle cx="80" cy="160" r="4" fill="#f59e0b" fill-opacity="0.85" />
+                <circle cx="160" cy="160" r="4" fill="#f59e0b" fill-opacity="0.85" />
+                <circle cx="240" cy="160" r="4" fill="#f59e0b" fill-opacity="0.85" />
+                <circle cx="320" cy="160" r="4" fill="#f59e0b" fill-opacity="0.85" />
+                <circle cx="80" cy="50" r="9" fill="none" stroke="#00d4ff" stroke-width="1" stroke-opacity="0.3" />
+                <circle cx="160" cy="50" r="9" fill="none" stroke="#00d4ff" stroke-width="1" stroke-opacity="0.3" />
+                <circle cx="240" cy="50" r="9" fill="none" stroke="#00d4ff" stroke-width="1" stroke-opacity="0.3" />
+                <circle cx="320" cy="50" r="9" fill="none" stroke="#00d4ff" stroke-width="1" stroke-opacity="0.3" />
+                <rect x="68" y="95" width="24" height="20" rx="2" fill="none" stroke="#60b3ff" stroke-width="1.4"
+                  stroke-opacity="0.7" />
+                <rect x="148" y="95" width="24" height="20" rx="2" fill="none" stroke="#60b3ff" stroke-width="1.4"
+                  stroke-opacity="0.7" />
+                <rect x="228" y="95" width="24" height="20" rx="2" fill="none" stroke="#60b3ff" stroke-width="1.4"
+                  stroke-opacity="0.7" />
+                <rect x="308" y="95" width="24" height="20" rx="2" fill="none" stroke="#60b3ff" stroke-width="1.4"
+                  stroke-opacity="0.7" />
+                <text x="52" y="44" font-family="monospace" font-size="8" fill="#00d4ff" fill-opacity="0.6">L1</text>
+                <text x="52" y="165" font-family="monospace" font-size="8" fill="#f59e0b" fill-opacity="0.6">N</text>
+                <text x="52" y="102" font-family="monospace" font-size="8" fill="#22c55e" fill-opacity="0.6">PE</text>
+              </svg>
+            </div>
+            <div class="ec-slide" data-label="MCB Circuit Breakers">
+              <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="210" fill="#050a14" />
+                <rect x="60" y="25" width="300" height="160" rx="4" fill="rgba(0,212,255,0.02)" stroke="#1a2840"
+                  stroke-width="1.5" />
+                <rect x="80" y="45" width="36" height="55" rx="3" fill="#0a1628" stroke="#00d4ff" stroke-width="1.2"
+                  stroke-opacity="0.6" />
+                <text x="92" y="57" font-family="monospace" font-size="7" fill="#00d4ff" fill-opacity="0.8">B16</text>
+                <line x1="98" y1="65" x2="98" y2="90" stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.5" />
+                <circle cx="98" cy="93" r="3" fill="#22c55e" fill-opacity="0.9" />
+                <rect x="128" y="45" width="36" height="55" rx="3" fill="#0a1628" stroke="#00d4ff" stroke-width="1.2"
+                  stroke-opacity="0.6" />
+                <text x="140" y="57" font-family="monospace" font-size="7" fill="#00d4ff" fill-opacity="0.8">C20</text>
+                <line x1="146" y1="65" x2="146" y2="90" stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.5" />
+                <circle cx="146" cy="93" r="3" fill="#22c55e" fill-opacity="0.9" />
+                <rect x="176" y="45" width="36" height="55" rx="3" fill="#0a1628" stroke="#f59e0b" stroke-width="1.2"
+                  stroke-opacity="0.7" />
+                <text x="188" y="57" font-family="monospace" font-size="7" fill="#f59e0b" fill-opacity="0.8">B32</text>
+                <line x1="194" y1="65" x2="194" y2="90" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5" />
+                <circle cx="194" cy="93" r="3" fill="#f59e0b" fill-opacity="0.9" />
+                <rect x="224" y="45" width="36" height="55" rx="3" fill="#0a1628" stroke="#00d4ff" stroke-width="1.2"
+                  stroke-opacity="0.6" />
+                <text x="236" y="57" font-family="monospace" font-size="7" fill="#00d4ff" fill-opacity="0.8">C16</text>
+                <line x1="242" y1="65" x2="242" y2="90" stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.5" />
+                <circle cx="242" cy="93" r="3" fill="#22c55e" fill-opacity="0.9" />
+                <rect x="272" y="45" width="36" height="55" rx="3" fill="#0a1628" stroke="#00d4ff" stroke-width="1.2"
+                  stroke-opacity="0.6" />
+                <text x="284" y="57" font-family="monospace" font-size="7" fill="#00d4ff" fill-opacity="0.8">D20</text>
+                <line x1="290" y1="65" x2="290" y2="90" stroke="#00d4ff" stroke-width="1.5" stroke-opacity="0.5" />
+                <circle cx="290" cy="93" r="3" fill="#22c55e" fill-opacity="0.9" />
+                <line x1="75" y1="40" x2="345" y2="40" stroke="#00d4ff" stroke-width="2" stroke-opacity="0.45" />
+                <text x="340" y="38" font-family="monospace" font-size="7" fill="#00d4ff" fill-opacity="0.5"
+                  text-anchor="end">BUS</text>
+              </svg>
+            </div>
+            <div class="ec-slide" data-label="Distribution Board">
+              <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="210" fill="#050a14" />
+                <rect x="45" y="18" width="330" height="175" rx="5" fill="#060e1e" stroke="#1a2840"
+                  stroke-width="1.5" />
+                <rect x="45" y="18" width="330" height="20" rx="5" fill="rgba(0,212,255,0.07)" />
+                <text x="58" y="31" font-family="monospace" font-size="8.5" fill="#00d4ff" fill-opacity="0.75">MAIN
+                  DISTRIBUTION BOARD · 3Ø 400V TN-S</text>
+                <line x1="70" y1="44" x2="70" y2="58" stroke="#f59e0b" stroke-width="2" stroke-opacity="0.65" />
+                <line x1="78" y1="44" x2="78" y2="58" stroke="#00d4ff" stroke-width="2" stroke-opacity="0.65" />
+                <line x1="86" y1="44" x2="86" y2="58" stroke="#c084fc" stroke-width="2" stroke-opacity="0.65" />
+                <line x1="94" y1="44" x2="94" y2="58" stroke="#22c55e" stroke-width="2" stroke-opacity="0.6" />
+                <rect x="58" y="58" width="50" height="28" rx="3" fill="#0a1628" stroke="#f59e0b" stroke-width="1.4"
+                  stroke-opacity="0.7" />
+                <text x="65" y="70" font-family="monospace" font-size="7.5" fill="#f59e0b"
+                  fill-opacity="0.85">ISOLATOR</text>
+                <text x="68" y="81" font-family="monospace" font-size="7" fill="#f59e0b" fill-opacity="0.55">100A
+                  TP</text>
+                <line x1="118" y1="68" x2="360" y2="68" stroke="#f59e0b" stroke-width="3" stroke-opacity="0.4" />
+                <line x1="118" y1="107" x2="360" y2="107" stroke="#00d4ff" stroke-width="2" stroke-opacity="0.35" />
+                <g font-family="monospace" font-size="6.5">
+                  <rect x="135" y="58" width="28" height="42" rx="2" fill="#0a1628" stroke="#00d4ff" stroke-width="1"
+                    stroke-opacity="0.55" />
+                  <text x="139" y="72" fill="#00d4ff" fill-opacity="0.7">C20</text>
+                  <circle cx="149" cy="92" r="2.5" fill="#22c55e" fill-opacity="0.9" />
+                  <line x1="149" y1="100" x2="149" y2="125" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.4" />
+                  <text x="141" y="138" fill="#00d4ff" fill-opacity="0.5">LTG</text>
+                  <rect x="173" y="58" width="28" height="42" rx="2" fill="#0a1628" stroke="#00d4ff" stroke-width="1"
+                    stroke-opacity="0.55" />
+                  <text x="177" y="72" fill="#00d4ff" fill-opacity="0.7">B32</text>
+                  <circle cx="187" cy="92" r="2.5" fill="#22c55e" fill-opacity="0.9" />
+                  <line x1="187" y1="100" x2="187" y2="125" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.4" />
+                  <text x="179" y="138" fill="#00d4ff" fill-opacity="0.5">PWR</text>
+                  <rect x="211" y="58" width="28" height="42" rx="2" fill="#0a1628" stroke="#f59e0b" stroke-width="1"
+                    stroke-opacity="0.65" />
+                  <text x="215" y="72" fill="#f59e0b" fill-opacity="0.7">C32</text>
+                  <circle cx="225" cy="92" r="2.5" fill="#f59e0b" fill-opacity="0.9" />
+                  <line x1="225" y1="100" x2="225" y2="125" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.4" />
+                  <text x="217" y="138" fill="#f59e0b" fill-opacity="0.5">HVAC</text>
+                  <rect x="249" y="58" width="42" height="42" rx="2" fill="#0a1628" stroke="#22c55e" stroke-width="1"
+                    stroke-opacity="0.65" />
+                  <text x="255" y="72" fill="#22c55e" fill-opacity="0.7">RCD</text>
+                  <text x="252" y="82" fill="#22c55e" fill-opacity="0.55">30mA</text>
+                  <circle cx="270" cy="92" r="2.5" fill="#22c55e" fill-opacity="0.9" />
+                  <line x1="270" y1="100" x2="270" y2="125" stroke="#22c55e" stroke-width="1.2" stroke-opacity="0.4" />
+                  <text x="262" y="138" fill="#22c55e" fill-opacity="0.5">WET</text>
+                  <rect x="301" y="58" width="28" height="42" rx="2" fill="#0a1628" stroke="#00d4ff" stroke-width="1"
+                    stroke-opacity="0.55" />
+                  <text x="305" y="72" fill="#00d4ff" fill-opacity="0.7">B16</text>
+                  <circle cx="315" cy="92" r="2.5" fill="#22c55e" fill-opacity="0.9" />
+                  <line x1="315" y1="100" x2="315" y2="125" stroke="#00d4ff" stroke-width="1.2" stroke-opacity="0.4" />
+                  <text x="307" y="138" fill="#00d4ff" fill-opacity="0.5">EXT</text>
+                </g>
+              </svg>
+            </div>
+            <div class="ec-slide" data-label="PV Solar Conduit">
+              <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="210" fill="#050a14" />
+                <circle cx="370" cy="40" r="18" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6" />
+                <circle cx="370" cy="40" r="10" fill="#f59e0b" fill-opacity="0.25" />
+                <g opacity="0.85">
+                  <rect x="30" y="30" width="60" height="40" rx="2" fill="#071020" stroke="#00d4ff" stroke-width="1.2"
+                    stroke-opacity="0.6" />
+                  <line x1="60" y1="30" x2="60" y2="70" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <line x1="30" y1="50" x2="90" y2="50" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <rect x="100" y="30" width="60" height="40" rx="2" fill="#071020" stroke="#00d4ff" stroke-width="1.2"
+                    stroke-opacity="0.6" />
+                  <line x1="130" y1="30" x2="130" y2="70" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <line x1="100" y1="50" x2="160" y2="50" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <rect x="170" y="30" width="60" height="40" rx="2" fill="#071020" stroke="#00d4ff" stroke-width="1.2"
+                    stroke-opacity="0.6" />
+                  <line x1="200" y1="30" x2="200" y2="70" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <line x1="170" y1="50" x2="230" y2="50" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <rect x="30" y="80" width="60" height="40" rx="2" fill="#071020" stroke="#00d4ff" stroke-width="1.2"
+                    stroke-opacity="0.6" />
+                  <line x1="60" y1="80" x2="60" y2="120" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <line x1="30" y1="100" x2="90" y2="100" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <rect x="100" y="80" width="60" height="40" rx="2" fill="#071020" stroke="#00d4ff" stroke-width="1.2"
+                    stroke-opacity="0.6" />
+                  <line x1="130" y1="80" x2="130" y2="120" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                  <line x1="100" y1="100" x2="160" y2="100" stroke="#00d4ff" stroke-width="0.6" stroke-opacity="0.35" />
+                </g>
+                <line x1="230" y1="55" x2="270" y2="55" stroke="#f59e0b" stroke-width="1.8" stroke-opacity="0.6"
+                  stroke-dasharray="5 3" />
+                <line x1="270" y1="55" x2="270" y2="130" stroke="#f59e0b" stroke-width="1.8" stroke-opacity="0.6" />
+                <rect x="258" y="130" width="50" height="40" rx="4" fill="#0a1628" stroke="#f59e0b" stroke-width="1.4"
+                  stroke-opacity="0.75" />
+                <text x="265" y="148" font-family="monospace" font-size="7.5" fill="#f59e0b"
+                  fill-opacity="0.85">INV</text>
+                <text x="261" y="160" font-family="monospace" font-size="6.5" fill="#f59e0b" fill-opacity="0.55">5.0
+                  kW</text>
+                <circle cx="308" cy="150" r="3" fill="#22c55e" fill-opacity="0.85" />
+                <line x1="308" y1="150" x2="380" y2="150" stroke="#22c55e" stroke-width="1.8" stroke-opacity="0.6" />
+                <rect x="380" y="140" width="28" height="20" rx="3" fill="#0a1628" stroke="#22c55e" stroke-width="1.2"
+                  stroke-opacity="0.6" />
+                <text x="382" y="153" font-family="monospace" font-size="7" fill="#22c55e"
+                  fill-opacity="0.75">GRID</text>
+                <text x="32" y="145" font-family="monospace" font-size="7.5" fill="#00d4ff" fill-opacity="0.5">DC STRING
+                  ×6</text>
+              </svg>
+            </div>
+            <div class="ec-slide" data-label="Earthing System">
+              <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="210" fill="#050a14" />
+                <line x1="210" y1="30" x2="210" y2="175" stroke="#22c55e" stroke-width="2.5" stroke-opacity="0.7" />
+                <polygon points="210,180 204,168 216,168" fill="#22c55e" fill-opacity="0.6" />
+                <line x1="170" y1="60" x2="250" y2="60" stroke="#22c55e" stroke-width="3" stroke-opacity="0.65" />
+                <line x1="178" y1="67" x2="242" y2="67" stroke="#22c55e" stroke-width="2" stroke-opacity="0.45" />
+                <line x1="186" y1="74" x2="234" y2="74" stroke="#22c55e" stroke-width="1.2" stroke-opacity="0.3" />
+                <text x="195" y="52" font-family="monospace" font-size="9" fill="#22c55e" fill-opacity="0.7">PE /
+                  CPC</text>
+                <path d="M170,60 Q120,60 90,80" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"
+                  stroke-dasharray="6 3" />
+                <rect x="65" y="72" width="30" height="20" rx="3" fill="#0a1628" stroke="#22c55e" stroke-width="1"
+                  stroke-opacity="0.6" />
+                <text x="68" y="85" font-family="monospace" font-size="7" fill="#22c55e" fill-opacity="0.65">H₂O</text>
+                <path d="M250,60 Q310,60 340,80" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.5"
+                  stroke-dasharray="6 3" />
+                <rect x="328" y="72" width="28" height="20" rx="3" fill="#0a1628" stroke="#22c55e" stroke-width="1"
+                  stroke-opacity="0.6" />
+                <text x="331" y="85" font-family="monospace" font-size="7" fill="#22c55e" fill-opacity="0.65">MDB</text>
+                <rect x="168" y="145" width="84" height="26" rx="4" fill="#0a1628" stroke="#22c55e" stroke-width="1"
+                  stroke-opacity="0.5" />
+                <text x="175" y="156" font-family="monospace" font-size="7" fill="#22c55e" fill-opacity="0.6">R
+                  earth</text>
+                <text x="175" y="166" font-family="monospace" font-size="8" fill="#22c55e" fill-opacity="0.85">≤ 1
+                  Ω</text>
+              </svg>
+            </div>
+            <!-- overlay elements -->
+            <div class="ec-grid-overlay"></div>
+            <div class="ec-fade-bottom"></div>
+            <div class="ec-slide-label" id="ec-slideLabel">Electrical Wiring</div>
+            <div class="ec-iec-badge">IEC 60364</div>
+            <div class="ec-dots" id="ec-dots"></div>
+          </div>
+
+          <!-- BODY -->
+          <div class="ec-body">
+            <div class="ec-category">Engineering Tool</div>
+            <h2 class="ec-title" id="ec-heading">AI Electrical Wiring Designer</h2>
+            <p class="ec-desc">A professional-grade electrical design tool built for engineers, contractors, and
+              consultants. The AI-powered wizard walks you through a 4-step process — from load calculation to full
+              circuit layout — automatically sizing cables to IEC 60364 standards, running voltage drop analysis, and
+              generating export-ready SVG wiring diagrams. Designed for residential homes, commercial fit-outs, and PV
+              solar installations across single and three-phase systems.</p>
+          </div>
+
+          <!-- TICKER -->
+          <div class="ec-ticker-wrap" id="ec-tickerWrap">
+            <div class="ec-ticker-track" id="ec-ticker"></div>
+          </div>
+
+          <!-- TAGS + BUTTON -->
+          <div class="ec-body">
+            <div class="ec-tags">
+              <span class="ec-tag ec-tb">Vanilla JS</span>
+              <span class="ec-tag ec-ta">IEC Compliant</span>
+              <span class="ec-tag ec-tg">SVG Diagrams</span>
+              <span class="ec-tag ec-tb">4-Step Wizard</span>
+              <span class="ec-tag ec-tg">Cable Sizing</span>
+            </div>
+            <div class="ec-btn-wrap">
+              <a href="electrical-estimator/index.html" class="ec-btn-launch">
+                <span class="ec-btn-left">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                  Launch Estimator
+                </span>
+                <svg class="ec-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="ec-footer">
+            <span class="ec-status"><span class="ec-status-dot"></span>LIVE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Why choose Technoid ── -->
+    <section class="section" aria-labelledby="why-heading">
+      <div class="section-header anim">
+        <span class="pill">Why Technoid</span>
+        <h2 id="why-heading">The Technoid Difference</h2>
+        <p>We combine technical expertise with genuine care for every client — here's what sets us apart.</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-search"></i></div>
+          <h3>Expert Diagnostics</h3>
+          <p>We identify the root cause before touching your device, saving you time and money with accurate fault
+            detection from the start.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-cog"></i></div>
+          <h3>Quality Parts Only</h3>
+          <p>Every repair uses tested, compatible components. No shortcuts — we protect your device's longevity.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Quick Turnaround</h3>
+          <p>Most phone repairs are completed same-day. We respect your time and keep you updated throughout.</p>
+        </div>
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Repair Guarantee</h3>
+          <p>All repairs come with a quality guarantee. If the same fault returns, we fix it — no questions asked.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-comments"></i></div>
+          <h3>Transparent Pricing</h3>
+          <p>You receive a clear quote before any work begins. No hidden fees, no surprises on your bill.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-globe"></i></div>
+          <h3>Local Expertise</h3>
+          <p>Based in Kumasi, we understand the local market and serve our community with pride and professionalism.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="about-text anim anim-delay-2">
+      <span class="pill">About Technoid</span>
+      <h2 id="about-heading">The Person Behind the Tools</h2>
+      <p>Hi, I'm <strong>Chris Atoopase</strong> — a certified Computer Engineer with a passion for technology and a
+        commitment to quality service. Since founding Technoid, I've been on a mission to bring professional-grade
+        tech solutions to Kumasi, Ghana.</p>
+      <p>My expertise spans hardware repair, creative design, and web development. Whether I'm diagnosing a faulty
+        motherboard, crafting a brand identity, or building a business website, I bring the same level of precision
+        and care to every project.</p>
+      <p>I believe technology should work for you — not the other way around. That's why I invest in ongoing
+        training, quality parts, and genuine customer relationships.</p>
+      <div class="skills-list">
+        <span class="skill-tag">Device Repair</span>
+        <span class="skill-tag">Electronics</span>
+        <span class="skill-tag">Adobe Suite</span>
+        <span class="skill-tag">AutoCAD</span>
+        <span class="skill-tag">HTML/CSS/JS</span>
+        <span class="skill-tag">Branding</span>
+        <span class="skill-tag">Video Editing</span>
+        <span class="skill-tag">PCB Repair</span>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn" href="contact.html">Get in Touch</a>
+        <a class="btn btn-light" id="view-cv-btn" href="assets/cv.jpg" data-sb-img="cv.jpg" target="_blank"
+          rel="noopener noreferrer" aria-label="View Technoid CV">
+          <i class="fas fa-eye"></i> View CV
+        </a>
+        <button class="btn btn-light" id="download-cv-btn" aria-label="Download Technoid CV">
+          <i class="fas fa-download"></i> Download CV
+        </button>
+      </div>
+    </div>
+    </div>
+    </section>
+
+    <!-- ── Skills & Credentials ── -->
+    <section class="section" aria-labelledby="skills-heading">
+      <div class="section-header anim">
+        <span class="pill">Skills & Credentials</span>
+        <h2 id="skills-heading">Technical Expertise</h2>
+        <p>Years of hands-on experience across repair, design, and development — here's the full toolkit.</p>
+      </div>
+      <div class="skills-grid anim anim-delay-1">
+        <div class="skill-cat skill-cat-full">
+          <h4>Hardware & Repair</h4>
+          <div class="skill-items">
+            <span class="skill-item">Smartphone Repair</span>
+            <span class="skill-item">Laptop Servicing</span>
+            <span class="skill-item">PCB Soldering</span>
+            <span class="skill-item">Screen Replacement</span>
+            <span class="skill-item">Battery Replacement</span>
+            <span class="skill-item">Home Appliances</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Graphic Design</h4>
+          <div class="skill-items">
+            <span class="skill-item">Adobe Photoshop</span>
+            <span class="skill-item">Illustrator</span>
+            <span class="skill-item">Premiere Pro</span>
+            <span class="skill-item">AutoCAD 2D/3D</span>
+            <span class="skill-item">Canva Pro</span>
+            <span class="skill-item">Brand Identity</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Web Development</h4>
+          <div class="skill-items">
+            <span class="skill-item">HTML5 / CSS3</span>
+            <span class="skill-item">JavaScript</span>
+            <span class="skill-item">Responsive Design</span>
+            <span class="skill-item">SEO Optimization</span>
+            <span class="skill-item">Performance</span>
+            <span class="skill-item">Git</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Comments / What Clients Say ── -->
+    <section class="section" aria-labelledby="testimonials-heading">
+      <div class="testimonials">
+        <div class="section-header anim"
+          style="margin-bottom:28px; display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:nowrap; text-align:left;">
+          <div style="flex:1 1 auto;">
+            <div style="margin-bottom:8px;"><span class="pill">Client Feedback</span></div>
+            <h2 id="testimonials-heading"
+              style="margin:0 0 6px 0; font-size:clamp(1.6rem,4vw,2.4rem); line-height:1.15;">What Clients Say</h2>
+            <p style="margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted);">Leave a comment about your
+              experience with Technoid, your feedback is import to us.</p>
+          </div>
+          <div
+            style="flex:0 0 auto; width:55%; max-width:245px; min-width:145px; display:flex; justify-content:center; margin-top:-40px; margin-bottom:-30px;">
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="assets/A.json" background="transparent" speed="1" style="width: 100%; height: auto;"
+              loop autoplay></lottie-player>
+          </div>
+        </div>
+
+        <!-- Login required alert -->
+        <div id="home-login-alert" class="comment-login-alert" style="display:none;">
+          <i class="fas fa-lock"></i>
+          <span>You need to <a href="projects.html" style="color:#0088CC;font-weight:700;">log in on the Projects
+              page</a> before you can leave a comment.</span>
+          <button onclick="document.getElementById('home-login-alert').style.display='none'"
+            style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:1rem;color:inherit;">×</button>
+        </div>
+
+        <!-- Comment form -->
+        <div class="comment-form-wrap anim anim-delay-1">
+          <textarea id="home-comment-input" class="comment-textarea" placeholder="Share your experience with Technoid…"
+            rows="3" maxlength="400"></textarea>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+            <button class="btn" id="home-comment-btn" onclick="submitHomeComment()"
+              style="font-size:.82rem;padding:7px 16px;">
+              <i class="fas fa-paper-plane"></i> Post Comment
+            </button>
+            <span id="home-comment-char" style="font-size:.75rem;color:var(--muted);margin-left:auto;">0 / 400</span>
+          </div>
+        </div>
+
+        <!-- Comments list -->
+        <div id="home-comments-list" class="comments-list" style="margin-top:20px;"></div>
+        <p id="home-comments-empty" class="comments-empty" style="display:none;">No comments yet. Be the first to share
+          your experience!</p>
+        <!-- Toggle button -->
+        <div id="home-comments-toggle-wrap" style="display:none;text-align:center;margin-top:12px;">
+          <button id="home-comments-toggle-btn" class="btn btn-light" onclick="toggleHomeComments()"
+            style="font-size:.78rem;padding:6px 18px;">
+            <i class="fas fa-chevron-down"></i> View all comments
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Promo: Store & Game ── -->
+    <section class="section-sm" aria-label="Tekstore and Game">
+      <div class="section-header anim" style="margin-bottom:24px;">
+        <span class="pill"><i class="fas fa-globe"></i> Explore More</span>
+        <h2 style="font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin:10px 0 8px;">More from Technoid</h2>
+        <p style="color:var(--muted);">Shop our store or take a break and play our game!</p>
+      </div>
+      <div class="promo-grid anim anim-delay-1">
+
+        <div class="promo-card promo-store">
+          <div class="promo-badge"><i class="fas fa-shopping-cart"></i> Now Open</div>
+          <h3>Tekstore</h3>
+          <a class="btn" href="https://tekstore.netlify.app" target="_blank" rel="noopener"
+            aria-label="Visit the Tekstore">
+            <i class="fas fa-store"></i> Shop Now
+          </a>
+          <span class="promo-emoji"><i class="fas fa-shopping-bag"></i></span>
+        </div>
+
+        <div class="promo-card promo-game">
+          <div class="promo-badge"><i class="fas fa-gamepad"></i> Play Free</div>
+          <h3>Technoid Game</h3>
+          <a class="btn" href="https://technoidgame1.netlify.app" target="_blank" rel="noopener"
+            aria-label="Play Technoid Game">
+            <i class="fas fa-gamepad"></i> Play Now
+          </a>
+          <span class="promo-emoji"><i class="fas fa-gamepad"></i></span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
+            data-cfemail="5130253e3e2130223411363c30383d7f323e3c"><span class="__cf_email__"
+              data-cfemail="95f4e1fafae5f4e6f0d5f2f8f4fcf9bbf6faf8">atoopase@icloud.com</span></span></a>
+        <a href="tel:+233544833571">+233 54 483 3571</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris
+        <!--  CV Modal  -->
+      <div id="cv-modal" class="cv-modal" aria-hidden="true" role="dialog" aria-modal="true">
+        <button class="cv-modal-close" aria-label="Close CV">&times;</button>
+        <div class="cv-modal-content">
+          <img id="cv-img" src="assets/cv.jpg" data-sb-img="cv.jpg" alt="Technoid CV" />
+        </div>
+      </div>
+      <!-- Supabase for comments -->
+      <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+      <script>
+        (function () {
+          const SUPABASE_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+          const SUPABASE_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+          const ADMIN_EMAILS = ['atoopase@gmail.com', 'atoopasechristopher@gmail.com'];
+
+          let sb = null;
+          function getSb() {
+            if (!sb && typeof window.supabase !== 'undefined')
+              sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            return sb;
+          }
+
+          let _allComments = [];
+          let _isExpanded = false;
+          let _isAdmin = false;
+
+          async function getUser() {
+            try {
+              const { data } = await getSb().auth.getSession();
+              return data?.session?.user || null;
+            } catch (e) { return null; }
+          }
+
+          function escHtml(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+
+          function timeAgo(iso) {
+            const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            return Math.floor(diff / 86400) + 'd ago';
+          }
+
+          function initials(email) {
+            return (email || 'AN').split('@')[0].slice(0, 2).toUpperCase();
+          }
+
+          function renderCommentCard(c) {
+            const deleteBtn = _isAdmin
+              ? `<button class="comment-delete-btn" onclick="deleteHomeComment('${c.id}')" title="Delete comment" aria-label="Delete comment">
+               <i class="fas fa-trash-alt"></i>
+             </button>`
+              : '';
+            return `
+          <div class="comment-card" id="hc-${c.id}">
+            <div class="comment-avatar">${initials(c.user_email)}</div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-name">${escHtml((c.user_email || 'anon').split('@')[0])}</span>
+                <span class="comment-time">${timeAgo(c.created_at)}</span>
+                ${deleteBtn}
+              </div>
+              <p class="comment-text">${escHtml(c.content)}</p>
+            </div>
+          </div>`;
+          }
+
+          function renderComments() {
+            const list = document.getElementById('home-comments-list');
+            const empty = document.getElementById('home-comments-empty');
+            const toggleWrap = document.getElementById('home-comments-toggle-wrap');
+            if (!list) return;
+
+            if (!_allComments || _allComments.length === 0) {
+              list.innerHTML = '';
+              if (empty) empty.style.display = '';
+              if (toggleWrap) toggleWrap.style.display = 'none';
+              return;
+            }
+
+            if (empty) empty.style.display = 'none';
+
+            const toShow = _isExpanded ? _allComments : [_allComments[0]];
+            list.innerHTML = toShow.map(renderCommentCard).join('');
+
+            // Show/hide toggle button
+            if (toggleWrap) {
+              if (_allComments.length > 1) {
+                toggleWrap.style.display = '';
+                const btn = document.getElementById('home-comments-toggle-btn');
+                if (btn) {
+                  if (_isExpanded) {
+                    btn.innerHTML = '<i class="fas fa-chevron-up"></i> Show less';
+                  } else {
+                    btn.innerHTML = `<i class="fas fa-chevron-down"></i> View all ${_allComments.length} comments`;
+                  }
+                }
+              } else {
+                toggleWrap.style.display = 'none';
+              }
+            }
+          }
+
+          async function loadComments() {
+            try {
+              const { data, error } = await getSb()
+                .from('home_comments')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(100);
+              if (error) throw error;
+              _allComments = data || [];
+              renderComments();
+            } catch (e) {
+              const list = document.getElementById('home-comments-list');
+              if (list) list.innerHTML = `<p style="color:#ef4444;font-size:.8rem;padding:8px 0;">Could not load comments: ${e?.message || e}</p>`;
+            }
+          }
+
+          window.toggleHomeComments = function () {
+            _isExpanded = !_isExpanded;
+            renderComments();
+          };
+
+          window.deleteHomeComment = async function (id) {
+            if (!_isAdmin) return;
+            if (!confirm('Delete this comment?')) return;
+            try {
+              const { error } = await getSb().from('home_comments').delete().eq('id', id);
+              if (error) throw error;
+              // Remove from local array and re-render without a full reload
+              _allComments = _allComments.filter(c => String(c.id) !== String(id));
+              if (_isExpanded && _allComments.length === 0) _isExpanded = false;
+              renderComments();
+            } catch (e) {
+              alert('Could not delete comment. Please try again.');
+            }
+          };
+
+          window.submitHomeComment = async function () {
+            const input = document.getElementById('home-comment-input');
+            const text = (input?.value || '').trim();
+            if (!text) return;
+
+            const user = await getUser();
+            if (!user) {
+              const banner = document.getElementById('home-login-alert');
+              if (banner) {
+                banner.style.display = 'flex';
+                setTimeout(() => { banner.style.display = 'none'; }, 5000);
+              }
+              return;
+            }
+
+            const btn = document.getElementById('home-comment-btn');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting…'; }
+
+            try {
+              const { error } = await getSb().from('home_comments').insert({
+                content: text,
+                user_id: user.id,
+                user_email: user.email,
+                created_at: new Date().toISOString()
+              });
+
+              if (error) throw error;
+
+              input.value = '';
+              const ctr = document.getElementById('home-comment-char');
+              if (ctr) ctr.textContent = '0 / 400';
+
+              _isExpanded = false;
+              await loadComments();
+
+            } catch (e) {
+              alert('Could not post comment.\n\nReason: ' + (e?.message || e));
+            }
+
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Comment'; }
+          };
+
+          document.addEventListener('DOMContentLoaded', async function () {
+            // Char counter
+            const inp = document.getElementById('home-comment-input');
+            const ctr = document.getElementById('home-comment-char');
+            if (inp && ctr) {
+              inp.addEventListener('input', () => { ctr.textContent = inp.value.length + ' / 400'; });
+            }
+
+            // Check admin
+            const user = await getUser();
+            if (user && ADMIN_EMAILS.includes(user.email)) {
+              _isAdmin = true;
+            }
+
+            loadComments();
+          });
+        })();
+      </script>
+
+      <!-- EC Card Scripts -->
+      <script>
+        (function () {
+          const slides = document.querySelectorAll('.ec-slide');
+          const labelEl = document.getElementById('ec-slideLabel');
+          const dotsEl = document.getElementById('ec-dots');
+          let current = 0;
+          slides.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'ec-dot' + (i === 0 ? ' ec-dot-active' : '');
+            d.onclick = () => ecGoTo(i);
+            dotsEl.appendChild(d);
+          });
+          function ecGoTo(idx) {
+            slides[current].classList.remove('ec-active');
+            dotsEl.children[current].classList.remove('ec-dot-active');
+            current = (idx + slides.length) % slides.length;
+            slides[current].classList.add('ec-active');
+            dotsEl.children[current].classList.add('ec-dot-active');
+            labelEl.style.opacity = '0';
+            setTimeout(() => { labelEl.textContent = slides[current].dataset.label; labelEl.style.opacity = '1'; }, 300);
+          }
+          setInterval(() => ecGoTo(current + 1), 2800);
+
+          const items = ['Circuits', 'Material List', 'Single Line Diagram', 'DB Layout', 'Earthing', 'Protection Hierarchy', 'Voltage Drop', 'Cable Sizing', 'Load Schedule'];
+          const track = document.getElementById('ec-ticker');
+          const wrap = document.getElementById('ec-tickerWrap');
+          const SPEED = 38, COPIES = 3;
+          const allItems = [];
+          for (let c = 0; c < COPIES; c++) {
+            items.forEach(label => {
+              const el = document.createElement('span');
+              el.className = 'ec-ticker-item';
+              el.innerHTML = '<span class="ec-sep"></span>' + label;
+              track.appendChild(el);
+              allItems.push(el);
+            });
+          }
+          let setWidth = 0, startTime = null, paused = false, pauseOffset = 0;
+          track.addEventListener('mouseenter', () => { paused = true; });
+          track.addEventListener('mouseleave', () => { paused = false; startTime = null; });
+          function ecTick(ts) {
+            if (!startTime) startTime = ts - pauseOffset;
+            if (!paused) pauseOffset = ts - startTime;
+            if (setWidth === 0) {
+              let w = 0;
+              for (let i = 0; i < items.length; i++) w += allItems[i].getBoundingClientRect().width;
+              setWidth = w;
+            }
+            if (setWidth > 0) {
+              const offset = ((ts - startTime) / 1000 * SPEED) % setWidth;
+              track.style.transform = 'translateX(-' + offset + 'px)';
+              const wrapRect = wrap.getBoundingClientRect();
+              const centrePx = wrapRect.left + wrapRect.width / 2;
+              allItems.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const dist = Math.abs(r.left + r.width / 2 - centrePx);
+                el.classList.remove('ec-center-hi', 'ec-center-near');
+                if (dist < 55) el.classList.add('ec-center-hi');
+                else if (dist < 110) el.classList.add('ec-center-near');
+              });
+            }
+            requestAnimationFrame(ecTick);
+          }
+          requestAnimationFrame(ecTick);
+        })();
+      </script>
+</body>
+
+</html>
+
+<!-- ── Settings Modal (admin only) ── -->
+<div id="settings-modal"
+  style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+  <div id="settings-panel"
+    style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+    <button onclick="closeSettingsModal()"
+      style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+    <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog"
+        style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+    <div id="

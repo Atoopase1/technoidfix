@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Technoid Portfolio | Kumasi, Ghana</title>
+  <meta name="description" content="Browse Technoid projects — repairs, designs, websites." />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  <style>
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 60px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .err-banner {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      color: #991b1b;
+      font-size: .92rem;
+      display: none;
+    }
+
+    [data-theme="dark"] .err-banner {
+      background: #3f1111;
+      border-color: #7f1d1d;
+      color: #fca5a5;
+    }
+
+    .upload-prog {
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .upload-prog-bar {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 99px;
+      transition: width .3s;
+      width: 0%;
+    }
+
+    /* ── Auth bar ── */
+    .auth-bar {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    [data-theme="dark"] .auth-bar {
+      background: #16161f;
+      border-color: #2a2a3a;
+    }
+
+    .auth-bar input {
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: .88rem;
+      font-family: inherit;
+      background: var(--white);
+      color: inherit;
+      min-width: 0;
+      flex: 1;
+      max-width: 220px;
+    }
+
+    [data-theme="dark"] .auth-bar input {
+      background: #0f0f17;
+      border-color: #2a2a3a;
+      color: #e5e7eb;
+    }
+
+    .auth-bar .btn {
+      padding: 9px 16px;
+      font-size: .85rem;
+    }
+
+    .auth-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .auth-user-info i {
+      color: var(--brand);
+    }
+
+    .auth-user-email {
+      color: var(--brand);
+    }
+
+    .auth-admin-badge {
+      background: #d1fae5;
+      color: #065f46;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    [data-theme="dark"] .auth-admin-badge {
+      background: #052e16;
+      color: #4ade80;
+    }
+
+    .auth-toggle-link {
+      font-size: .82rem;
+      color: var(--brand);
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      background: none;
+      font-family: inherit;
+    }
+
+    .auth-toggle-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .auth-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .auth-bar input {
+        max-width: 100%;
+      }
+
+      .auth-user-info {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+</head>
+
+<body>
+
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+        <div class="nav-inline">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="design.html" data-page="design">Design</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main class="container" style="padding-top:32px;padding-bottom:60px;">
+
+    <div class="section-header anim" style="margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:nowrap; text-align:left;">
+      <div style="flex:1 1 auto; max-width:560px;">
+        <div style="margin-bottom:8px;"><span class="pill"><i class="fas fa-images"></i> Live Portfolio</span></div>
+        <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 6px 0; line-height:1.15;">Our Activity Log</h1>
+        <p style="color:var(--muted);font-size:1rem;margin:0;">Here are some projects executed by TechnoidFix
+          -including device repairs, brand identity development, web engineering, electrical installations, and related
+          technical services for reference.</p>
+      </div>
+      <div style="flex:0 0 auto; width:45%; max-width:240px; min-width:130px; display:flex; justify-content:center; margin-top:-50px; margin-bottom:-35px;">
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <lottie-player src="assets/Projet.json" background="transparent" speed="1" style="width: 100%; height: auto;" loop autoplay></lottie-player>
+      </div>
+    </div>
+
+    <!-- Auth Bar -->
+    <div class="auth-bar" id="auth-bar">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Admin btn + error -->
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+      <div style="font-size:.9rem;color:var(--muted);" id="post-count-label"></div>
+      <!-- Add Project button rendered only for admins via JS -->
+    </div>
+
+    <div class="err-banner" id="err-banner">
+      <strong>Connection issue.</strong> Could not reach the database. Check your internet connection and try
+      refreshing.
+    </div>
+
+    <!-- Upload panel -->
+    <div class="upload-panel" id="upload-panel">
+      <h3><i class="fas fa-upload"></i> Post a New Project</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px;">Upload an image or video with a caption. It will
+        be saved to Supabase and visible to everyone.</p>
+
+      <div class="upload-drop" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/*,video/*" onchange="handleFileSelect(this)" />
+        <div class="upload-drop-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <p><strong>Click to choose a file</strong> or drag &amp; drop here</p>
+        <p style="font-size:.8rem;">Images (JPG, PNG, GIF, WebP) or Videos (MP4, WebM) — max 50MB</p>
+      </div>
+
+      <img id="img-preview" class="upload-preview" alt="Preview" />
+      <video id="vid-preview" class="upload-preview-video" controls muted playsinline></video>
+
+      <div class="upload-prog" id="upload-prog">
+        <div class="upload-prog-bar" id="upload-prog-bar"></div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <label style="font-weight:700;font-size:.9rem;display:block;margin-bottom:6px;">Caption / Project Description
+          <span style="color:#ef4444">*</span></label>
+        <textarea id="post-caption" rows="3" placeholder="Describe this project — what was done, tools used, outcome…"
+          style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;"></textarea>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn" id="publish-btn" onclick="submitPost()"><i class="fas fa-upload"></i> Publish
+          Project</button>
+        <button class="btn btn-light" onclick="closeUploadPanel()">Cancel</button>
+      </div>
+      <div id="upload-status" style="font-size:.85rem;color:var(--muted);margin-top:10px;"></div>
+    </div>
+
+    <!-- Feed -->
+    <div id="feed-loading" class="loading-spinner">
+      <div class="spinner"></div> Loading projects…
+    </div>
+    <div class="projects-feed" id="projects-feed" style="display:none;"></div>
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="empty-state-icon"><i class="fas fa-folder-open" style="font-size:3rem;color:var(--muted);"></i></div>
+      <h3>No projects yet</h3>
+      <p>Click "Add Project" to post your first project.</p>
+    </div>
+
+  </main>
+
+  <!-- Share Modal -->
+  <div class="modal-overlay" id="share-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:380px;">
+      <button class="modal-close" onclick="closeShareModal()">✕</button>
+      <h3><i class="fas fa-share-alt"></i> Share This Project</h3>
+      <p>Copy the link or share on social media.</p>
+      <div id="share-url-box"
+        style="background:#f3f4f6;border-radius:8px;padding:10px 14px;font-size:.82rem;word-break:break-all;margin-bottom:16px;font-family:monospace;">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn" onclick="copyShareLink()"><i class="fas fa-copy"></i> Copy Link</button>
+        <a id="share-wa" href="#" target="_blank" rel="noopener" class="btn" style="background:#25d366;">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Project Modal -->
+  <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:480px;">
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+      <h3><i class="fas fa-pencil-alt"></i> Edit Project Caption</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;">Update the description, tools used, or outcome for this project.</p>
+      <input type="hidden" id="edit-project-id" />
+      <textarea id="edit-caption-input" rows="6"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;box-sizing:border-box;"
+        placeholder="Describe this project — what was done, tools used, outcome…"></textarea>
+      <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn" id="edit-save-btn" onclick="saveEditCaption()"><i class="fas fa-check-circle"></i> Save Changes</button>
+        <button class="btn btn-light" onclick="closeEditModal()">Cancel</button>
+      </div>
+      <div id="edit-status" style="font-size:.85rem;color:var(--muted);margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay" id="delete-confirm-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:340px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:12px;">🗑️</div>
+      <h3 style="margin-bottom:8px;">Delete Project?</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px;">This cannot be undone. The image and all its likes and comments will be permanently removed.</p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button class="btn" id="delete-confirm-btn" onclick="confirmDeleteProject()" style="background:#475569;">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+        <button class="btn btn-light" onclick="closeDeleteConfirm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Reset Modal -->
+  <div class="modal-overlay" id="reset-password-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:420px;">
+      <button class="modal-close" onclick="closeResetModal()">✕</button>
+      <h3><i class="fas fa-key"></i> Set New Password</h3>
+      <p>Enter your new password below to complete the reset.</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="password-input-wrapper" style="max-width:100%;">
+          <input type="password" id="reset-new-password" placeholder="New password (min 6 characters)"
+            autocomplete="new-password"
+            style="width:100%;padding:11px 42px 11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;background:var(--white);color:inherit;" />
+          <button type="button" class="password-toggle-btn"
+            onclick="toggleResetPasswordVisibility('reset-new-password', this)" title="Show/hide password"
+            aria-label="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="password-input-wrapper" style="max-width:100%;">
+          <input type="password" id="reset-confirm-password" placeholder="Confirm new password"
+            autocomplete="new-password"
+            style="width:100%;padding:11px 42px 11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;background:var(--white);color:inherit;" />
+          <button type="button" class="password-toggle-btn"
+            onclick="toggleResetPasswordVisibility('reset-confirm-password', this)" title="Show/hide password"
+            aria-label="Toggle password visibility">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <button class="btn" id="reset-submit-btn" onclick="submitNewPassword()"
+          style="width:100%;padding:12px;font-size:1rem;">
+          <i class="fas fa-check-circle"></i> Update Password
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris Atoopase. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="toast" aria-live="polite" role="status"></div>
+
+  <script>
+    /* ============================================================
+       TECHNOID PROJECTS — Supabase v2 + Auth
+       ============================================================ */
+    const SUPABASE_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+    const BUCKET = 'project-media';
+    const ADMIN_EMAILS = ['atoopase@gmail.com', 'atoopasechristopher@gmail.com'];
+
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    /* ── Auth state ───────────────────────────────────────────── */
+    let currentUser = null;   // null | { id, email }
+    let isAdmin = false;
+    const captionStore = {};  // id -> raw caption string for edit modal
+
+    function getDisplayName() {
+      if (currentUser) return currentUser.email.split('@')[0];
+      return null;
+    }
+
+    /* Anonymous UID for likes when not signed in */
+    function getUID() {
+      if (currentUser) return currentUser.id;
+      let uid = localStorage.getItem('technoid-uid');
+      if (!uid) { uid = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now(); localStorage.setItem('technoid-uid', uid); }
+      return uid;
+    }
+
+    /* ── Helpers ───────────────────────────────────────────── */
+    function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function formatCaption(s) {
+      return escHtml(s)
+        .replace(/\n/g, '<br>')
+        .replace(/(https?:\/\/[^\s<&"]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--brand);word-break:break-all;">$1</a>');
+    }
+    function fmt(iso) { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+
+    /* ── Auth UI ──────────────────────────────────────────────── */
+    function renderAuthBar() {
+      const bar = document.getElementById('auth-bar');
+      if (!bar) return;
+
+      if (currentUser) {
+        bar.innerHTML = `
+      <div class="auth-user-info">
+        <i class="fas fa-user-circle" style="font-size:1.3rem;"></i>
+        <span class="auth-user-email">${escHtml(currentUser.email)}</span>
+        ${isAdmin ? '<span class="auth-admin-badge">Admin</span>' : ''}
+      </div>
+      <button class="btn btn-light" onclick="signOut()" style="white-space:nowrap;">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>`;
+      } else {
+        bar.innerHTML = `
+      <input type="email" id="auth-email" placeholder="Email" autocomplete="email" />
+      <div class="password-input-wrapper">
+        <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')signIn()" />
+        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility()" title="Show/hide password" aria-label="Toggle password visibility">
+          <i class="fas fa-eye" id="password-eye-icon"></i>
+        </button>
+      </div>
+      <button class="btn" onclick="signIn()" id="auth-signin-btn"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+      <button class="btn btn-light" onclick="signUp()" id="auth-signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+      <button class="auth-toggle-link" onclick="forgotPassword()" style="margin-left:auto;"><i class="fas fa-lock"></i> Forgot Password?</button>`;
+      }
+    }
+
+    async function signIn() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const pass = document.getElementById('auth-password')?.value;
+      if (!email || !pass) { window.toast('Enter email and password.', 'error'); return; }
+
+      const btn = document.getElementById('auth-signin-btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…'; }
+
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if (error) {
+        window.toast(error.message, 'error');
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In'; }
+        return;
+      }
+      window.toast('Signed in!', 'success');
+    }
+
+    async function signUp() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      const pass = document.getElementById('auth-password')?.value;
+      if (!email || !pass) { window.toast('Enter email and password.', 'error'); return; }
+      if (pass.length < 6) { window.toast('Password must be at least 6 characters.', 'error'); return; }
+
+      const btn = document.getElementById('auth-signup-btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing up…'; }
+
+      const { error } = await sb.auth.signUp({ email, password: pass });
+      if (error) {
+        window.toast(error.message, 'error');
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up'; }
+        return;
+      }
+      window.toast('Account created! Check your email to confirm, then sign in.', 'success');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Sign Up'; }
+    }
+
+    async function signOut() {
+      await sb.auth.signOut();
+      window.toast('Signed out.', 'success');
+    }
+
+    /* ── Forgot Password ─────────────────────────────────────── */
+    async function forgotPassword() {
+      const email = document.getElementById('auth-email')?.value.trim();
+      if (!email) {
+        window.toast('Enter your email address first, then click Forgot Password.', 'error');
+        return;
+      }
+      try {
+        const { error } = await sb.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/projects.html'
+        });
+        if (error) {
+          window.toast(error.message, 'error');
+          return;
+        }
+        window.toast('Password reset link sent! Check your email inbox.', 'success');
+      } catch (err) {
+        window.toast('Could not send reset email. Try again later.', 'error');
+      }
+    }
+
+    /* ── Toggle Password Visibility ───────────────────────────── */
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('auth-password');
+      const eyeIcon = document.getElementById('password-eye-icon');
+      if (!passInput || !eyeIcon) return;
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    /* ── Reset Password Modal ────────────────────────────────── */
+    function openResetModal() {
+      document.getElementById('reset-password-modal').classList.add('open');
+    }
+
+    function closeResetModal() {
+      document.getElementById('reset-password-modal').classList.remove('open');
+      document.getElementById('reset-new-password').value = '';
+      document.getElementById('reset-confirm-password').value = '';
+    }
+
+    async function submitNewPassword() {
+      const newPass = document.getElementById('reset-new-password')?.value;
+      const confirmPass = document.getElementById('reset-confirm-password')?.value;
+
+      if (!newPass || !confirmPass) {
+        window.toast('Please fill in both password fields.', 'error');
+        return;
+      }
+      if (newPass.length < 6) {
+        window.toast('Password must be at least 6 characters.', 'error');
+        return;
+      }
+      if (newPass !== confirmPass) {
+        window.toast('Passwords do not match.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('reset-submit-btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating…'; }
+
+      try {
+        const { error } = await sb.auth.updateUser({ password: newPass });
+        if (error) {
+          window.toast(error.message, 'error');
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> Update Password'; }
+          return;
+        }
+        window.toast('Password updated successfully! You are now signed in.', 'success');
+        closeResetModal();
+      } catch (err) {
+        window.toast('Could not update password. Try again.', 'error');
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> Update Password'; }
+      }
+    }
+
+    function toggleResetPasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (!input || !icon) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function updateAdminUI() {
+      const addBtnContainer = document.getElementById('admin-add-btn-wrap');
+      if (isAdmin) {
+        /* Inject Add Project button if admin */
+        if (!addBtnContainer) {
+          const wrap = document.createElement('div');
+          wrap.id = 'admin-add-btn-wrap';
+          wrap.innerHTML = `<button class="btn btn-dark" onclick="openUploadPanel()" id="add-project-btn">
+        <i class="fas fa-plus"></i> Add Project
+      </button>`;
+          const row = document.getElementById('post-count-label')?.parentElement;
+          if (row) row.appendChild(wrap);
+        }
+      } else {
+        /* Remove Add Project button for non-admins */
+        if (addBtnContainer) addBtnContainer.remove();
+      }
+    }
+
+    /* Listen for auth changes */
+    sb.auth.onAuthStateChange((_event, session) => {
+      if (_event === 'PASSWORD_RECOVERY') {
+        /* User arrived via password reset link — show reset modal */
+        openResetModal();
+        return;
+      }
+      if (session?.user) {
+        currentUser = { id: session.user.id, email: session.user.email };
+        isAdmin = ADMIN_EMAILS.includes(session.user.email.toLowerCase());
+      } else {
+        currentUser = null;
+        isAdmin = false;
+      }
+      renderAuthBar();
+      updateAdminUI();
+      loadFeed();  // Re-render feed to show/hide delete btns and update comment inputs
+    });
+
+    /* ── Load projects ─────────────────────────────────────── */
+    async function loadFeed() {
+      const loading = document.getElementById('feed-loading');
+      const feed = document.getElementById('projects-feed');
+      const empty = document.getElementById('empty-state');
+      const errBan = document.getElementById('err-banner');
+      const label = document.getElementById('post-count-label');
+
+      loading.style.display = 'flex';
+      feed.style.display = 'none';
+      empty.style.display = 'none';
+      errBan.style.display = 'none';
+
+      const uid = getUID();
+
+      try {
+        /* Fetch projects */
+        const { data: projects, error: pErr } = await sb
+          .from('projects')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (pErr) throw pErr;
+
+        if (!projects || projects.length === 0) {
+          loading.style.display = 'none';
+          empty.style.display = 'block';
+          label.textContent = 'No projects yet';
+          return;
+        }
+
+        /* Fetch this user's likes */
+        const ids = projects.map(p => p.id);
+        const { data: myLikes } = await sb
+          .from('likes')
+          .select('project_id')
+          .in('project_id', ids)
+          .eq('user_uid', uid);
+        const likedSet = new Set((myLikes || []).map(l => l.project_id));
+
+        /* Fetch comment counts */
+        const { data: commentCounts } = await sb
+          .from('comments')
+          .select('project_id')
+          .in('project_id', ids);
+        const countMap = {};
+        (commentCounts || []).forEach(c => { countMap[c.project_id] = (countMap[c.project_id] || 0) + 1; });
+
+        label.textContent = `${projects.length} project${projects.length !== 1 ? 's' : ''}`;
+        loading.style.display = 'none';
+        feed.style.display = 'grid';
+
+        /* Store raw captions for edit modal */
+        projects.forEach(p => { captionStore[p.id] = p.caption; });
+
+        feed.innerHTML = projects.map(p => {
+          const liked = likedSet.has(p.id);
+          const cCount = countMap[p.id] || 0;
+          const mediaHTML = p.file_type === 'video'
+            ? `<video src="${escHtml(p.file_url)}" controls playsinline muted preload="none" style="width:100%;height:100%;object-fit:cover;"></video>
+           <span class="project-media-type">VIDEO</span>`
+            : `<img src="${escHtml(p.file_url)}" alt="${escHtml(p.caption)}" loading="lazy" />`;
+
+          /* Delete + Edit buttons: only render for admins */
+          const deleteBtnHTML = isAdmin
+            ? `<button class="proj-btn" onclick="openEditModal('${p.id}')" style="color:#2563eb;border-color:#93c5fd;" title="Edit caption">
+             <i class="fas fa-pencil-alt"></i>
+           </button>
+           <button class="proj-btn" onclick="deleteProject('${p.id}')" style="color:#64748b;border-color:#cbd5e1;" title="Delete project">
+             <i class="fas fa-trash"></i>
+           </button>`
+            : '';
+
+          /* Comment name input: hidden if signed in */
+          const nameInputHTML = currentUser
+            ? ''
+            : `<input type="text" placeholder="Your name" id="cname-${p.id}" maxlength="40" class="comment-name-input" />`;
+
+          return `
+      <article class="project-card" data-id="${p.id}">
+        <div class="project-media">${mediaHTML}</div>
+        <div class="project-body">
+          <p class="project-caption clamped" id="caption-${p.id}">${formatCaption(p.caption)}</p>
+          <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="toggleCaption('${p.id}')" style="display:none;">More</button>
+          <div class="project-meta">Posted ${fmt(p.created_at)}</div>
+        </div>
+        <div class="project-actions">
+          <button class="proj-btn like-btn ${liked ? 'liked' : ''}" onclick="handleLike('${p.id}',this)" aria-label="Like">
+            ${liked ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'} <span class="like-count">${p.likes_count || 0}</span>
+          </button>
+          <button class="proj-btn" onclick="toggleComments('${p.id}')" aria-label="Comments">
+            <i class="fas fa-comment"></i> <span id="ccount-${p.id}">${cCount}</span>
+          </button>
+          <button class="proj-btn proj-btn-share" onclick="openShare('${p.id}')" aria-label="Share">
+            <i class="fas fa-share-alt"></i> Share
+          </button>
+          ${deleteBtnHTML}
+        </div>
+        <div class="comments-section" id="comments-${p.id}">
+          <div id="clist-${p.id}"><div class="loading-spinner" style="padding:20px;"><div class="spinner"></div></div></div>
+          <div class="comment-input-row">
+            ${nameInputHTML}
+            <textarea placeholder="Write a comment…" id="ctext-${p.id}" maxlength="280" rows="1"
+              class="comment-text-input"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitComment('${p.id}')}"
+              oninput="autoGrowTextarea(this)"></textarea>
+            <button onclick="submitComment('${p.id}')">Post</button>
+          </div>
+        </div>
+      </article>`;
+        }).join('');
+
+        /* Show More/Less toggles for long captions */
+        requestAnimationFrame(initCaptionToggles);
+
+      } catch (err) {
+        console.error('Feed load error:', err);
+        loading.style.display = 'none';
+        errBan.style.display = 'block';
+        window.toast('Could not load projects. Check connection.', 'error');
+      }
+    }
+
+    /* ── Caption More / Less ─────────────────────────────────── */
+    function toggleCaption(id) {
+      const cap = document.getElementById('caption-' + id);
+      const btn = document.getElementById('caption-toggle-' + id);
+      if (!cap || !btn) return;
+      const isClipped = cap.classList.contains('clamped');
+      cap.classList.toggle('clamped', !isClipped);
+      btn.textContent = isClipped ? 'Less' : 'More';
+    }
+
+    function initCaptionToggles() {
+      document.querySelectorAll('.project-caption.clamped').forEach(el => {
+        const id = el.id.replace('caption-', '');
+        const btn = document.getElementById('caption-toggle-' + id);
+        if (!btn) return;
+        /* Show toggle only if text is actually overflowing */
+        if (el.scrollHeight > el.clientHeight + 2) {
+          btn.style.display = 'block';
+          btn.textContent = 'More';
+        }
+      });
+    }
+
+    /* ── Auto-grow textarea ───────────────────────────────────── */
+    function autoGrowTextarea(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
+
+    /* ── Like ──────────────────────────────────────────────── */
+    async function handleLike(id, btn) {
+      const uid = getUID();
+      const liked = btn.classList.contains('liked');
+      const countEl = btn.querySelector('.like-count');
+      const cur = parseInt(countEl.textContent) || 0;
+
+      /* Optimistic UI */
+      const newLiked = !liked;
+      const optimisticCount = newLiked ? cur + 1 : Math.max(0, cur - 1);
+      btn.classList.toggle('liked', newLiked);
+      btn.innerHTML = `${newLiked ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'} <span class="like-count">${optimisticCount}</span>`;
+      btn.disabled = true;
+
+      try {
+        if (liked) {
+          /* Unlike */
+          await sb.from('likes').delete().eq('project_id', id).eq('user_uid', uid);
+        } else {
+          /* Like */
+          await sb.from('likes').insert({ project_id: id, user_uid: uid });
+        }
+        /* Count actual likes from DB to avoid race conditions */
+        const { count } = await sb
+          .from('likes')
+          .select('*', { count: 'exact', head: true })
+          .eq('project_id', id);
+        const realCount = count || 0;
+        /* Update project row with real count */
+        await sb.from('projects').update({ likes_count: realCount }).eq('id', id);
+        /* Update UI with real count */
+        const newCountEl = btn.querySelector('.like-count');
+        if (newCountEl) newCountEl.textContent = realCount;
+      } catch (err) {
+        /* Revert */
+        btn.classList.toggle('liked', liked);
+        btn.innerHTML = `${liked ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'} <span class="like-count">${cur}</span>`;
+        window.toast('Could not save like. Try again.', 'error');
+      }
+      btn.disabled = false;
+    }
+
+    /* ── Comments ───────────────────────────────────────────── */
+    async function toggleComments(id) {
+      const sec = document.getElementById('comments-' + id);
+      if (!sec) return;
+      const isOpen = sec.classList.contains('open');
+      sec.classList.toggle('open', !isOpen);
+      if (!isOpen) await loadComments(id);
+    }
+
+    async function loadComments(id) {
+      const list = document.getElementById('clist-' + id);
+      if (!list) return;
+      list.innerHTML = '<div class="loading-spinner" style="padding:16px;"><div class="spinner"></div></div>';
+
+      /* Fetch comments */
+      const { data, error } = await sb
+        .from('comments')
+        .select('*')
+        .eq('project_id', id)
+        .order('created_at', { ascending: true });
+
+      if (error || !data || data.length === 0) {
+        list.innerHTML = '<p style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">No comments yet. Be first!</p>';
+        return;
+      }
+
+      /* Fetch all likes for this project to check which commenters liked it */
+      const { data: likesData } = await sb
+        .from('likes')
+        .select('user_uid')
+        .eq('project_id', id);
+      const likersSet = new Set((likesData || []).map(l => l.user_uid));
+
+      list.innerHTML = data.map(c => {
+        /* Check if commenter liked by matching user_uid stored in comment */
+        const commenterLiked = c.user_uid && likersSet.has(c.user_uid);
+        const likedBadge = commenterLiked
+          ? ' <span style="color:#2563eb;font-size:.72rem;" title="Liked this project"><i class="fas fa-heart"></i></span>'
+          : '';
+        return `
+    <div class="comment-item">
+      <div class="comment-author">${escHtml(c.author)}${likedBadge}</div>
+      <div class="comment-text">${escHtml(c.body)}</div>
+    </div>`;
+      }).join('');
+    }
+
+    async function submitComment(id) {
+      const nameEl = document.getElementById('cname-' + id);
+      const textEl = document.getElementById('ctext-' + id);
+      const text = (textEl?.value || '').trim();
+      if (!text) { window.toast('Write something first.', 'error'); return; }
+
+      /* Determine author name */
+      let author;
+      if (currentUser) {
+        author = getDisplayName() || currentUser.email;
+      } else {
+        author = (nameEl?.value || '').trim() || 'Anonymous';
+      }
+
+      const uid = getUID();
+      const { error } = await sb.from('comments').insert({ project_id: id, author, body: text, user_uid: uid });
+      if (error) { window.toast('Could not post comment.', 'error'); return; }
+
+      if (textEl) { textEl.value = ''; textEl.style.height = 'auto'; }
+      if (nameEl) nameEl.value = '';
+
+      /* Update count badge */
+      const ccEl = document.getElementById('ccount-' + id);
+      if (ccEl) ccEl.textContent = parseInt(ccEl.textContent || 0) + 1;
+
+      window.toast('Comment posted!', 'success');
+      await loadComments(id);
+    }
+
+    /* ── Share ─────────────────────────────────────────────── */
+    function openShare(id) {
+      const url = window.location.href.split('?')[0] + '?project=' + id;
+      document.getElementById('share-url-box').textContent = url;
+      document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent('Check out this Technoid project: ' + url);
+      document.getElementById('share-modal').classList.add('open');
+    }
+    function closeShareModal() { document.getElementById('share-modal').classList.remove('open'); }
+    function copyShareLink() {
+      navigator.clipboard.writeText(document.getElementById('share-url-box').textContent)
+        .then(() => window.toast('Link copied!', 'success'));
+    }
+
+    /* ── Upload panel ──────────────────────────────────────── */
+    function openUploadPanel() {
+      if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
+      const p = document.getElementById('upload-panel');
+      p.classList.add('open');
+      p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function closeUploadPanel() {
+      document.getElementById('upload-panel').classList.remove('open');
+      resetUpload();
+    }
+    function resetUpload() {
+      pendingFile = null; pendingFileType = null;
+      document.getElementById('file-input').value = '';
+      document.getElementById('post-caption').value = '';
+      const ip = document.getElementById('img-preview');
+      const vp = document.getElementById('vid-preview');
+      ip.style.display = 'none'; ip.src = '';
+      vp.style.display = 'none'; vp.src = '';
+      document.getElementById('upload-prog').style.display = 'none';
+      document.getElementById('upload-prog-bar').style.width = '0%';
+      document.getElementById('upload-status').textContent = '';
+    }
+
+    let pendingFile = null;
+    let pendingFileType = null;
+
+    function handleFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+      pendingFile = file;
+      pendingFileType = file.type.startsWith('video') ? 'video' : 'image';
+      const url = URL.createObjectURL(file);
+      const ip = document.getElementById('img-preview');
+      const vp = document.getElementById('vid-preview');
+      if (pendingFileType === 'video') {
+        ip.style.display = 'none';
+        vp.src = url; vp.style.display = 'block';
+      } else {
+        vp.style.display = 'none';
+        ip.src = url; ip.style.display = 'block';
+      }
+    }
+
+    async function submitPost() {
+      if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
+      const caption = document.getElementById('post-caption').value.trim();
+      if (!pendingFile) { window.toast('Select an image or video first.', 'error'); return; }
+      if (!caption) { window.toast('Add a caption.', 'error'); return; }
+
+      const btn = document.getElementById('publish-btn');
+      const progWrap = document.getElementById('upload-prog');
+      const progBar = document.getElementById('upload-prog-bar');
+      const status = document.getElementById('upload-status');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading…';
+      progWrap.style.display = 'block';
+      status.textContent = 'Uploading file to storage…';
+
+      try {
+        /* 1. Upload file to Supabase Storage */
+        const ext = pendingFile.name.split('.').pop() || (pendingFileType === 'video' ? 'mp4' : 'jpg');
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        progBar.style.width = '30%';
+
+        const { error: upErr } = await sb.storage
+          .from(BUCKET)
+          .upload(fileName, pendingFile, { cacheControl: '3600', upsert: false });
+        if (upErr) throw new Error('Storage upload failed: ' + upErr.message);
+        progBar.style.width = '65%';
+        status.textContent = 'Saving project details…';
+
+        /* 2. Get public URL */
+        const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fileName);
+        const fileUrl = urlData.publicUrl;
+
+        /* 3. Insert project row */
+        const { error: dbErr } = await sb.from('projects').insert({
+          caption, file_url: fileUrl, file_type: pendingFileType, likes_count: 0
+        });
+        if (dbErr) throw new Error('Database insert failed: ' + dbErr.message);
+
+        progBar.style.width = '100%';
+        status.textContent = 'Project published!';
+        window.toast('Project published!', 'success');
+
+        setTimeout(() => { closeUploadPanel(); loadFeed(); }, 800);
+      } catch (err) {
+        console.error(err);
+        window.toast('Upload failed: ' + err.message, 'error');
+        status.textContent = 'Upload failed. Try again.';
+        progBar.style.background = '#ef4444';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-upload"></i> Publish Project';
+      }
+    }
+
+    /* ── Edit Caption ───────────────────────────────────────── */
+    function openEditModal(id) {
+      if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
+      const currentText = captionStore[id] || '';
+      document.getElementById('edit-project-id').value = id;
+      document.getElementById('edit-caption-input').value = currentText;
+      document.getElementById('edit-status').textContent = '';
+      const btn = document.getElementById('edit-save-btn');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Save Changes';
+      document.getElementById('edit-modal').classList.add('open');
+      setTimeout(() => document.getElementById('edit-caption-input').focus(), 100);
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.remove('open');
+      document.getElementById('edit-caption-input').value = '';
+      document.getElementById('edit-project-id').value = '';
+      document.getElementById('edit-status').textContent = '';
+    }
+
+    async function saveEditCaption() {
+      if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
+      const id = document.getElementById('edit-project-id').value;
+      const newCaption = document.getElementById('edit-caption-input').value.trim();
+      if (!newCaption) { window.toast('Caption cannot be empty.', 'error'); return; }
+
+      const btn = document.getElementById('edit-save-btn');
+      const status = document.getElementById('edit-status');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+      status.textContent = 'Updating…';
+
+      const { error } = await sb.from('projects').update({ caption: newCaption }).eq('id', id);
+      if (error) {
+        window.toast('Could not save changes.', 'error');
+        status.textContent = 'Save failed. Try again.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-check-circle"></i> Save Changes';
+        return;
+      }
+
+      window.toast('Caption updated!', 'success');
+      captionStore[id] = newCaption;
+      closeEditModal();
+      loadFeed();
+    }
+
+    /* ── Delete ─────────────────────────────────────────────── */
+    let _pendingDeleteId = null;
+
+    async function deleteProject(id) {
+      /* Re-verify admin from live session — fixes Spck session persistence issues */
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session?.user || !ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
+        window.toast('Admin access required. Please sign in again.', 'error');
+        return;
+      }
+      /* Keep isAdmin in sync */
+      currentUser = { id: session.user.id, email: session.user.email };
+      isAdmin = true;
+
+      _pendingDeleteId = id;
+      document.getElementById('delete-confirm-modal').classList.add('open');
+    }
+
+    function closeDeleteConfirm() {
+      _pendingDeleteId = null;
+      document.getElementById('delete-confirm-modal').classList.remove('open');
+    }
+
+    async function confirmDeleteProject() {
+      const id = _pendingDeleteId;
+      if (!id) return;
+      closeDeleteConfirm();
+
+      const btn = document.getElementById('delete-confirm-btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…'; }
+
+      /* Get file_url before deleting */
+      const { data: proj, error: fetchErr } = await sb.from('projects').select('file_url').eq('id', id).single();
+      if (fetchErr) { window.toast('Could not fetch project: ' + fetchErr.message, 'error'); return; }
+
+      /* Delete related rows first to avoid FK constraint errors */
+      await sb.from('likes').delete().eq('project_id', id);
+      await sb.from('comments').delete().eq('project_id', id);
+
+      /* Delete the project row */
+      const { error } = await sb.from('projects').delete().eq('id', id);
+      if (error) {
+        window.toast('Delete failed: ' + error.message, 'error');
+        return;
+      }
+
+      /* Delete media file from storage */
+      if (proj?.file_url) {
+        try {
+          const urlObj = new URL(proj.file_url);
+          const parts = urlObj.pathname.split('/' + BUCKET + '/');
+          const filePath = parts[1] ? decodeURIComponent(parts[1].split('?')[0]) : null;
+          if (filePath) await sb.storage.from(BUCKET).remove([filePath]);
+        } catch (_) {}
+      }
+
+      window.toast('Project deleted.', 'success');
+      loadFeed();
+    }
+
+    /* ── Init ────────────────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', async function () {
+      /* Check existing session */
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = { id: session.user.id, email: session.user.email };
+        isAdmin = ADMIN_EMAILS.includes(session.user.email.toLowerCase());
+      }
+      renderAuthBar();
+      updateAdminUI();
+      loadFeed();
+
+      /* Drag & drop */
+      const zone = document.getElementById('drop-zone');
+      if (zone) {
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+          e.preventDefault(); zone.classList.remove('drag-over');
+          const f = e.dataTransfer.files[0];
+          if (f) { const inp = document.getElementById('file-input'); const dt = new DataTransfer(); dt.items.add(f); inp.files = dt.files; handleFileSelect(inp); }
+        });
+      }
+
+      /* Close modals on overlay click */
+      document.getElementById('share-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeShareModal(); });
+      document.getElementById('edit-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeEditModal(); });
+      document.getElementById('delete-confirm-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDeleteConfirm(); });
+    });
+  </script>
+</body>
+
+</html>
