@@ -3193,3 +3193,46 @@ h4 {
     min-height: 380px;
   }
 }
+
+/* ── Testimonials header — mobile side-by-side layout ── */
+@media (max-width: 600px) {
+  .testimonials-header {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  /* Title column: pill + heading only, no description */
+  .testimonials-title-col {
+    flex: 1 1 0 !important;
+    min-width: 0;
+  }
+
+  /* Hide the desktop description inside the title column */
+  .testimonials-desc-desktop {
+    display: none !important;
+  }
+
+  /* Show the mobile description below both columns */
+  .testimonials-desc-mobile {
+    display: block !important;
+    order: 3;
+    flex-basis: 100%;
+    margin-top: 0 !important;
+  }
+
+  /* Lottie column: sits next to title, no extra spacing */
+  .testimonials-lottie-col {
+    flex: 0 0 auto !important;
+    width: 38% !important;
+    max-width: 150px !important;
+    min-width: 90px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .testimonials-lottie-col lottie-player {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
