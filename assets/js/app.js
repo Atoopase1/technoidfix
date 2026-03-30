@@ -122,8 +122,7 @@ window.toggleTheme = function() {
           const a = document.createElement('a');
           a.href = url;
           // Extract filename from the URL or default to Technoid-CV.jpg
-          const fileName = currentCvPath.split('/').pop().split('?')[0] || 'Technoid-CV.jpg';
-          a.download = fileName.endsWith('.jpg') || fileName.endsWith('.png') || fileName.endsWith('.pdf') ? fileName : 'Technoid-CV.jpg';
+          a.download = 'Technoid-CV.jpg';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -196,9 +195,21 @@ window.toast = function(msg, type) {
   // ── Modal open ──
   window.openSettingsModal = function(e) {
     if (e) e.preventDefault();
-    const modal = document.getElementById('settings-modal');
+    let modal = document.getElementById('settings-modal');
+    if (!modal) {
+       modal = document.createElement('div');
+       modal.id = 'settings-modal';
+       modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:100000;align-items:center;justify-content:center;padding:20px;';
+       modal.innerHTML = '<div id="settings-panel" style="width:100%;max-width:440px;border-radius:16px;padding:24px 28px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,0.3);"></div>';
+       document.body.appendChild(modal);
+       
+       modal.addEventListener('click', function(ev) {
+         if (ev.target === modal) window.closeSettingsModal();
+       });
+    }
     const panel = document.getElementById('settings-panel');
-    if (!modal) return;
+    if (!panel) return;
+    
     const nav  = document.querySelector('header.nav > nav');
     const hbtn = document.querySelector('.nav-hamburger');
     if (nav)  nav.classList.remove('open');

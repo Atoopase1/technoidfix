@@ -44,7 +44,6 @@
       });
     }
   </script>
-  <!-- Supabase dynamic content loader -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     (function () {
@@ -105,8 +104,10 @@
       <a href="web.html" data-page="web">Web</a>
     </div>
     <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
       <a href="projects.html" data-page="projects">Projects</a>
       <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;">Privacy</a>
       <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;"
         onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a>
       <hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"
@@ -1012,10 +1013,9 @@
       <!-- ── Below hero: Description + Stats + Image ── -->
       <div class="tx-below-hero">
         <div class="tx-hero__mid">
-          <p class="tx-hero__mid-desc">Affordable, fast, and professional — we've been Kumasi's most trusted repair and
-            tech team since 2014, delivering same-day fixes without cutting corners. With over a decade of hands-on
-            experience across device repair, electrical work, design, and web development, we bring expert-level skill
-            to every single job.</p>
+          <p class="tx-hero__mid-desc" style="margin-bottom:16px;">Technoid is Kumasi's certified technology practice —
+            delivering precision device repair, IEC-compliant electrical work, professional design, and modern web
+            builds. Every job is handled with expert care, transparent pricing, and a quality guarantee.</p>
           <div class="tx-hero__mid-stats">
             <div class="tx-mid-stat">
               <div class="tx-mid-stat__num">2<span class="tx-mid-stat__unit"> hrs</span></div>
@@ -1073,8 +1073,8 @@
             <img src="assets/repair.jpeg" data-sb-img="repair.jpeg" alt="Technoid expert performing a device repair"
               loading="eager" />
           </div>
-          <p class="tx-hero__img-caption">Precision by certified engineers, your device or installation in
-            expert hands.</p>
+          <p class="tx-hero__img-caption">Precision by certified engineers — your device or installation is in expert
+            hands.</p>
         </div>
       </div>
 
@@ -1379,125 +1379,265 @@
       </div>
     </section>
 
-    <!-- ── Why choose Technoid ── -->
-    <section class="section" aria-labelledby="why-heading">
+    <!-- ── How It Works ── -->
+    <section class="section how-steps-section" aria-labelledby="how-heading">
       <div class="section-header anim">
-        <span class="pill">Why Technoid</span>
-        <h2 id="why-heading">The Technoid Difference</h2>
-        <p>We combine technical expertise with genuine care for every client — here's what sets us apart.</p>
+        <span class="pill"><i class="fas fa-route"></i> Process</span>
+        <h2 id="how-heading">How It Works</h2>
+        <p>Getting help from Technoid is simple — three steps from first contact to job done.</p>
       </div>
-      <div class="grid cols-3">
-        <div class="card anim anim-delay-1">
-          <div class="card-icon"><i class="fas fa-search"></i></div>
-          <h3>Expert Diagnostics</h3>
-          <p>We identify the root cause before touching your device, saving you time and money with accurate fault
-            detection from the start.</p>
+
+      <style>
+        .how-steps {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+          position: relative;
+        }
+
+
+
+        @media (max-width: 600px) {
+          .how-steps {
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          .how-step-last {
+            grid-column: 1;
+            max-width: 100%;
+          }
+
+          .how-steps::before {
+            display: none;
+          }
+
+          .how-step {
+            padding: 16px 16px 14px;
+            gap: 10px;
+          }
+
+          .how-step-num {
+            width: 36px;
+            height: 36px;
+            font-size: .9rem;
+          }
+
+          .how-step h3 {
+            font-size: .95rem;
+          }
+
+          .how-step p {
+            padding-left: 48px;
+          }
+
+          .how-steps-section {
+            padding-top: 20px !important;
+          }
+        }
+
+        .how-step {
+          background: var(--card-bg, #fff);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 24px 22px 22px;
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        [data-theme="dark"] .how-step {
+          background: rgba(255, 255, 255, .04);
+        }
+
+        /* Top row: number + title + icon */
+        .how-step-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .how-step-num {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          flex-shrink: 0;
+          border-radius: 50%;
+          background: #0088CC;
+          color: #fff;
+          font-size: 1.1rem;
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .how-step h3 {
+          font-size: 1.05rem;
+          font-weight: 700;
+          margin: 0;
+          flex: 1;
+          color: var(--dark, #111827);
+        }
+
+        [data-theme="dark"] .how-step h3 {
+          color: #f0f4ff;
+        }
+
+        .how-step-icon {
+          font-size: 1.35rem;
+          color: #0088CC;
+          opacity: .75;
+          flex-shrink: 0;
+        }
+
+        /* Description below the header row */
+        .how-step p {
+          font-size: .9rem;
+          color: var(--muted);
+          line-height: 1.7;
+          margin: 0;
+          padding-left: 56px;
+          /* indent to align under title (44px num + 12px gap) */
+        }
+
+        @media (max-width: 600px) {
+          .how-step p {
+            padding-left: 0;
+          }
+        }
+
+        .how-services {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+          margin-top: 24px;
+        }
+
+        @media (max-width: 700px) {
+          .how-services {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        .how-service-item {
+          background: var(--card-bg, #f8fafc);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 16px 14px;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        [data-theme="dark"] .how-service-item {
+          background: rgba(255, 255, 255, .04);
+        }
+
+        .how-service-item i {
+          color: #0088CC;
+          font-size: .95rem;
+          margin-top: 2px;
+          flex-shrink: 0;
+        }
+
+        .how-service-item-body strong {
+          display: block;
+          font-size: .85rem;
+          font-weight: 700;
+          color: var(--dark, #111827);
+          margin-bottom: 2px;
+        }
+
+        [data-theme="dark"] .how-service-item-body strong {
+          color: #f0f4ff;
+        }
+
+        .how-service-item-body span {
+          font-size: .75rem;
+          color: var(--muted);
+          line-height: 1.4;
+        }
+      </style>
+
+      <!-- 3 steps -->
+      <div class="how-steps">
+        <div class="how-step anim anim-delay-1">
+          <div class="how-step-header">
+            <div class="how-step-num">1</div>
+            <h3>Get in Touch</h3>
+            <i class="fas fa-phone-alt how-step-icon"></i>
+          </div>
+          <p>Call, WhatsApp, or use the contact form to describe your issue or project. We respond same day.</p>
         </div>
-        <div class="card anim anim-delay-2">
-          <div class="card-icon"><i class="fas fa-cog"></i></div>
-          <h3>Quality Parts Only</h3>
-          <p>Every repair uses tested, compatible components. No shortcuts — we protect your device's longevity.</p>
+        <div class="how-step anim anim-delay-2">
+          <div class="how-step-header">
+            <div class="how-step-num">2</div>
+            <h3>Get a Quote</h3>
+            <i class="fas fa-clipboard-check how-step-icon"></i>
+          </div>
+          <p>We assess the job and give you a clear, upfront price — no hidden costs. You only proceed if you're happy.
+          </p>
         </div>
-        <div class="card anim anim-delay-3">
-          <div class="card-icon"><i class="fas fa-bolt"></i></div>
-          <h3>Quick Turnaround</h3>
-          <p>Most phone repairs are completed same-day. We respect your time and keep you updated throughout.</p>
-        </div>
-        <div class="card anim anim-delay-1">
-          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-          <h3>Repair Guarantee</h3>
-          <p>All repairs come with a quality guarantee. If the same fault returns, we fix it — no questions asked.</p>
-        </div>
-        <div class="card anim anim-delay-2">
-          <div class="card-icon"><i class="fas fa-comments"></i></div>
-          <h3>Transparent Pricing</h3>
-          <p>You receive a clear quote before any work begins. No hidden fees, no surprises on your bill.</p>
-        </div>
-        <div class="card anim anim-delay-3">
-          <div class="card-icon"><i class="fas fa-globe"></i></div>
-          <h3>Local Expertise</h3>
-          <p>Based in Kumasi, we understand the local market and serve our community with pride and professionalism.</p>
+        <div class="how-step how-step-last anim anim-delay-3">
+          <div class="how-step-header">
+            <div class="how-step-num">3</div>
+            <h3>Job Done</h3>
+            <i class="fas fa-check-circle how-step-icon"></i>
+          </div>
+          <p>We complete the work to a high standard, on time. Repairs include a quality guarantee so you're covered.
+          </p>
         </div>
       </div>
+
+      <!-- What we do tiles -->
+      <div class="how-services anim anim-delay-2">
+        <div class="how-service-item">
+          <i class="fas fa-mobile-alt"></i>
+          <div class="how-service-item-body">
+            <strong>Device Repair</strong>
+            <span>Phones, laptops, tablets, home appliances — same-day turnaround.</span>
+          </div>
+        </div>
+        <div class="how-service-item">
+          <i class="fas fa-bolt"></i>
+          <div class="how-service-item-body">
+            <strong>Electrical</strong>
+            <span>Wiring, installations, distribution boards, solar — IEC-compliant work.</span>
+          </div>
+        </div>
+        <div class="how-service-item">
+          <i class="fas fa-palette"></i>
+          <div class="how-service-item-body">
+            <strong>Graphic Design</strong>
+            <span>Logos, branding, flyers, AutoCAD drafts — Adobe Suite quality.</span>
+          </div>
+        </div>
+        <div class="how-service-item">
+          <i class="fas fa-code"></i>
+          <div class="how-service-item-body">
+            <strong>Web Development</strong>
+            <span>Fast, mobile-first websites built with HTML/CSS/JS + Supabase.</span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
-
-    <div class="about-text anim anim-delay-2">
-      <span class="pill">About Technoid</span>
-      <h2 id="about-heading">The Person Behind the Tools</h2>
-      <p>Hi, I'm <strong>Chris Atoopase</strong> — a certified Computer Engineer with a passion for technology and a
-        commitment to quality service. Since founding Technoid, I've been on a mission to bring professional-grade
-        tech solutions to Kumasi, Ghana.</p>
-      <p>My expertise spans hardware repair, creative design, and web development. Whether I'm diagnosing a faulty
-        motherboard, crafting a brand identity, or building a business website, I bring the same level of precision
-        and care to every project.</p>
-      <p>I believe technology should work for you — not the other way around. That's why I invest in ongoing
-        training, quality parts, and genuine customer relationships.</p>
-      <div class="skills-list">
-        <span class="skill-tag">Device Repair</span>
-        <span class="skill-tag">Electronics</span>
-        <span class="skill-tag">Adobe Suite</span>
-        <span class="skill-tag">AutoCAD</span>
-        <span class="skill-tag">HTML/CSS/JS</span>
-        <span class="skill-tag">Branding</span>
-        <span class="skill-tag">Video Editing</span>
-        <span class="skill-tag">PCB Repair</span>
-      </div>
-      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a class="btn" href="contact.html">Get in Touch</a>
-        <a class="btn btn-light" id="view-cv-btn" href="assets/cv.jpg" data-sb-img="cv.jpg" target="_blank"
-          rel="noopener noreferrer" aria-label="View Technoid CV">
-          <i class="fas fa-eye"></i> View CV
-        </a>
-        <button class="btn btn-light" id="download-cv-btn" aria-label="Download Technoid CV">
-          <i class="fas fa-download"></i> Download CV
-        </button>
-      </div>
-    </div>
-    </div>
-    </section>
-
-    <!-- ── Skills & Credentials ── -->
-    <section class="section" aria-labelledby="skills-heading">
-      <div class="section-header anim">
-        <span class="pill">Skills & Credentials</span>
-        <h2 id="skills-heading">Technical Expertise</h2>
-        <p>Years of hands-on experience across repair, design, and development — here's the full toolkit.</p>
-      </div>
-      <div class="skills-grid anim anim-delay-1">
-        <div class="skill-cat skill-cat-full">
-          <h4>Hardware & Repair</h4>
-          <div class="skill-items">
-            <span class="skill-item">Smartphone Repair</span>
-            <span class="skill-item">Laptop Servicing</span>
-            <span class="skill-item">PCB Soldering</span>
-            <span class="skill-item">Screen Replacement</span>
-            <span class="skill-item">Battery Replacement</span>
-            <span class="skill-item">Home Appliances</span>
-          </div>
+    <!-- ── About CTA nudge ── -->
+    <section class="section-sm" aria-label="About Technoid">
+      <div class="card anim"
+        style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:22px 28px; background:rgba(0,136,204,.04); border-color:rgba(0,136,204,.18);">
+        <div>
+          <div
+            style="font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#0088CC; margin-bottom:4px;">
+            About Technoid</div>
+          <div style="font-size:.95rem; font-weight:700;">Meet the person behind every repair, design &amp; build.</div>
         </div>
-        <div class="skill-cat">
-          <h4>Graphic Design</h4>
-          <div class="skill-items">
-            <span class="skill-item">Adobe Photoshop</span>
-            <span class="skill-item">Illustrator</span>
-            <span class="skill-item">Premiere Pro</span>
-            <span class="skill-item">AutoCAD 2D/3D</span>
-            <span class="skill-item">Canva Pro</span>
-            <span class="skill-item">Brand Identity</span>
-          </div>
-        </div>
-        <div class="skill-cat">
-          <h4>Web Development</h4>
-          <div class="skill-items">
-            <span class="skill-item">HTML5 / CSS3</span>
-            <span class="skill-item">JavaScript</span>
-            <span class="skill-item">Responsive Design</span>
-            <span class="skill-item">SEO Optimization</span>
-            <span class="skill-item">Performance</span>
-            <span class="skill-item">Git</span>
-          </div>
-        </div>
+        <a href="about.html" class="btn btn-light" style="flex-shrink:0;"><i class="fas fa-user"></i> Our Story &amp;
+          Values</a>
       </div>
     </section>
 
@@ -1511,8 +1651,9 @@
             <div style="margin-bottom:8px;"><span class="pill">Client Feedback</span></div>
             <h2 id="testimonials-heading"
               style="margin:0 0 6px 0; font-size:clamp(1.6rem,4vw,2.4rem); line-height:1.15;">What Clients Say</h2>
-            <p class="testimonials-desc-desktop" style="margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted);">Leave a comment about your
-              experience with Technoid, your feedback is import to us.</p>
+            <p class="testimonials-desc-desktop"
+              style="margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted);">Leave a comment about your
+              experience with Technoid, your feedback is important to us.</p>
           </div>
           <div class="testimonials-lottie-col"
             style="flex:0 0 auto; width:55%; max-width:245px; min-width:145px; display:flex; justify-content:center; margin-top:-40px; margin-bottom:-30px;">
@@ -1521,8 +1662,10 @@
               loop autoplay></lottie-player>
           </div>
           <!-- Description below both on mobile -->
-          <p class="testimonials-desc-mobile" style="display:none; margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted); width:100%; text-align:left;">Leave a comment about your
-            experience with Technoid, your feedback is import to us.</p>
+          <p class="testimonials-desc-mobile"
+            style="display:none; margin:0; font-size:clamp(0.9rem, 2.5vw, 1.05rem); color:var(--muted); width:100%; text-align:left;">
+            Leave a comment about your
+            experience with Technoid, your feedback is important to us.</p>
         </div>
 
         <!-- Login required alert -->
@@ -1613,10 +1756,12 @@
       </div>
       <div class="footer-links">
         <a href="index.html">Home</a>
+        <a href="about.html">About</a>
         <a href="design.html">Design</a>
         <a href="web.html">Web Dev</a>
         <a href="projects.html">Projects</a>
         <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
         <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
             data-cfemail="5130253e3e2130223411363c30383d7f323e3c"><span class="__cf_email__"
               data-cfemail="95f4e1fafae5f4e6f0d5f2f8f4fcf9bbf6faf8">atoopase@icloud.com</span></span></a>

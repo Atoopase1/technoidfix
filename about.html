@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Technoid — Chris Atoopase | Kumasi, Ghana</title>
+  <meta name="description"
+    content="Learn about Technoid and Chris Atoopase — Kumasi's trusted tech repair, electrical, design, and web development expert since 2020." />
+  <meta property="og:title" content="About Technoid — Chris Atoopase" />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+  <!-- Supabase for CV image -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (function () {
+      const _SB_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+      const _SB_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+      const _BUCKET = 'site-images';
+      let _sb = null;
+      function sb() { return _sb || (_sb = window.supabase.createClient(_SB_URL, _SB_KEY)); }
+      async function loadContent() {
+        document.querySelectorAll('[data-sb-img]').forEach(el => {
+          const key = el.getAttribute('data-sb-img');
+          // profile gets loaded from project-media to avoid site-images RLS restrictions
+          const useBucket = key === 'profile.jpg' ? 'project-media' : _BUCKET;
+          const { data } = sb().storage.from(useBucket).getPublicUrl(key);
+          if (data?.publicUrl) {
+            let fileSrc = data.publicUrl;
+            if (key === 'profile.jpg') fileSrc += '?t=' + new Date().getHours() + new Date().getMinutes();
+            if (el.tagName === 'IMG') el.src = fileSrc;
+            else el.href = fileSrc;
+          }
+        });
+      }
+      if (document.readyState === 'loading')
+        document.addEventListener('DOMContentLoaded', loadContent);
+      else
+        loadContent();
+    })();
+  </script>
+
+  <style>
+    /* ── About page specific styles ── */
+    .about-page-hero {
+      background: var(--card-bg, #f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 40px 32px;
+      margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    /* clip only the top gradient bar, not the whole card */
+    .about-page-hero-inner-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg, #0088CC 0%, #3399dd 60%, transparent 100%);
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .about-page-hero {
+      background: rgba(255, 255, 255, .04);
+    }
+
+    /* Profile pic: positioned relative to the status wrapper, overflows 30% above box */
+    .about-status-wrapper {
+      position: relative;
+      flex: 0 1 auto; /* Yield space when mostly empty */
+      width: fit-content; /* Hug text naturally until max-width */
+      min-width: 290px;
+      max-width: 500px; /* Maxes out safely below 50% of the card interior */
+      padding-top: 28px;
+      /* ~30% of 92px pic = overlap space above the box */
+    }
+
+    #about-user-status-box {
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      position: relative;
+      /* Default shown/hidden managed by JS */
+    }
+
+    [data-theme="dark"] #about-user-status-box {
+      background: rgba(255, 255, 255, .03);
+      border-color: rgba(255, 255, 255, .1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    #about-user-status-img {
+      float: left;
+      width: 130px;
+      height: 140px;
+      object-fit: cover;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      border-bottom-right-radius: 12px;
+      margin-right: 12px;
+      margin-bottom: 8px;
+    }
+
+    [data-theme="dark"] #about-user-status-img {
+      border-right-color: rgba(255, 255, 255, .1);
+      border-bottom-color: rgba(255, 255, 255, .1);
+    }
+
+    #about-user-status-text {
+      font-size: 0.86rem;
+      margin: 0;
+      line-height: 1.55;
+      font-weight: 500;
+      font-style: italic;
+      color: #374151;
+      /* specific light mode text color */
+    }
+
+    [data-theme="dark"] #about-user-status-text {
+      color: #d1d5db;
+      /* specific dark mode text color */
+    }
+
+    #profile-pic-spacer {
+      float: right;
+      width: 116px;
+      height: 72px;
+    }
+
+    .about-page-hero-img {
+      position: absolute;
+      top: 0;
+      right: 14px;
+      width: 92px;
+      height: 92px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #e2e8f0;
+      border: 4px solid var(--card-bg, #fff);
+      box-shadow: 0 6px 20px rgba(0, 136, 204, 0.28);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+    }
+
+    [data-theme="dark"] .about-page-hero-img {
+      border-color: #181c27;
+    }
+
+    .about-page-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Top row: title left, status box right */
+    .about-hero-top-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .about-hero-title {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .about-hero-title h1 {
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin: 8px 0 0;
+      line-height: 1.1;
+    }
+
+    /* Description + buttons row below title+status */
+    .about-hero-desc .about-tagline {
+      font-size: 1.02rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0 0 20px;
+    }
+
+
+    /* Founder bio card */
+    .founder-bio {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+    }
+
+    [data-theme="dark"] .founder-bio {
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .founder-bio p {
+      margin: 0 0 14px;
+      line-height: 1.75;
+      color: var(--text);
+      font-size: .95rem;
+    }
+
+    .founder-bio p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* Trust highlight block */
+    .trust-highlight {
+      border-left: 3px solid #0088CC;
+      background: rgba(0, 136, 204, .05);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      font-size: .95rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin: 0 0 20px;
+    }
+
+    [data-theme="dark"] .trust-highlight {
+      background: rgba(0, 136, 204, .08);
+    }
+
+    /* Values grid — repurposed from homepage "Why Technoid" */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 720px) {
+      .values-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-page-hero {
+        padding: 20px 20px 28px;
+        gap: 16px;
+      }
+
+      .about-status-wrapper {
+        padding-top: 24px;
+        max-width: 100%;
+      }
+
+      .about-page-hero-img {
+        width: 78px;
+        height: 78px;
+        right: 12px;
+        top: 0;
+      }
+
+      .about-hero-top-row {
+        flex-direction: column-reverse;
+        gap: 16px;
+      }
+
+      #about-user-status-img {
+        width: 100px !important;
+        height: 110px !important;
+      }
+
+      #profile-pic-spacer {
+        width: 90px !important;
+        height: 60px !important;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .founder-bio {
+        padding: 20px;
+      }
+    }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: linear-gradient(to bottom, #0088CC, rgba(0, 136, 204, .1));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 28px 24px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -21px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0088CC;
+      border: 2px solid var(--bg, #fff);
+      box-shadow: 0 0 0 2px #0088CC;
+    }
+
+    [data-theme="dark"] .timeline-item::before {
+      border-color: #0d1117;
+    }
+
+    .timeline-year {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #0088CC;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-size: .95rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--dark, #111827);
+    }
+
+    [data-theme="dark"] .timeline-title {
+      color: #f0f4ff;
+    }
+
+    .timeline-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Stats row */
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .about-stat-card {
+      background: var(--card-bg, #fff);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    [data-theme="dark"] .about-stat-card {
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .about-stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--dark, #111827);
+      line-height: 1;
+    }
+
+    [data-theme="dark"] .about-stat-num {
+      color: #f0f4ff;
+    }
+
+    .about-stat-unit {
+      font-size: .9rem;
+      font-weight: 700;
+      color: #0088CC;
+    }
+
+    .about-stat-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .bridge-desc {
+      background: rgba(0, 136, 204, .04);
+    }
+
+    .bridge-desc p {
+      color: var(--dark, #111827);
+    }
+
+    [data-theme="dark"] .bridge-desc p {
+      color: #e2e8f0;
+    }
+
+    [data-theme="dark"] .bridge-desc {
+      background: rgba(0, 136, 204, .08);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Navigation ── -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+    <div class="nav-inline">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="design.html" data-page="design">Design</a>
+      <a href="web.html" data-page="web">Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;">Privacy</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;"
+        onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a>
+      <hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"
+        aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu"
+      aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main class="container" style="padding-top:10px; padding-bottom:40px;">
+
+    <!-- ── Page hero ── -->
+    <div class="about-page-hero anim">
+
+      <!-- Row 1: Title & Description (left) | Status wrapper with pic (right) — side-by-side neighbors -->
+      <div class="about-hero-top-row">
+        <!-- Title & Description block -->
+        <div class="about-hero-title">
+          <span class="pill" style="display:inline-block;">About Technoid</span>
+          <h1>The Architect Behind<br>the Tools</h1>
+
+          <div class="about-hero-desc" style="margin-top: 20px;">
+            <p class="about-tagline">Hi, I'm <strong>Chris Atoopase</strong>. As a certified Computer Engineer, I blend
+              hardware expertise, creative design, and modern web engineering to bring professional-grade tech solutions
+              to Kumasi, Ghana.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <a class="btn" href="contact.html"><i class="fas fa-calendar-check"></i> Book a Service</a>
+              <a class="btn btn-light" id="view-cv-btn"
+                href="https://xhaoerrcbnqtlzigwqjt.supabase.co/storage/v1/object/public/site-images/cv.jpg"
+                data-sb-img="cv.jpg" target="_blank" rel="noopener noreferrer" aria-label="View Technoid CV">
+                <i class="fas fa-eye"></i> View CV
+              </a>
+              <button class="btn btn-light" id="download-cv-btn" aria-label="Download Technoid CV">
+                <i class="fas fa-download"></i> Download CV
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status wrapper: profile pic overflows 30% above the status box -->
+        <div class="about-status-wrapper">
+          <!-- Profile pic: top-right of wrapper, overflows 30% above status box -->
+          <div class="about-page-hero-img" id="profile-img-container" onclick="toggleEditCamera(event)">
+            <img src="https://ui-avatars.com/api/?name=Chris+Atoopase&background=0088CC&color=fff&size=512"
+              data-sb-img="profile.jpg" alt="Chris Atoopase Portrait"
+              onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Chris+Atoopase&background=0088CC&color=fff&size=512';" />
+
+            <!-- Camera button overlay: visible only when tapped by admin -->
+            <div id="admin-edit-btn"
+              style="display:none; position: absolute; bottom: 0; left: 0; right: 0; height: 32px; background: rgba(0,0,0,0.65); color: #fff; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-size: 0.95rem; z-index: 5;"
+              onclick="openProfileEdit(event)">
+              <i class="fas fa-camera"></i>
+            </div>
+          </div>
+          <!-- Status box: image floated left, text wraps around it — and profile pic spacer right -->
+          <div id="about-user-status-box" style="display:none;">
+            <img id="about-user-status-img" style="display:none;" alt="Status Image" />
+            <div style="padding: 10px 12px 16px 12px;">
+              <!-- Float spacer: right-side ghost matching where profile pic overlaps -->
+              <div id="profile-pic-spacer"></div>
+              <p id="about-user-status-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Bridge description ── -->
+    <div class="anim bridge-desc"
+      style="margin: 24px 0 0; padding: 20px 24px; border-left: 3px solid #0088CC; border-radius: 0 10px 10px 0;">
+      <p style="margin:0; font-size:.97rem; line-height:1.75;">
+        Technoid is a certified, full-service technology practice based in Kumasi, Ghana — combining hardware precision,
+        creative design, and modern web engineering under one roof. Every service is delivered to a professional
+        standard,
+        backed by over a decade of hands-on experience and a genuine commitment to getting the job done right.
+      </p>
+    </div>
+
+    <!-- ── Stats ── -->
+    <section class="section" aria-label="Key stats" style="padding-top:28px;">
+      <div class="about-stats anim">
+        <div class="about-stat-card">
+          <div class="about-stat-num">10<span class="about-stat-unit">yrs+</span></div>
+          <div class="about-stat-label">Experience</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">98<span class="about-stat-unit">%</span></div>
+          <div class="about-stat-label">Client Satisfaction</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">2<span class="about-stat-unit"> hrs</span></div>
+          <div class="about-stat-label">Avg Repair Time</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="about-stat-num">88<span class="about-stat-unit">%</span></div>
+          <div class="about-stat-label">Return Clients</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Founder story ── -->
+    <section class="section" aria-labelledby="story-heading">
+      <div class="section-header anim">
+        <span class="pill">Our Story</span>
+        <h2 id="story-heading">Built on Expertise &amp; Trust</h2>
+      </div>
+      <div class="founder-bio anim anim-delay-1">
+        <p class="trust-highlight">Affordable, fast, and professional — we've been Kumasi's most trusted repair and tech
+          team since 2020, delivering same-day fixes without cutting corners. With over a decade of hands-on experience
+          across device repair, electrical work, design, and web development, we bring expert-level skill to every
+          single job.</p>
+        <p>My expertise spans hardware repair, creative design, and web development. Whether I'm diagnosing a faulty
+          motherboard, crafting a brand identity, or building a business website, I bring the same level of precision
+          and care to every project.</p>
+        <p>I believe technology should work for <em>you</em> — not the other way around. That's why I invest in ongoing
+          training, quality parts, and genuine customer relationships. Every client gets my full attention, whether
+          it's a quick screen replacement or a full commercial web build.</p>
+      </div>
+    </section>
+
+    <!-- ── Why Technoid — The Technoid Difference ── -->
+    <section class="section" aria-labelledby="why-heading">
+      <div class="section-header anim">
+        <span class="pill">Why Technoid</span>
+        <h2 id="why-heading">The Technoid Difference</h2>
+        <p>We combine technical expertise with genuine care for every client — here's what sets us apart.</p>
+      </div>
+      <div class="values-grid">
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-search"></i></div>
+          <h3>Expert Diagnostics</h3>
+          <p>We identify the root cause before touching your device, saving you time and money with accurate fault
+            detection from the start.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-cog"></i></div>
+          <h3>Quality Parts Only</h3>
+          <p>Every repair uses tested, compatible components. No shortcuts — we protect your device's longevity.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Quick Turnaround</h3>
+          <p>Most phone repairs are completed same-day. We respect your time and keep you updated throughout.</p>
+        </div>
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3>Repair Guarantee</h3>
+          <p>All repairs come with a quality guarantee. If the same fault returns, we fix it — no questions asked.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-comments"></i></div>
+          <h3>Transparent Pricing</h3>
+          <p>You receive a clear quote before any work begins. No hidden fees, no surprises on your bill.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-globe"></i></div>
+          <h3>Local Expertise</h3>
+          <p>Based in Kumasi, we understand the local market and serve our community with pride and professionalism.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Skills ── -->
+    <section class="section" aria-labelledby="skills-heading">
+      <div class="section-header anim">
+        <span class="pill">Skills &amp; Credentials</span>
+        <h2 id="skills-heading">Technical Expertise</h2>
+        <p>Years of hands-on experience across repair, design, and development — here's the full toolkit.</p>
+      </div>
+      <div class="skills-grid anim anim-delay-1">
+        <div class="skill-cat skill-cat-full">
+          <h4>Hardware &amp; Repair</h4>
+          <div class="skill-items">
+            <span class="skill-item">Smartphone Repair</span>
+            <span class="skill-item">Laptop Servicing</span>
+            <span class="skill-item">PCB Soldering</span>
+            <span class="skill-item">Screen Replacement</span>
+            <span class="skill-item">Battery Replacement</span>
+            <span class="skill-item">Home Appliances</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Graphic Design</h4>
+          <div class="skill-items">
+            <span class="skill-item">Adobe Photoshop</span>
+            <span class="skill-item">Illustrator</span>
+            <span class="skill-item">Premiere Pro</span>
+            <span class="skill-item">AutoCAD 2D/3D</span>
+            <span class="skill-item">Canva Pro</span>
+            <span class="skill-item">Brand Identity</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <h4>Web Development</h4>
+          <div class="skill-items">
+            <span class="skill-item">HTML5 / CSS3</span>
+            <span class="skill-item">JavaScript</span>
+            <span class="skill-item">Responsive Design</span>
+            <span class="skill-item">SEO Optimization</span>
+            <span class="skill-item">Performance</span>
+            <span class="skill-item">Git</span>
+          </div>
+        </div>
+      </div>
+      <div class="skills-list anim anim-delay-2" style="margin-top:20px;">
+        <span class="skill-tag">Device Repair</span>
+        <span class="skill-tag">Electronics</span>
+        <span class="skill-tag">Adobe Suite</span>
+        <span class="skill-tag">AutoCAD</span>
+        <span class="skill-tag">HTML/CSS/JS</span>
+        <span class="skill-tag">Branding</span>
+        <span class="skill-tag">Video Editing</span>
+        <span class="skill-tag">PCB Repair</span>
+      </div>
+    </section>
+
+    <!-- ── Journey timeline ── -->
+    <section class="section" aria-labelledby="journey-heading">
+      <div class="section-header anim">
+        <span class="pill">Journey</span>
+        <h2 id="journey-heading">How We Got Here</h2>
+      </div>
+      <div class="timeline anim anim-delay-1">
+        <div class="timeline-item">
+          <div class="timeline-year">2014</div>
+          <div class="timeline-title">Started in Tech Repair</div>
+          <p class="timeline-desc">Began repairing smartphones and laptops for friends and family in Kumasi, quickly
+            building a reputation for reliable, honest work.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2017</div>
+          <div class="timeline-title">Expanded into Design</div>
+          <p class="timeline-desc">Added graphic design and branding services — logos, flyers, and brand identities —
+            for local Kumasi businesses.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2019</div>
+          <div class="timeline-title">Web Development &amp; AutoCAD</div>
+          <p class="timeline-desc">Began building websites for clients and offering AutoCAD drafting services, expanding
+            the scope of Technoid into full digital services.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2020</div>
+          <div class="timeline-title">Technoid Founded Officially</div>
+          <p class="timeline-desc">Launched Technoid as a formal brand, bringing all services under one roof — repair,
+            electrical, design, and web development.</p>
+        </div>
+        <div class="timeline-item" style="padding-bottom:0;">
+          <div class="timeline-year">Today</div>
+          <div class="timeline-title">Kumasi's Trusted Tech Team</div>
+          <p class="timeline-desc">Serving hundreds of clients across Kumasi with a 98% satisfaction rate and growing
+            portfolio of projects and tools.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <section class="section-sm" aria-label="Get in touch">
+      <div class="card anim"
+        style="text-align:center; padding:40px 28px; background:linear-gradient(135deg, rgba(0,136,204,.08), rgba(0,136,204,.02)); border-color:rgba(0,136,204,.2);">
+        <h2 style="font-size:1.6rem; font-weight:800; margin:0 0 10px;">Ready to work together?</h2>
+        <p style="color:var(--muted); margin:0 0 24px;">Whether it's a repair, a design job, or a web project — let's
+          talk.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+          <a class="btn" href="contact.html"><i class="fas fa-calendar-check"></i> Book a Service</a>
+          <a class="btn btn-light" href="https://wa.me/233544833571" target="_blank" rel="noopener"><i
+              class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:atoopase@icloud.com">atoopase@icloud.com</a>
+        <a href="tel:+233544833571">+233 54 483 3571</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris Atoopase. All rights reserved. · <a
+          href="privacy.html" style="color:var(--muted);">Privacy Policy</a></p>
+    </div>
+  </footer>
+
+  <!-- CV Viewer Modal -->
+  <div class="modal-overlay" id="cv-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:800px; padding:20px; text-align:center;">
+      <button class="modal-close cv-modal-close">✕</button>
+      <h3 style="margin-bottom:16px;"><i class="fas fa-file-alt"></i> Chris Atoopase — CV</h3>
+      <div
+        style="width:100%; max-height:70vh; overflow-y:auto; background:var(--card-bg, #f3f4f6); border-radius:8px; border:1px solid var(--border); box-shadow:inset 0 2px 8px rgba(0,0,0,0.05);">
+        <img src="https://xhaoerrcbnqtlzigwqjt.supabase.co/storage/v1/object/public/site-images/cv.jpg"
+          alt="Technoid CV Preview" style="width:100%; height:auto; display:block;" data-sb-img="cv.jpg" />
+      </div>
+      <div style="margin-top:20px;">
+        <button class="btn" onclick="document.getElementById('download-cv-btn').click()"><i class="fas fa-download"></i>
+          Download Full Resume</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="profile-edit-modal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:500px;">
+      <button class="modal-close" onclick="closeProfileEdit()">✕</button>
+      <h3 style="margin-bottom:12px;"><i class="fas fa-user-edit"></i> Edit Profile & Status</h3>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label style="display:block; font-size:.85rem; font-weight:700; margin-bottom:8px;">New Profile Image
+          (Optional)</label>
+        <input type="file" id="admin-profile-file" accept="image/*" class="input" style="padding:10px;">
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:6px;">Upload a square or circular image for best
+          results.</div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <label style="font-size:.85rem; font-weight:700;">Status Image (Optional)</label>
+          <button class="btn btn-light" id="admin-remove-status-img-btn"
+            style="padding:3px 8px; font-size:0.75rem; display:none;" onclick="triggerRemoveStatusImage(event)"><i
+              class="fas fa-trash"></i> Remove</button>
+        </div>
+        <input type="file" id="admin-status-image" accept="image/*" class="input" style="padding:10px;">
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label style="display:block; font-size:.85rem; font-weight:700; margin-bottom:8px;">Status / Bio Message</label>
+        <textarea id="admin-status-text" class="input" rows="4" style="resize:vertical;"
+          placeholder="Write your professional status..."></textarea>
+      </div>
+
+      <button class="btn btn-full" id="admin-save-profile-btn" onclick="saveProfileUpdate()">
+        <i class="fas fa-save"></i> Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Toast -->
+  <div class="toast" role="alert" aria-live="assertive"></div>
+
+  <script>
+    document.querySelector('.year') && (document.querySelector('.year').textContent = new Date().getFullYear());
+
+    // Auth Check
+    let _aboutIsAdmin = false;
+    const ADMIN_EMAILS = ['atoopase@gmail.com', 'atoopasechristopher@gmail.com'];
+
+    // Make sure sb exists
+    if (window.supabase) {
+      const _SB_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+      const _SB_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+      const localSb = window.supabase.createClient(_SB_URL, _SB_KEY);
+
+      localSb.auth.getSession().then(({ data: { session } }) => {
+        if (session && session.user && ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
+          _aboutIsAdmin = true;
+          const imgContainer = document.getElementById('profile-img-container');
+          if (imgContainer) imgContainer.style.cursor = 'pointer';
+          const editBtn = document.getElementById('admin-edit-btn');
+          if (editBtn) editBtn.style.display = 'flex';
+        }
+      });
+
+      let _statusHasImage = false;
+      let _removeStatusImageTrigger = false;
+
+      // Load status text
+      fetch(localSb.storage.from('project-media').getPublicUrl('status.json').data.publicUrl + '?t=' + Date.now())
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && (data.status || data.hasImage)) {
+            const statusBox = document.getElementById('about-user-status-box');
+            const statusTextEl = document.getElementById('about-user-status-text');
+            const statusImgEl = document.getElementById('about-user-status-img');
+
+            if (statusBox) {
+              if (statusTextEl && data.status) statusTextEl.innerHTML = data.status;
+              else if (statusTextEl) statusTextEl.innerHTML = '';
+
+              if (data.hasImage && statusImgEl) {
+                _statusHasImage = true;
+                statusImgEl.src = localSb.storage.from('project-media').getPublicUrl('status_image.jpg').data.publicUrl + '?t=' + Date.now();
+                statusImgEl.style.display = 'block';
+
+                const rmBtn = document.getElementById('admin-remove-status-img-btn');
+                if (rmBtn) rmBtn.style.display = 'inline-flex';
+              }
+              statusBox.style.display = 'block';
+            }
+            const adminText = document.getElementById('admin-status-text');
+            if (adminText && data.status) adminText.value = data.status;
+          }
+        })
+        .catch(e => { });
+
+      window.triggerRemoveStatusImage = function (e) {
+        e.preventDefault();
+        _removeStatusImageTrigger = true;
+        document.getElementById('admin-status-image').value = '';
+        document.getElementById('admin-remove-status-img-btn').style.display = 'none';
+      };
+
+      window.toggleEditCamera = function (e) {
+        if (!_aboutIsAdmin) return;
+        const btn = document.getElementById('admin-edit-btn');
+        if (btn) {
+          btn.style.opacity = (btn.style.opacity === '1') ? '0' : '1';
+        }
+      };
+
+      document.addEventListener('click', function (e) {
+        if (!_aboutIsAdmin) return;
+        const btn = document.getElementById('admin-edit-btn');
+        if (btn && btn.style.opacity === '1' && !e.target.closest('#profile-img-container')) {
+          btn.style.opacity = '0';
+        }
+      });
+
+      window.openProfileEdit = function (e) {
+        if (e) e.stopPropagation();
+        _removeStatusImageTrigger = false;
+        document.getElementById('profile-edit-modal').classList.add('open');
+        const btn = document.getElementById('admin-edit-btn');
+        if (btn) btn.style.opacity = '0';
+      };
+
+      window.closeProfileEdit = function () {
+        document.getElementById('profile-edit-modal').classList.remove('open');
+      };
+
+      window.saveProfileUpdate = async function () {
+        if (!_aboutIsAdmin) return;
+        const btn = document.getElementById('admin-save-profile-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        try {
+          const fileInput = document.getElementById('admin-profile-file');
+          const file = fileInput.files[0];
+
+          if (file) {
+            // Delete existing file purely to bypass restrictive UPDATE storage policies
+            await localSb.storage.from('project-media').remove(['profile.jpg']);
+            const { error: upErr } = await localSb.storage.from('project-media').upload('profile.jpg', file, { upsert: false, cacheControl: '1' });
+            if (upErr) throw upErr;
+            const profileImgData = document.querySelector('img[data-sb-img="profile.jpg"]');
+            if (profileImgData) {
+              const { data: pubData } = localSb.storage.from('project-media').getPublicUrl('profile.jpg');
+              profileImgData.onerror = null;
+              profileImgData.src = pubData.publicUrl + '?t=' + Date.now();
+            }
+          }
+
+          // 2. Status Image Upload
+          let finalHasImage = _statusHasImage;
+          const statusImgInput = document.getElementById('admin-status-image');
+          const statusFile = statusImgInput.files[0];
+
+          if (statusFile) {
+            await localSb.storage.from('project-media').remove(['status_image.jpg']);
+            const { error: sUpErr } = await localSb.storage.from('project-media').upload('status_image.jpg', statusFile, { upsert: false, cacheControl: '1' });
+            if (sUpErr) throw sUpErr;
+            finalHasImage = true;
+            _statusHasImage = true;
+          }
+          else if (_removeStatusImageTrigger) {
+            await localSb.storage.from('project-media').remove(['status_image.jpg']);
+            finalHasImage = false;
+            _statusHasImage = false;
+          }
+
+          // 3. Status Text Upload
+          const statusText = document.getElementById('admin-status-text').value;
+          if ((statusText && statusText.trim().length > 0) || finalHasImage) {
+            await localSb.storage.from('project-media').remove(['status.json']);
+            const blob = new Blob([JSON.stringify({ status: statusText, hasImage: finalHasImage })], { type: 'application/json' });
+            const { error: txtErr } = await localSb.storage.from('project-media').upload('status.json', blob, { upsert: false, cacheControl: '1' });
+            if (txtErr) throw txtErr;
+
+            const statusBox = document.getElementById('about-user-status-box');
+            const statusTextEl = document.getElementById('about-user-status-text');
+            const statusImgEl = document.getElementById('about-user-status-img');
+            if (statusBox) {
+              if (statusTextEl) statusTextEl.innerHTML = statusText;
+              if (finalHasImage && statusImgEl) {
+                statusImgEl.src = localSb.storage.from('project-media').getPublicUrl('status_image.jpg').data.publicUrl + '?t=' + Date.now();
+                statusImgEl.style.display = 'block';
+                const rmBtn = document.getElementById('admin-remove-status-img-btn');
+                if (rmBtn) rmBtn.style.display = 'inline-flex';
+              } else if (statusImgEl) {
+                statusImgEl.style.display = 'none';
+              }
+              statusBox.style.display = 'block';
+            }
+          } else {
+            document.getElementById('about-user-status-box').style.display = 'none';
+          }
+
+          window.toast && window.toast('Profile & status updated successfully!', 'success');
+          closeProfileEdit();
+        } catch (e) {
+          console.error(e);
+          window.toast && window.toast('Error saving updates: ' + e.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        }
+      };
+    }
+  </script>
+
+</body>
+
+</html>

@@ -171,6 +171,24 @@
         flex-wrap: wrap;
       }
     }
+
+    .share-url-box-styled {
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: .82rem;
+      word-break: break-all;
+      margin-bottom: 16px;
+      font-family: monospace;
+      color: #111827;
+      border: 1px solid transparent;
+    }
+    
+    [data-theme="dark"] .share-url-box-styled {
+      background: #0f0f17 !important;
+      color: #e5e7eb !important;
+      border: 1px solid #2a2a3a !important;
+    }
   </style>
   <script>
     if ("serviceWorker" in navigator) {
@@ -193,8 +211,10 @@
       <a href="web.html" data-page="web">Web</a>
     </div>
     <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
       <a href="projects.html" data-page="projects">Projects</a>
       <a href="contact.html" data-page="contact" class="nav-cta">Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;">Privacy</a>
       <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
     </nav>
     <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -206,9 +226,7 @@
       <div style="flex:1 1 auto; max-width:560px;">
         <div style="margin-bottom:8px;"><span class="pill"><i class="fas fa-images"></i> Live Portfolio</span></div>
         <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 6px 0; line-height:1.15;">Our Activity Log</h1>
-        <p style="color:var(--muted);font-size:1rem;margin:0;">Here are some projects executed by TechnoidFix
-          -including device repairs, brand identity development, web engineering, electrical installations, and related
-          technical services for reference.</p>
+        <p style="color:var(--muted);font-size:1rem;margin:0;">Here are some projects executed by TechnoidFix — including device repairs, brand identity development, web engineering, electrical installations, and related technical services for reference.</p>
       </div>
       <div style="flex:0 0 auto; width:45%; max-width:240px; min-width:130px; display:flex; justify-content:center; margin-top:-50px; margin-bottom:-35px;">
         <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -287,14 +305,16 @@
       <button class="modal-close" onclick="closeShareModal()">✕</button>
       <h3><i class="fas fa-share-alt"></i> Share This Project</h3>
       <p>Copy the link or share on social media.</p>
-      <div id="share-url-box"
-        style="background:#f3f4f6;border-radius:8px;padding:10px 14px;font-size:.82rem;word-break:break-all;margin-bottom:16px;font-family:monospace;">
+      <div id="share-url-box" class="share-url-box-styled">
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn" onclick="copyShareLink()"><i class="fas fa-copy"></i> Copy Link</button>
         <a id="share-wa" href="#" target="_blank" rel="noopener" class="btn" style="background:#25d366;">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
+        <button id="share-clients-btn" class="btn" onclick="shareToClients()" style="background:#4b5563; display:none;">
+          <i class="fas fa-envelope"></i> Share to All Clients
+        </button>
       </div>
     </div>
   </div>
@@ -384,10 +404,12 @@
       </div>
       <div class="footer-links">
         <a href="index.html">Home</a>
+        <a href="about.html">About</a>
         <a href="design.html">Design</a>
         <a href="web.html">Web Dev</a>
         <a href="projects.html">Projects</a>
         <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
       </div>
       <hr class="footer-divider" />
       <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris Atoopase. All rights reserved.</p>
@@ -916,7 +938,46 @@
       const url = window.location.href.split('?')[0] + '?project=' + id;
       document.getElementById('share-url-box').textContent = url;
       document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent('Check out this Technoid project: ' + url);
+      const btnClients = document.getElementById('share-clients-btn');
+      if (btnClients) btnClients.style.display = isAdmin ? 'inline-flex' : 'none';
       document.getElementById('share-modal').classList.add('open');
+    }
+
+    async function shareToClients() {
+      if (!isAdmin) return;
+      
+      const btn = document.getElementById('share-clients-btn');
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+      
+      try {
+        const url = document.getElementById('share-url-box').textContent;
+        const msg = 'Check out this new project from TechnoidFix: ' + url;
+        
+        let emails = new Set();
+        try {
+          const { data: home } = await sb.from('home_comments').select('user_email');
+          if (home) home.forEach(r => { if(r.user_email) emails.add(r.user_email); });
+        } catch(e) {}
+        
+        try {
+          const { data: proj } = await sb.from('comments').select('user_email');
+          if (proj) proj.forEach(r => { if(r.user_email) emails.add(r.user_email); });
+        } catch(e) {}
+        
+        if (emails.size === 0) {
+          window.toast('No clients found in database.', 'error');
+        } else {
+          const bccList = Array.from(emails).join(',');
+          window.location.href = 'mailto:?bcc=' + encodeURIComponent(bccList) + '&subject=' + encodeURIComponent('New Project from TechnoidFix') + '&body=' + encodeURIComponent(msg);
+          window.toast('Opened email client for ' + emails.size + ' clients.', 'success');
+        }
+      } catch(err) {
+        console.error(err);
+        window.toast('Failed to load clients.', 'error');
+      } finally {
+        btn.innerHTML = originalHtml;
+      }
     }
     function closeShareModal() { document.getElementById('share-modal').classList.remove('open'); }
     function copyShareLink() {
