@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found — Technoid</title>
+  <meta name="robots" content="noindex" />
+  <meta property="og:title" content="Page Not Found — Technoid" />
+  <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="assets/js/app.js"></script>
+  <style>
+    .notfound-wrap {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      gap: 18px;
+    }
+    .notfound-code {
+      font-size: clamp(5rem, 20vw, 8rem);
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--brand), #7c3aed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .notfound-icon {
+      font-size: 3rem;
+      color: var(--brand);
+      opacity: .7;
+    }
+    .notfound-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin: 0;
+    }
+    .notfound-desc {
+      color: var(--muted);
+      max-width: 360px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .notfound-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .notfound-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .notfound-btn:hover { transform: translateY(-2px); }
+    .notfound-btn-primary {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37,99,235,.3);
+    }
+    .notfound-btn-secondary {
+      background: var(--card);
+      color: var(--fg);
+      border: 1.5px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav injected by app.js via header.nav — replicate standard header -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="brand-link" aria-label="Technoid home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+    <div class="nav-inline">
+      <a href="index.html" data-page="home"><i class="fas fa-home"></i> Home</a>
+      <a href="design.html" data-page="design"><i class="fas fa-palette"></i> Design</a>
+      <a href="web.html" data-page="web"><i class="fas fa-code"></i> Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
+      <a href="projects.html" data-page="projects"><i class="fas fa-folder-open nav-icon-mobile"></i> Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta"><i class="fas fa-envelope nav-icon-mobile"></i> Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;"><i class="fas fa-shield-alt nav-icon-mobile"></i> Privacy</a>
+      <a href="electrical-estimator/index.html" data-page="estimator" title="Free electrical wiring calculator"><i class="fas fa-bolt nav-icon-mobile"></i> Estimator</a>
+      <hr class="nav-divider">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </header>
+
+  <main>
+    <div class="notfound-wrap">
+      <div class="notfound-icon"><i class="fas fa-plug"></i></div>
+      <div class="notfound-code">404</div>
+      <h1 class="notfound-title">Page not found</h1>
+      <p class="notfound-desc">
+        Looks like this page got unplugged. The link may be broken or the page may have moved.
+      </p>
+      <div class="notfound-actions">
+        <a href="index.html" class="notfound-btn notfound-btn-primary">
+          <i class="fas fa-home"></i> Back to Home
+        </a>
+        <a href="contact.html" class="notfound-btn notfound-btn-secondary">
+          <i class="fas fa-envelope"></i> Contact Us
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/233544833571?text=Hi%20Technoid%2C%20I%27d%20like%20to%20enquire%20about%20your%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-float-label">Chat on WhatsApp</span>
+  </a>
+
+</body>
+</html>

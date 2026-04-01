@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graphic Design Services — Technoid | Kumasi, Ghana</title>
+  <meta name="description"
+    content="Professional graphic design in Kumasi: logo design, photo editing, video production, brand kits, and AutoCAD 2D/3D drafting. Get a quote today." />
+  <meta property="og:title" content="Graphic Design Services — Technoid" />
+  <meta property="og:description"
+    content="Creative studio in Kumasi, Ghana. Logos, branding, video editing, and AutoCAD drafting." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+  <!-- Supabase dynamic content loader -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    (function () {
+      const _SB_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+      const _SB_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+      const _BUCKET = 'site-images';
+      let _sb = null;
+      function sb() { return _sb || (_sb = window.supabase.createClient(_SB_URL, _SB_KEY)); }
+
+      // Load images and text from Supabase (data-sb-img / data-sb-text attributes)
+
+      async function loadContent() {
+        // Images
+        document.querySelectorAll('[data-sb-img]').forEach(el => {
+          const key = el.getAttribute('data-sb-img');
+          const { data } = sb().storage.from(_BUCKET).getPublicUrl(key);
+          if (data?.publicUrl) {
+            if (el.tagName === 'IMG') el.src = data.publicUrl;
+            else el.href = data.publicUrl;
+            el.setAttribute('data-sb-loaded', '1');
+          }
+        });
+
+        // Text / HTML content
+        const textEls = document.querySelectorAll('[data-sb-text]');
+        if (textEls.length) {
+          const keys = Array.from(textEls).map(el => el.getAttribute('data-sb-text'));
+          const { data } = await sb().from('site_content').select('key,value').in('key', keys);
+          if (data) {
+            data.forEach(row => {
+              document.querySelectorAll(`[data-sb-text="${row.key}"]`).forEach(el => {
+                el.innerHTML = row.value;
+              });
+            });
+          }
+        }
+      }
+
+      if (document.readyState === 'loading')
+        document.addEventListener('DOMContentLoaded', loadContent);
+      else
+        loadContent();
+    })();
+  </script>
+</head>
+
+<body class="page-tinted-cards">
+
+  <!-- Navigation -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+    <div class="nav-inline">
+      <a href="index.html" data-page="home"><i class="fas fa-home"></i> Home</a>
+      <a href="design.html" data-page="design"><i class="fas fa-palette"></i> Design</a>
+      <a href="web.html" data-page="web"><i class="fas fa-code"></i> Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
+      <a href="projects.html" data-page="projects"><i class="fas fa-folder-open nav-icon-mobile"></i> Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta"><i class="fas fa-envelope nav-icon-mobile"></i> Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;"><i class="fas fa-shield-alt nav-icon-mobile"></i> Privacy</a>
+      <a href="electrical-estimator/index.html" data-page="estimator" title="Free electrical wiring calculator"><i class="fas fa-bolt nav-icon-mobile"></i> Estimator</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;"
+        onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a>
+      <hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"
+        aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu"
+      aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main class="container" style="padding-top:28px;">
+
+    <!-- Hero -->
+    <section class="service-hero anim" aria-label="Design services overview">
+      <div class="hero-text">
+        <span class="pill"><i class="fas fa-palette"></i> Creative Studio</span>
+        <h1>Design That Makes Your Brand Unforgettable</h1>
+        <p>From bold logos to polished social content — Technoid delivers professional visuals that build trust, attract
+          customers, and tell your brand's story with clarity.</p>
+        <div class="hero-actions">
+          <a class="btn btn-lg" href="contact.html">Request a Design</a>
+          <a class="btn btn-lg btn-hero-sec" href="web.html">Need a Website?</a>
+        </div>
+      </div>
+      <div class="service-hero-img">
+        <img src="assets/images.JPG" data-sb-img="images.JPG" alt="Technoid Creative Studio — design work"
+          loading="eager" />
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" aria-labelledby="design-services-heading">
+      <div class="section-header anim">
+        <span class="pill">Services</span>
+        <h2 id="design-services-heading">What We Design</h2>
+        <p>A full-spectrum creative studio built to make your brand look and feel world-class.</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-pen-nib"></i></div>
+          <h3>Logo Design</h3>
+          <p>Clean, memorable logos crafted in multiple formats — PNG, SVG, PDF — ready for print and digital use.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-camera"></i></div>
+          <h3>Photo Editing</h3>
+          <p>Professional retouching, background removal, color correction, and compositing using Adobe Photoshop.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-film"></i></div>
+          <h3>Video Editing</h3>
+          <p>Engaging shorts, reels, and promotional videos optimized for TikTok, YouTube, and Instagram.</p>
+        </div>
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-drafting-compass"></i></div>
+          <h3>AutoCAD Drafting</h3>
+          <p>Precise 2D floor plans, schematics, and technical drawings for architecture, engineering, and construction.
+          </p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-cube"></i></div>
+          <h3>3D Modeling</h3>
+          <p>Detailed 3D renders and models for visualization, client presentations, and project planning.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+          <h3>Brand Kits</h3>
+          <p>Complete brand identity packages: typography, color palette, logo variations, and usage guidelines.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section" aria-labelledby="process-heading">
+      <div class="section-header anim">
+        <span class="pill">How We Work</span>
+        <h2 id="process-heading">Our Design Process</h2>
+        <p>A clear, collaborative approach that delivers results — without wasted time or endless revisions.</p>
+      </div>
+      <div class="steps anim anim-delay-1">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Discovery</h4>
+          <p>We start by understanding your brand, audience, and goals. The brief is everything.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Concept</h4>
+          <p>Initial designs are created and shared for your review. We explore direction before committing.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>Refinement</h4>
+          <p>Your feedback shapes the final design. We iterate until it's exactly right.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h4>Delivery</h4>
+          <p>Final files delivered in all formats you need, on time and ready to use.</p>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+
+      <!-- Explore More strip -->
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+        <a href="https://tekstore.netlify.app" target="_blank" rel="noopener" class="promo-link-store">
+          <i class="fas fa-shopping-cart"></i> Visit Tekstore
+        </a>
+        <a href="https://technoidgame1.netlify.app" target="_blank" rel="noopener" class="promo-link-game">
+          <i class="fas fa-gamepad"></i> Play Technoid Game
+        </a>
+      </div>
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
+            data-cfemail="5130253e3e2130223411363c30383d7f323e3c"><span class="__cf_email__"
+              data-cfemail="4120352e2e3120322401262c20282d6f222e2c">atoopase@icloud.com</span></span></a>
+        <a href="tel:+233544833571">+233 54 483 3571</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year"></span> Technoid — Chris
+        <!-- Settings Modal (admin only) -->
+      <div id="settings-modal"
+        style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+        <div id="settings-panel"
+          style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+          <button onclick="closeSettingsModal()"
+            style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+          <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog"
+              style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+          <div id="settings-slots"></div>
+          <p style="font-size:.75rem;color:#9ca3af;margin-top:14px;">Images are saved to yo
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/233544833571?text=Hi%20Technoid%2C%20I%27d%20like%20to%20enquire%20about%20your%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-float-label">Chat on WhatsApp</span>
+  </a>
+</body>
+</html>

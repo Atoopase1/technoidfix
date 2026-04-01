@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Development Services — Technoid | Kumasi, Ghana</title>
+  <meta name="description"
+    content="Professional web development in Kumasi, Ghana. Fast, responsive, SEO-optimized websites for businesses, portfolios, and startups. Built by Technoid." />
+  <meta property="og:title" content="Web Development Services — Technoid" />
+  <meta property="og:description" content="Clean, fast websites that convert. Built by Technoid in Kumasi, Ghana." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+  <!-- Supabase dynamic content loader -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+  (function(){
+    const _SB_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
+    const _SB_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
+    const _BUCKET  = 'site-images';
+    let _sb = null;
+    function sb(){ return _sb || (_sb = window.supabase.createClient(_SB_URL, _SB_KEY)); }
+
+    // Load images: data-sb-img="key" => sets src from Supabase storage public URL
+    // Load text:   data-sb-text="key" => replaces innerHTML from site_content table
+
+    async function loadContent(){
+      // Images
+      document.querySelectorAll('[data-sb-img]').forEach(el => {
+        const key = el.getAttribute('data-sb-img');
+        const { data } = sb().storage.from(_BUCKET).getPublicUrl(key);
+        if(data?.publicUrl){
+          if(el.tagName === 'IMG') el.src = data.publicUrl;
+          else el.href = data.publicUrl;
+          el.setAttribute('data-sb-loaded','1');
+        }
+      });
+
+      // Text / HTML content
+      const textEls = document.querySelectorAll('[data-sb-text]');
+      if(textEls.length){
+        const keys = Array.from(textEls).map(el => el.getAttribute('data-sb-text'));
+        const { data } = await sb().from('site_content').select('key,value').in('key', keys);
+        if(data){
+          data.forEach(row => {
+            document.querySelectorAll(`[data-sb-text="${row.key}"]`).forEach(el => {
+              el.innerHTML = row.value;
+            });
+          });
+        }
+      }
+    }
+
+    if(document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', loadContent);
+    else
+      loadContent();
+  })();
+  </script>
+</head>
+
+<body class="page-tinted-cards">
+
+  <!-- Navigation -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+        <div class="nav-inline">
+      <a href="index.html" data-page="home"><i class="fas fa-home"></i> Home</a>
+      <a href="design.html" data-page="design"><i class="fas fa-palette"></i> Design</a>
+      <a href="web.html" data-page="web"><i class="fas fa-code"></i> Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="projects.html" data-page="projects"><i class="fas fa-folder-open nav-icon-mobile"></i> Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta"><i class="fas fa-envelope nav-icon-mobile"></i> Contact</a>
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;"><i class="fas fa-shield-alt nav-icon-mobile"></i> Privacy</a>
+      <a href="electrical-estimator/index.html" data-page="estimator" title="Free electrical wiring calculator"><i class="fas fa-bolt nav-icon-mobile"></i> Estimator</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;" onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a><hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <main class="container" style="padding-top:28px;">
+
+    <!-- Hero -->
+    <section class="service-hero anim" aria-label="Web development services overview">
+      <div class="hero-text" style="flex:1.2;">
+        <span class="pill"><i class="fas fa-laptop-code"></i> Web Development</span>
+        <h1>Websites That Work as Hard as You Do</h1>
+        <p>Clean code, blazing speed, and designs that convert. Technoid builds websites for Ghanaian businesses that
+          need an online presence they can be proud of.</p>
+        <div class="hero-actions">
+          <a class="btn btn-lg" href="contact.html">Send Message</a>
+          <a class="btn btn-lg btn-hero-sec" href="design.html">Need Design Too?</a>
+        </div>
+      </div>
+      <div class="service-hero-img">
+        <img src="assets/web.jpeg" data-sb-img="web.jpeg" alt="Technoid web development — responsive website" loading="eager" />
+      </div>
+    </section>
+
+    <!-- Niche Specialization -->
+    <section class="section-sm" aria-label="Specialization">
+      <div class="niche-block"
+        style="border-radius:var(--radius);padding:40px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;">
+        <div style="flex:1;min-width:240px;">
+          <span class="pill" style="margin-bottom:12px;">Niche Specialization</span>
+          <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:10px;">Built for African Small Businesses</h2>
+          <p class="niche-desc">Most agencies build for large budgets and slow timelines. Technoid specializes in fast,
+            affordable, mobile-first websites for SMEs and entrepreneurs across Ghana who need to compete online
+            <em>right now</em>.
+          </p>
+        </div>
+        <div style="flex:1;min-width:240px;display:grid;gap:12px;">
+          <div class="niche-card"
+            style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:14px 18px;">
+            <span style="font-size:1.5rem;"><i class="fas fa-mobile-alt"></i></span>
+            <div><strong>Mobile-First Always</strong><br><span style="color:var(--muted);font-size:.85rem;">70%+ of
+                Ghanaians browse on mobile</span></div>
+          </div>
+          <div class="niche-card"
+            style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:14px 18px;">
+            <span style="font-size:1.5rem;"><i class="fas fa-bolt"></i></span>
+            <div><strong>Fast Load on Any Connection</strong><br><span
+                style="color:var(--muted);font-size:.85rem;">Optimized for local network conditions</span></div>
+          </div>
+          <div class="niche-card"
+            style="display:flex;align-items:center;gap:12px;border-radius:10px;padding:14px 18px;">
+            <span style="font-size:1.5rem;"><i class="fas fa-money-bill-wave"></i></span>
+            <div><strong>Budget-Conscious Pricing</strong><br><span
+                style="color:var(--muted);font-size:.85rem;">Professional quality at SME-friendly rates</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" aria-labelledby="web-services-heading">
+      <div class="section-header anim">
+        <span class="pill">Services</span>
+        <h2 id="web-services-heading">What We Build</h2>
+        <p>Every project is handcrafted — no templates, no page builders. Real code for real results.</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-building"></i></div>
+          <h3>Business Websites</h3>
+          <p>Professional multi-page websites with contact forms, service showcases, and Google Maps integration.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+          <h3>Portfolio Sites</h3>
+          <p>Personal brand websites for freelancers and professionals to showcase their work and attract clients.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-shopping-bag"></i></div>
+          <h3>Landing Pages</h3>
+          <p>Conversion-focused single pages built for product launches, campaigns, and lead generation.</p>
+        </div>
+        <div class="card anim anim-delay-1">
+          <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+          <h3>SEO Optimization</h3>
+          <p>On-page SEO, meta tags, structured data, and speed optimization so Google finds you first.</p>
+        </div>
+        <div class="card anim anim-delay-2">
+          <div class="card-icon"><i class="fas fa-wrench"></i></div>
+          <h3>Site Maintenance</h3>
+          <p>Ongoing updates, bug fixes, and content changes so your site stays current and functional.</p>
+        </div>
+        <div class="card anim anim-delay-3">
+          <div class="card-icon"><i class="fas fa-palette"></i></div>
+          <h3>Design + Dev Bundle</h3>
+          <p>Complete package: brand design + website build + deployment. One provider, zero friction.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unique Strengths -->
+    <section class="section" aria-labelledby="strengths-heading">
+      <div class="section-header anim">
+        <span class="pill">Unique Strengths</span>
+        <h2 id="strengths-heading">Why Our Code Is Different</h2>
+      </div>
+      <div class="grid cols-2 anim anim-delay-1">
+        <div class="card" style="border-left:4px solid var(--brand);">
+          <h3><i class="fas fa-bolt"></i> Performance by Default</h3>
+          <p>Every site is optimized from day one — lazy-loaded images, minified assets, compressed code. Fast sites
+            rank better and convert more.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--accent);">
+          <h3><i class="fas fa-universal-access"></i> Accessible & Inclusive</h3>
+          <p>We follow WCAG accessibility guidelines: proper semantic HTML, ARIA labels, keyboard navigation, and
+            contrast ratios that everyone can use.</p>
+        </div>
+        <div class="card" style="border-left:4px solid #f59e0b;">
+          <h3><i class="fas fa-mobile-alt"></i> Truly Responsive</h3>
+          <p>Tested on real devices — not just browser emulators. Your site will look perfect on every screen, every
+            time.</p>
+        </div>
+        <div class="card" style="border-left:4px solid #ec4899;">
+          <h3><i class="fas fa-code"></i> Clean, Maintainable Code</h3>
+          <p>No bloated frameworks when simple is better. You own your code and can hand it to any developer later
+            without confusion.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Study -->
+    <section class="section" aria-labelledby="web-cases-heading">
+      <div class="section-header anim">
+        <span class="pill">Portfolio Highlights</span>
+        <h2 id="web-cases-heading">Web Projects in Action</h2>
+      </div>
+
+      <div class="case-study anim anim-delay-1">
+        <div class="case-study-header">
+          <span class="pill pill-green" style="margin-bottom:12px;">Web Project</span>
+          <h3>Technoid — Multi-Service Business Website</h3>
+          <p style="color:#9ca3af;font-size:.9rem;">Full website build for Technoid's own online presence — designed,
+            developed, and deployed from scratch.</p>
+        </div>
+        <div class="case-study-body">
+          <div class="case-row">
+            <div class="case-item">
+              <label>The Problem</label>
+              <p>Technoid had no online presence. Customers had no way to learn about services, check operating hours,
+                or make contact outside of word-of-mouth referrals.</p>
+            </div>
+            <div class="case-item">
+              <label>My Role</label>
+              <p>Full-stack designer and developer — responsible for information architecture, UI/UX design, HTML/CSS/JS
+                development, SEO setup, and deployment.</p>
+            </div>
+            <div class="case-item">
+              <label>Tools Used</label>
+              <p>HTML5, CSS3, Vanilla JavaScript, Font Awesome, Google Fonts, Formspree for contact, Git for version
+                control.</p>
+            </div>
+            <div class="case-item">
+              <label>Process</label>
+              <p>Sitemap planning → wireframes → design system → component build → page assembly → cross-browser testing
+                → deployment → SEO audit.</p>
+            </div>
+          </div>
+          <label
+            style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--brand);display:block;margin-bottom:8px;">Results</label>
+          <div>
+            <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Mobile
+              Lighthouse score 90+</span>
+            <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Fully
+              responsive across all devices</span>
+            <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>SEO meta tags
+              & structured data integrated</span>
+            <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>WCAG AA
+              accessibility compliant</span>
+            <span class="result-pill"><i class="fas fa-check" style="color:#065f46;margin-right:4px;"></i>Built &
+              launched in under 2 weeks</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section" aria-labelledby="web-process-heading">
+      <div class="section-header anim">
+        <span class="pill">Our Process</span>
+        <h2 id="web-process-heading">How We Build Your Website</h2>
+      </div>
+      <div class="steps anim anim-delay-1">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Discovery & Plan</h4>
+          <p>We understand your goals, audience, and content. Then we build a clear sitemap and timeline.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Design Mockup</h4>
+          <p>You see exactly how your site will look before a single line of code is written.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>Build & Test</h4>
+          <p>We write clean code, test on all devices, and optimize for speed and accessibility.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h4>Launch & Hand Off</h4>
+          <p>Your site goes live. You get all files, credentials, and a walkthrough of how to manage it.</p>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+
+      <!-- Explore More strip -->
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+        <a href="https://tekstore.netlify.app" target="_blank" rel="noopener" class="promo-link-store">
+          <i class="fas fa-shopping-cart"></i> Visit Tekstore
+        </a>
+        <a href="https://technoidgame1.netlify.app" target="_blank" rel="noopener" class="promo-link-game">
+          <i class="fas fa-gamepad"></i> Play Technoid Game
+        </a>
+      </div>
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
+            data-cfemail="5130253e3e2130223411363c30383d7f323e3c"><span class="__cf_email__" data-cfemail="3b5a4f54544b5a485e7b5c565a525715585456">atoopase@icloud.com</span></span></a>
+        <a href="tel:+233544833571">+233544833571</a>
+      </div>
+      <hr class="footer-divider" />
+      <p class="footer-bottom">&copy; <span class="year"></span> Technoid-Chris
+<!-- Settings Modal (admin only) -->
+<div id="settings-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+  <div id="settings-panel" style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+    <button onclick="closeSettingsModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+    <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog" style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+    <div id="settings-slots"></div>
+    <p style="font-size:.75rem;color:#9ca3af;margin-top:14px;">Images are saved to yo
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/233544833571?text=Hi%20Technoid%2C%20I%27d%20like%20to%20enquire%20about%20your%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-float-label">Chat on WhatsApp</span>
+  </a>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Technoid — Book a Repair or Request a Quote | Kumasi, Ghana</title>
+  <meta name="description"
+    content="Contact Technoid in Kumasi, Ghana. Book device repairs, request design quotes, or reach out on WhatsApp. Fast response guaranteed." />
+  <meta property="og:title" content="Contact Technoid — Book a Repair or Request a Quote" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js");
+      });
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <header class="nav" role="banner">
+    <a href="index.html" class="nav-logo" aria-label="TechnoidFix home">
+      <span class="brand">TECHNOID<span class="brand-fix">FIX</span></span>
+    </a>
+    <div class="nav-inline">
+      <a href="index.html" data-page="home"><i class="fas fa-home"></i> Home</a>
+      <a href="design.html" data-page="design"><i class="fas fa-palette"></i> Design</a>
+      <a href="web.html" data-page="web"><i class="fas fa-code"></i> Web</a>
+    </div>
+    <nav role="navigation" aria-label="Main navigation">
+      <a href="about.html" data-page="about"><i class="fas fa-user"></i> About</a>
+      <a href="projects.html" data-page="projects"><i class="fas fa-folder-open nav-icon-mobile"></i> Projects</a>
+      <a href="contact.html" data-page="contact" class="nav-cta"><i class="fas fa-envelope nav-icon-mobile"></i> Contact</a>
+      <a href="privacy.html" data-page="privacy" style="font-size:.78rem;"><i class="fas fa-shield-alt nav-icon-mobile"></i> Privacy</a>
+      <a href="electrical-estimator/index.html" data-page="estimator" title="Free electrical wiring calculator"><i class="fas fa-bolt nav-icon-mobile"></i> Estimator</a>
+      <a href="#" id="nav-settings-btn" class="nav-settings-link" style="display:none;"
+        onclick="openSettingsModal(event)"><i class="fas fa-cog"></i> Settings</a>
+      <hr class="nav-divider"><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"
+        aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="nav-hamburger" aria-label="Toggle menu"
+      aria-expanded="false"><span></span><span></span><span></span></button>
+  </header>
+
+  <style>
+    .contact-main {
+      padding-top: 0;
+    }
+
+    .contact-header-desktop {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0px;
+      margin: 0 0 8px 0;
+      flex-wrap: wrap;
+    }
+
+    .contact-header-mobile {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0 0 8px 0;
+    }
+
+    @media (max-width: 680px) {
+      .contact-main {
+        padding-top: 20px !important;
+      }
+
+      .contact-header-desktop {
+        display: none !important;
+      }
+
+      .contact-header-mobile {
+        display: flex !important;
+      }
+
+      .contact-desc-row {
+        margin-bottom: 16px !important;
+      }
+    }
+  </style>
+
+  <main class="container contact-main" style="padding-bottom:0;">
+
+    <!-- Page header Desktop -->
+    <div class="section-header anim contact-header-desktop">
+
+      <!-- Left side: Lottie Animation -->
+      <div style="flex: 0 1 35%; min-width: 180px; display: flex; justify-content: right; align-items: center;">
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <div
+          style="width: 100%; max-width: 250px; display: flex; justify-content: center; margin-top: -95px; margin-bottom: -70px;">
+          <lottie-player src="assets/phone.json" background="transparent" speed="1" style="width: 100%; height: auto;"
+            loop autoplay></lottie-player>
+        </div>
+      </div>
+
+      <!-- Right side: Text -->
+      <div style="flex: 1 1 50%; min-width: 300px; padding: 0;">
+        <div style="margin-bottom: 6px;"><span class="pill"><i class="fas fa-envelope"></i> Get In Touch</span></div>
+        <h1 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.03em;margin:0 0 6px;">
+          Let's Start a Conversation
+        </h1>
+        <p style="max-width:520px;color:var(--muted);font-size:1.05rem;margin:0;">
+          Whether you need electrical installation, device repair, a design, or a website — we'll get back to you within
+          a
+          few hours. Book online or chat on WhatsApp.
+        </p>
+      </div>
+    </div>
+
+    <!-- Page header Mobile -->
+    <div class="section-header anim contact-header-mobile">
+
+      <!-- Top Row: Lottie + Title Side-by-Side -->
+      <div style="display: flex; flex-direction: row; align-items: center; gap: 16px; flex-wrap: nowrap; width: 100%;">
+
+        <!-- Left side: Lottie Animation -->
+        <div
+          style="flex: 0 0 auto; width: 40%; max-width: 180px; min-width: 120px; display: flex; justify-content: center;">
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+          <div style="width: 100%; display: flex; justify-content: center; margin-top: -65px; margin-bottom: -45px;">
+            <lottie-player src="assets/phone.json" background="transparent" speed="1" style="width: 100%; height: auto;"
+              loop autoplay></lottie-player>
+          </div>
+        </div>
+
+        <!-- Right side: Pill and Title -->
+        <div style="flex: 1 1 auto; padding: 10px 0 0 0;">
+          <div style="margin-bottom: 10px;"><span class="pill"><i class="fas fa-envelope"></i> Get In Touch</span></div>
+          <h1
+            style="font-size:clamp(1.6rem,4.5vw,2.8rem);font-weight:800;letter-spacing:-.03em;margin:0;line-height:1.15;">
+            Let's Start a <br class="mobile-break">Conversation
+          </h1>
+        </div>
+
+      </div>
+
+      <!-- Bottom Row: Description -->
+      <div class="contact-desc-row" style="width: 100%; padding: 0 4px; margin-bottom: 8px;">
+        <p style="max-width:580px;color:var(--muted);font-size:1.05rem;margin:0;">
+          Whether you need electrical installation, device repair, a design, or a website — we'll get back to you within
+          a
+          few hours. Book online or chat on WhatsApp.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Urgency bar -->
+    <div
+      style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;"
+      class="info-urgency anim anim-delay-1">
+      <span
+        style="background:#459864;width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block;"></span>
+      <strong style="font-size:.92rem;">Available Now — Mon to Sat, 9 AM - 6 PM</strong>
+      <span style="color:var(--muted);font-size:.88rem;">| Most phone services are completed same-day</span>
+      <a href="https://wa.me/233544833571" target="_blank" rel="noopener" class="wa-btn"
+        style="margin:0;margin-left:auto;padding:8px 16px;font-size:.85rem;">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp Now
+      </a>
+    </div>
+
+    <!-- Main contact grid -->
+    <div class="contact-grid anim anim-delay-2" style="margin-bottom:24px;">
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <h2>Send Us a Message</h2>
+        <p>Fill in the form and we'll respond promptly. For urgent requests, WhatsApp is fastest.</p>
+
+        <form id="main-contact-form" action="https://formspree.io/f/xdklpdag" method="POST" novalidate>
+          <!-- Honeypot anti-spam -->
+          <input type="text" name="_honey" style="display:none;" tabindex="-1" autocomplete="off" />
+
+          <div class="form-group">
+            <label for="contact-name">Full Name <span style="color:#ef4444">*</span></label>
+            <input type="text" id="contact-name" name="name" placeholder="e.g. Kwame Mensah" required
+              autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">Email Address <span style="color:#ef4444">*</span></label>
+            <input type="email" id="contact-email" name="email" placeholder="you@example.com" required
+              autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-phone">Phone / WhatsApp Number</label>
+            <input type="tel" id="contact-phone" name="phone" placeholder="+233 XX XXX XXXX" autocomplete="tel" />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-service">Service Needed <span style="color:#ef4444">*</span></label>
+            <select id="contact-service" name="service" required>
+              <option value="" disabled selected>Select a service…</option>
+              <option value="repair-phone">Phone / Tablet Repair</option>
+              <option value="repair-laptop">Laptop / Computer Repair</option>
+              <option value="repair-appliance">Electrical Wiring / Installation</option>
+              <option value="repair-appliance">Home Appliance Repair</option>
+              <option value="design-logo">Logo & Brand Design</option>
+              <option value="design-video">Video / Photo Editing</option>
+              <option value="design-autocad">AutoCAD Drafting</option>
+              <option value="web-build">Website Build</option>
+              <option value="web-seo">SEO / Web Maintenance</option>
+              <option value="other">Others</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message">Tell Us About Your Project <span style="color:#ef4444">*</span></label>
+            <textarea id="contact-message" name="message" rows="5"
+              placeholder="Describe the device issue, design brief, or project scope…" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-lg" style="width:100%;justify-content:center;">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+          <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center;">
+            We typically respond within 2 to 4 hours during business hours. Our dedicated team is always ready to assist
+            you. Thank you for choosing TechnoidFix.
+          </p>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <div class="contact-info" style="margin-bottom:24px;">
+          <h3>Contact Information</h3>
+          <p>Reach us directly through any of these channels:</p>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-envelope"></i></div>
+            <div>
+              <div class="info-label">Email</div>
+              <div class="info-value"><a href="/cdn-cgi/l/email-protection#0465706b6b74657761446369656d682a676b69"><span
+                    class="__cf_email__" data-cfemail="76170219190617051336111b171f1a5815191b"><span
+                      class="__cf_email__"
+                      data-cfemail="a3c2d7ccccd3c2d0c6e3c4cec2cacf8dc0cccd">atoopase@gmail.com</span></span></a></div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+            <div>
+              <div class="info-label">Phone / WhatsApp</div>
+              <div class="info-value"><a href="tel:+233544833571">+233 54 483 3571</a></div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <div>
+              <div class="info-label">Location</div>
+              <div class="info-value">
+                <a href="https://maps.google.com/?q=Adum,Kumasi,Ghana" target="_blank" rel="noopener">
+                  Adum Street, Kumasi, Ghana
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="fas fa-clock"></i></div>
+            <div>
+              <div class="info-label">Working Hours</div>
+              <div class="info-value">Monday - Saturday, 9:00 AM - 6:00 PM</div>
+            </div>
+          </div>
+
+          <a class="wa-btn"
+            href="https://wa.me/233544833571?text=Hi%20Technoid%2C%20I'd%20like%20to%20enquire%20about%20your%20services."
+            target="_blank" rel="noopener" aria-label="Chat with Technoid on WhatsApp">
+            <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i>
+            Chat on WhatsApp — Fast Response
+          </a>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);">
+            <div
+              style="font-size:.8rem;color:#9ca3af;margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+              Follow Technoid</div>
+            <div class="social-links" style="justify-content:flex-start;">
+              <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener"
+                aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+              <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+                  class="fab fa-x-twitter"></i></a>
+              <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+                  class="fab fa-youtube"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+                aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- What to expect -->
+        <div class="card" style="border-left:4px solid var(--brand);">
+          <h4 style="margin-bottom:12px;font-size:.95rem;">What Happens Next?</h4>
+          <div style="display:grid;gap:10px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:.88rem;">
+              <span style="color:var(--brand);font-weight:700;flex-shrink:0;">01</span>
+              <span>We review your message and confirm receipt within a few hours.</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:.88rem;">
+              <span style="color:var(--brand);font-weight:700;flex-shrink:0;">02</span>
+              <span>We assess your device or project and provide a clear quote.</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:.88em;">
+              <span style="color:var(--brand);font-weight:700;flex-shrink:0;">03</span>
+              <span>Once confirmed, we get to work — keeping you updated throughout.</span>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:.88rem;">
+              <span style="color:var(--brand);font-weight:700;flex-shrink:0;">04</span>
+              <span>Delivery with full quality check and satisfaction guarantee.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+
+      <!-- Explore More strip -->
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+        <a href="https://tekstore.netlify.app" target="_blank" rel="noopener" class="promo-link-store">
+          <i class="fas fa-shopping-cart"></i> Visit Tekstore
+        </a>
+        <a href="https://technoidgame1.netlify.app" target="_blank" rel="noopener" class="promo-link-game">
+          <i class="fas fa-gamepad"></i> Play Technoid Game
+        </a>
+      </div>
+      <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="social-links" style="justify-content:center;margin:20px 0;">
+        <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
+            class="fab fa-tiktok"></i></a>
+        <a href="https://x.com/technoidchris" target="_blank" rel="noopener" aria-label="X/Twitter"><i
+            class="fab fa-x-twitter"></i></a>
+        <a href="https://youtube.com/@techniod_chris" target="_blank" rel="noopener" aria-label="YouTube"><i
+            class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100015011820419" target="_blank" rel="noopener"
+          aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="design.html">Design</a>
+        <a href="web.html">Web Dev</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="/cdn-cgi/l/email-protection#37564358584756445277505a565e5b1954585a"><span class="__cf_email__"
+            data-cfemail="5130253e3e2130223411363c30383d7f323e3c"><span class="__cf_email__"
+              data-cfemail="29485d464659485a4c694e44484045074a4644">atoopase@icloud.com</span></span></a>
+        <a href="tel:+233544833571">+233544833571</a>
+        <!-- Settings Modal (admin only) -->
+        <div id="settings-modal"
+          style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;">
+          <div id="settings-panel"
+            style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;max-height:85vh;overflow-y:auto;position:relative;">
+            <button onclick="closeSettingsModal()"
+              style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">×</button>
+            <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:18px;"><i class="fas fa-cog"
+                style="color:var(--brand);margin-right:6px;"></i> Image Settings</h3>
+            <div id="settings-slots">
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/233544833571?text=Hi%20Technoid%2C%20I%27d%20like%20to%20enquire%20about%20your%20services." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-float-label">Chat on WhatsApp</span>
+  </a>
+</body>
+</html>
