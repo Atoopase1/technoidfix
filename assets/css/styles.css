@@ -1,7 +1,7 @@
 /* TECHNOID — Elite Portfolio Design System
    Palette: Indigo #0088CC | Black #0a0a0f | White #fafafa */
 
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Exo+2:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
   --brand: #0088CC;
@@ -109,7 +109,7 @@ h4 {
 }
 
 .brand {
-  font-family: 'Exo 2', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 800;
   font-size: 1.22rem;
   letter-spacing: 0.01em;
@@ -146,8 +146,9 @@ h4 {
 .nav-inline a {
   padding: 5px 9px;
   border-radius: 6px;
-  font-size: .78rem;
-  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
   letter-spacing: .01em;
   color: #4b5563;
   text-decoration: none;
@@ -190,8 +191,9 @@ h4 {
 .nav nav a {
   padding: 7px 14px;
   border-radius: 8px;
+  font-family: 'Inter', sans-serif;
   font-size: .9rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #374151;
   transition: all .2s;
   text-decoration: none;
@@ -210,9 +212,9 @@ h4 {
   background: none !important;
   border: 0 !important;
   border-color: transparent !important;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
   font-size: .9rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #374151;
   padding: 7px 14px;
   border-radius: 8px;
@@ -1372,10 +1374,11 @@ h4 {
   .nav>nav a {
     width: 100%;
     border-radius: 7px;
-    padding: 5px 10px;
-    font-size: .82rem;
+    padding: 7px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
     color: #111827;
-    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -1923,26 +1926,8 @@ h4 {
   margin-bottom: 0;
 }
 
-.project-caption.clamped {
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* "More" overlaid at the bottom-right of the last clamped line */
-.project-caption.clamped ~ .caption-toggle {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 0;
-  padding-left: 20px;
-  background: linear-gradient(to right, transparent, #fff 40%);
-}
-
-[data-theme="dark"] .project-caption.clamped ~ .caption-toggle {
-  background: linear-gradient(to right, transparent, #16161f 40%);
-}
+/* Caption toggle — progressive word reveal */
+/* (CSS clamping removed; JS handles word-by-word reveal) */
 
 .caption-toggle {
   background: none;
@@ -3732,5 +3717,154 @@ h4 {
     flex-direction: column;
     text-align: center;
     justify-content: center;
+  }
+}
+
+/* ═══════════════════════════════════════
+   Full-screen Image Lightbox
+   Double-tap a post image to activate
+═══════════════════════════════════════ */
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(5, 5, 12, 0.96);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  transition: opacity .22s ease;
+}
+
+.img-lightbox.lb-active {
+  display: flex;
+  opacity: 1;
+  animation: lb-appear .22s ease forwards;
+}
+
+@keyframes lb-appear {
+  from { opacity: 0; transform: scale(.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Close button — top-right, always visible */
+.lb-close {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 10001;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .18s, transform .18s;
+}
+.lb-close:hover {
+  background: rgba(255,255,255,.25);
+  transform: scale(1.08);
+}
+
+/* Inner layout — image then details */
+.lb-inner {
+  width: 100%;
+  max-width: 860px;
+  padding: 60px 18px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+}
+
+/* Image container — full width, no cropping */
+.lb-img-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
+  background: #0a0a14;
+}
+
+.lb-img-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 75vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 14px 14px 0 0;
+}
+
+/* Details card below image */
+.lb-details {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  padding: 18px 22px 22px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lb-date {
+  font-size: .75rem;
+  color: rgba(255,255,255,.45);
+  margin: 0 0 10px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+
+.lb-caption {
+  font-size: .97rem;
+  line-height: 1.65;
+  color: #e5e7eb;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.lb-caption a {
+  color: var(--brand);
+  word-break: break-all;
+}
+
+/* Hint badge on images — double-tap to fullscreen */
+.project-media::after {
+  content: '⊞';
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0,0,0,.45);
+  color: rgba(255,255,255,.75);
+  font-size: .68rem;
+  padding: 2px 7px;
+  border-radius: 5px;
+  pointer-events: none;
+  letter-spacing: .04em;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.project-media:hover::after {
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .lb-inner {
+    padding: 56px 10px 30px;
+  }
+  .lb-img-wrap img {
+    max-height: 60vh;
   }
 }

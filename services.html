@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects   Technoid Portfolio | Kumasi, Ghana</title>
-  <meta name="description" content="Browse Technoid projects — repairs, designs, websites." />
-  <meta property="og:title" content="Projects — Technoid Portfolio" />
-  <meta property="og:description" content="Browse Technoid projects — repairs, designs, websites." />
+  <title>Services   Technoid Portfolio | Kumasi, Ghana</title>
+  <meta name="description" content="Browse Technoid projects â€” repairs, designs, websites." />
+  <meta property="og:title" content="Services â€” Technoid Portfolio" />
+  <meta property="og:description" content="Browse Technoid projects â€” repairs, designs, websites." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
   <meta property="og:image:width" content="512" />
@@ -179,7 +179,7 @@
       }
     }
 
-    /* ═══ Activity Log hero — mobile-only layout ═══ */
+    /* â•â•â• Activity Log hero â€” mobile-only layout â•â•â• */
     @media (max-width: 600px) {
       /* Wrapper switches from flex-row to block */
       .activity-hero {
@@ -191,7 +191,7 @@
         display: none !important;
       }
 
-      /* Description paragraph — show only the first sentence on mobile */
+      /* Description paragraph â€” show only the first sentence on mobile */
       .activity-hero .hero-desc-full {
         display: none;
       }
@@ -201,7 +201,7 @@
         display: block !important;
       }
 
-      /* Divider — only visible on mobile */
+      /* Divider â€” only visible on mobile */
       .activity-hero-divider {
         display: block !important;
       }
@@ -228,7 +228,7 @@
       }
     }
 
-    /* ═══ Tab Row ═══ */
+    /* â•â•â• Tab Row â•â•â• */
     .tabs-wrapper {
       margin-bottom: 0;
     }
@@ -285,7 +285,7 @@
     .win-menu-btn.menu-active  { background: rgba(var(--brand-rgb, 99,102,241),.15); }
     .win-menu-btn svg          { display: block; }
 
-    /* ═══ Sub-category pill bar (slides down below the tab row) ═══ */
+    /* â•â•â• Sub-category pill bar (slides down below the tab row) â•â•â• */
     .subcat-bar {
       display: none;           /* hidden by default */
       flex-wrap: wrap;
@@ -412,7 +412,7 @@
     </a>
         <div class="nav-inline">
       <a href="index.html" data-page="home"><i class="fas fa-home"></i> Home</a>
-      <a href="projects.html" data-page="projects"><i class="fas fa-folder-open"></i> Projects</a>
+      <a href="services.html" data-page="projects"><i class="fas fa-folder-open"></i> Services</a>
       <a href="electrical-estimator/index.html" data-page="estimator"><i class="fas fa-bolt"></i> Estimator</a>
     </div>
     <nav role="navigation" aria-label="Main navigation">
@@ -428,7 +428,7 @@
 
   <main class="container" style="padding-top:32px;padding-bottom:60px;">
 
-    <!-- ── Activity Log hero ── -->
+    <!-- â”€â”€ Activity Log hero â”€â”€ -->
     <div class="section-header anim activity-hero" style="margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:nowrap; text-align:left;">
 
       <!-- LEFT: text block (desktop shows all; mobile shows pill + h1 + short desc only) -->
@@ -436,16 +436,16 @@
         <div style="margin-bottom:8px;"><span class="pill"><i class="fas fa-images"></i> Live Portfolio</span></div>
         <h1 style="font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin:0 0 6px 0;line-height:1.15;">Our Activity Log</h1>
         <!-- Full paragraph visible on desktop; hidden on mobile via CSS -->
-        <p class="hero-desc-full" style="color:var(--muted);font-size:1rem;margin:0;">Projects executed by TechnoidFix include device repair, brand identity, web engineering, electrical installations, and related technical services. Browse completed client work under <strong>Projects</strong> or explore system builds and setups under <strong>Tech Infrastructure</strong>.</p>
+        <p class="hero-desc-full" style="color:var(--muted);font-size:1rem;margin:0;">Projects executed by TechnoidFix include device repair, brand identity, web engineering, electrical installations, and related technical services. Browse completed client work under <strong>Engineering Hub</strong> or explore system builds and setups under <strong>Tech Infrastructure</strong>.</p>
 
-        <!-- ── Mobile-only section (hidden on desktop via CSS) ── -->
+        <!-- â”€â”€ Mobile-only section (hidden on desktop via CSS) â”€â”€ -->
         <!-- Short description (first sentence only) -->
         <p class="hero-desc-mobile" style="display:none; color:var(--muted);font-size:1rem;margin:0 0 16px 0;">Projects executed by TechnoidFix include device repair, brand identity, web engineering, electrical installations, and related technical services.</p>
 
-        <!-- Divider — hidden on desktop -->
+        <!-- Divider â€” hidden on desktop -->
         <hr class="activity-hero-divider" style="display:none; border:none; border-top:1px solid var(--border); margin:0 0 16px 0;" />
 
-        <!-- Bottom row: browse text + lottie — hidden on desktop -->
+        <!-- Bottom row: browse text + lottie â€” hidden on desktop -->
         <div class="activity-hero-bottom" style="display:none;">
           <p class="hero-browse-text">Browse completed client work under <strong style="color:var(--text);">Projects</strong> or explore system builds and setups under <strong style="color:var(--text);">Tech Infrastructure</strong>.</p>
           <div class="hero-lottie-mobile">
@@ -473,14 +473,14 @@
       <!-- Add Project button rendered only for admins via JS -->
     </div>
 
-    <!-- ── Tab Row ── -->
+    <!-- â”€â”€ Tab Row â”€â”€ -->
     <div class="tabs-wrapper">
       <div class="category-tabs" role="tablist" aria-label="Project categories">
 
         <!-- Projects Tab -->
         <button class="cat-tab active" id="tab-projects" role="tab" aria-selected="true"
           onclick="switchTab('projects')">
-          <i class="fas fa-folder"></i> Projects
+          <i class="fas fa-folder"></i> Engineering Hub
           <span class="win-menu-btn" id="win-menu-projects"
             onclick="toggleSubBar(event,'subcat-projects','win-menu-projects','subcat-tech','win-menu-tech')"
             title="Filter Projects" aria-label="Filter project categories" aria-expanded="false">
@@ -511,11 +511,11 @@
 
       </div><!-- /category-tabs -->
 
-      <!-- ── Projects sub-category pill bar (hidden until menu pressed) ── -->
+      <!-- â”€â”€ Projects sub-category pill bar (hidden until menu pressed) â”€â”€ -->
       <div class="subcat-bar" id="subcat-projects" role="group" aria-label="Project filters">
-        <span class="subcat-label">Projects &mdash; filter by type</span>
+        <span class="subcat-label">Engineering Hub &mdash; filter by type</span>
         <button class="subcat-pill active" id="pill-projects-all"      onclick="selectSubCat(event,'projects','all')">
-          <i class="fas fa-th-large"></i> All Projects
+          <i class="fas fa-th-large"></i> All
         </button>
         <button class="subcat-pill" id="pill-projects-design"   onclick="selectSubCat(event,'projects','design')">
           <i class="fas fa-pencil-ruler"></i> Designed
@@ -529,9 +529,12 @@
         <button class="subcat-pill" id="pill-projects-embedded" onclick="selectSubCat(event,'projects','embedded')">
           <i class="fas fa-microchip"></i> Embedded
         </button>
+        <button class="subcat-pill" id="pill-projects-repairs" onclick="selectSubCat(event,'projects','repairs')">
+          <i class="fas fa-wrench"></i> Repairs
+        </button>
       </div>
 
-      <!-- ── Tech sub-category pill bar (hidden until menu pressed) ── -->
+      <!-- â”€â”€ Tech sub-category pill bar (hidden until menu pressed) â”€â”€ -->
       <div class="subcat-bar" id="subcat-tech" role="group" aria-label="Tech Infrastructure filters">
         <span class="subcat-label">Tech Infrastructure &mdash; filter by type</span>
         <button class="subcat-pill active" id="pill-tech-all"          onclick="selectSubCat(event,'tech','all')">
@@ -548,6 +551,9 @@
         </button>
         <button class="subcat-pill" id="pill-tech-embedded"    onclick="selectSubCat(event,'tech','embedded')">
           <i class="fas fa-microchip"></i> Embedded
+        </button>
+        <button class="subcat-pill" id="pill-tech-repairs"    onclick="selectSubCat(event,'tech','repairs')">
+          <i class="fas fa-wrench"></i> Repairs
         </button>
       </div>
 
@@ -582,19 +588,21 @@
         <label style="font-weight:700;font-size:.9rem;display:block;margin-bottom:6px;">Category
           <span style="color:#ef4444">*</span></label>
         <select id="post-category" class="cat-select">
-          <optgroup label="── Projects ──">
-            <option value="projects">All Projects</option>
+          <optgroup label="Engineering Hub">
+            <option value="projects">All Engineering Hub</option>
             <option value="projects-design">Designed Projects</option>
             <option value="projects-web">Web Projects</option>
             <option value="projects-electrical">Electrical Projects</option>
             <option value="projects-embedded">Embedded System Projects</option>
+            <option value="projects-repairs">Repairs</option>
           </optgroup>
-          <optgroup label="── Tech Infrastructure ──">
+          <optgroup label="Tech Infrastructure">
             <option value="tech">All Tech Infrastructure</option>
             <option value="tech-design">Designed Infrastructure</option>
             <option value="tech-web">Web Infrastructure</option>
             <option value="tech-electrical">Electrical Infrastructure</option>
             <option value="tech-embedded">Embedded System Infrastructure</option>
+            <option value="tech-repairs">Repairs</option>
           </optgroup>
         </select>
       </div>
@@ -602,7 +610,7 @@
       <div style="margin-top:16px;">
         <label style="font-weight:700;font-size:.9rem;display:block;margin-bottom:6px;">Caption / Project Description
           <span style="color:#ef4444">*</span></label>
-        <textarea id="post-caption" rows="3" placeholder="Describe this project — what was done, tools used, outcome…"
+        <textarea id="post-caption" rows="3" placeholder="Describe this project â€” what was done, tools used, outcomeâ€¦"
           style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;"></textarea>
       </div>
 
@@ -616,7 +624,7 @@
 
     <!-- Feed -->
     <div id="feed-loading" class="loading-spinner">
-      <div class="spinner"></div> Loading projects…
+      <div class="spinner"></div> Loading projectsâ€¦
     </div>
     <div class="projects-feed" id="projects-feed" style="display:none;"></div>
     <div class="empty-state" id="empty-state" style="display:none;">
@@ -630,7 +638,7 @@
   <!-- Share Modal -->
   <div class="modal-overlay" id="share-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:380px;">
-      <button class="modal-close" onclick="closeShareModal()">✕</button>
+      <button class="modal-close" onclick="closeShareModal()">âœ•</button>
       <h3><i class="fas fa-share-alt"></i> Share This Project</h3>
       <p>Copy the link or share on social media.</p>
       <div id="share-url-box" class="share-url-box-styled">
@@ -650,13 +658,34 @@
   <!-- Edit Project Modal -->
   <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:480px;">
-      <button class="modal-close" onclick="closeEditModal()">✕</button>
+      <button class="modal-close" onclick="closeEditModal()">âœ•</button>
       <h3><i class="fas fa-pencil-alt"></i> Edit Project Caption</h3>
       <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;">Update the description, tools used, or outcome for this project.</p>
       <input type="hidden" id="edit-project-id" />
+      <div style="margin-bottom:12px;">
+        <label style="font-weight:700;font-size:.9rem;display:block;margin-bottom:6px;">Category</label>
+        <select id="edit-category-input" class="cat-select">
+          <optgroup label="Engineering Hub">
+            <option value="projects">All Engineering Hub</option>
+            <option value="projects-design">Designed Projects</option>
+            <option value="projects-web">Web Projects</option>
+            <option value="projects-electrical">Electrical Projects</option>
+            <option value="projects-embedded">Embedded System Projects</option>
+            <option value="projects-repairs">Repairs</option>
+          </optgroup>
+          <optgroup label="Tech Infrastructure">
+            <option value="tech">All Tech Infrastructure</option>
+            <option value="tech-design">Designed Infrastructure</option>
+            <option value="tech-web">Web Infrastructure</option>
+            <option value="tech-electrical">Electrical Infrastructure</option>
+            <option value="tech-embedded">Embedded System Infrastructure</option>
+            <option value="tech-repairs">Repairs</option>
+          </optgroup>
+        </select>
+      </div>
       <textarea id="edit-caption-input" rows="6"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;box-sizing:border-box;"
-        placeholder="Describe this project — what was done, tools used, outcome…"></textarea>
+        placeholder="Describe this project â€” what was done, tools used, outcomeâ€¦"></textarea>
       <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
         <button class="btn" id="edit-save-btn" onclick="saveEditCaption()"><i class="fas fa-check-circle"></i> Save Changes</button>
         <button class="btn btn-light" onclick="closeEditModal()">Cancel</button>
@@ -683,7 +712,7 @@
   <!-- Password Reset Modal -->
   <div class="modal-overlay" id="reset-password-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:420px;">
-      <button class="modal-close" onclick="closeResetModal()">✕</button>
+      <button class="modal-close" onclick="closeResetModal()">âœ•</button>
       <h3><i class="fas fa-key"></i> Set New Password</h3>
       <p>Enter your new password below to complete the reset.</p>
       <div style="display:flex;flex-direction:column;gap:14px;">
@@ -719,7 +748,7 @@
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
-      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
+      <div class="footer-tagline">Expert Repair Â· Creative Design Â· Web Development Â· Kumasi, Ghana</div>
       <div class="social-links" style="justify-content:center;margin:20px 0;">
         <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
             class="fab fa-tiktok"></i></a>
@@ -735,7 +764,7 @@
         <a href="about.html">About</a>
         <a href="design.html">Design</a>
         <a href="web.html">Web Dev</a>
-        <a href="projects.html">Projects</a>
+        <a href="services.html">Services</a>
         <a href="contact.html">Contact</a>
         <a href="privacy.html">Privacy</a>
       </div>
@@ -747,7 +776,7 @@
   <div class="toast" aria-live="polite" role="status"></div>
 
   <script>
-    /* TECHNOID PROJECTS — Supabase v2 + Auth */
+    /* TECHNOID PROJECTS â€” Supabase v2 + Auth */
     const SUPABASE_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
     const BUCKET = 'project-media';
@@ -759,7 +788,7 @@
     let activeTab = 'projects';    // 'projects' | 'tech'
     let activeSubCat = 'all';      // 'all' | 'design' | 'web' | 'electrical' | 'embedded'
 
-    /* ── Sub-category pill bar toggle ── */
+    /* â”€â”€ Sub-category pill bar toggle â”€â”€ */
     function toggleSubBar(e, barId, btnId, otherBarId, otherBtnId) {
       e.stopPropagation();
       const bar      = document.getElementById(barId);
@@ -825,6 +854,7 @@
     let currentUser = null;   // null | { id, email }
     let isAdmin = false;
     const captionStore = {};  // id -> raw caption string for edit modal
+    const categoryStore = {}; // id -> category string
 
     function getDisplayName() {
       if (currentUser) return currentUser.email.split('@')[0];
@@ -846,39 +876,77 @@
         .replace(/\n/g, '<br>')
         .replace(/(https?:\/\/[^\s<&"]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:var(--brand);word-break:break-all;">$1</a>');
     }
+
+    /* Render the first N space-separated words of raw caption */
+    function formatCaptionWords(raw, n) {
+      const words = (raw || '').trim().split(/\s+/);
+      const slice = words.slice(0, n).join(' ');
+      const suffix = words.length > n ? '...' : '';
+      return formatCaption(slice) + suffix;
+    }
     function fmt(iso) { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
 
     const tapMap = {};
 
     function handleMediaTap(id, fileUrl, e) {
       e.stopPropagation();
-      
+
       if (tapMap[id]) {
-        /* Double Tap */
+        /* Double Tap — open full-screen lightbox */
         clearTimeout(tapMap[id]);
         tapMap[id] = null;
-        window.open(fileUrl, '_blank', 'noopener,noreferrer');
+        openLightbox(id, fileUrl);
       } else {
         /* Single Tap */
         tapMap[id] = setTimeout(() => {
           tapMap[id] = null;
-          
+
           /* Look for a link inside the caption */
           const captionEl = document.getElementById('caption-' + id);
           const firstLink = captionEl ? captionEl.querySelector('a') : null;
-          
+
           if (firstLink && firstLink.href) {
             window.open(firstLink.href, '_blank', 'noopener,noreferrer');
           } else {
-            /* Fallback to showing the date overlay */
+            /* Show the date overlay */
             const overlay = document.getElementById('date-overlay-' + id);
             if (!overlay) return;
             const isVisible = overlay.classList.contains('visible');
             document.querySelectorAll('.date-overlay.visible').forEach(el => el.classList.remove('visible'));
             if (!isVisible) overlay.classList.add('visible');
           }
-        }, 300); /* 300ms double-tap threshold */
+        }, 300);
       }
+    }
+
+    /* Full-screen image lightbox */
+    function openLightbox(id, fileUrl) {
+      const lb      = document.getElementById('img-lightbox');
+      const lbImg   = document.getElementById('lb-img');
+      const lbCap   = document.getElementById('lb-caption');
+      const lbDate  = document.getElementById('lb-date');
+      if (!lb) return;
+
+      const rawCaption = captionStore[id] || '';
+      lbImg.src        = fileUrl;
+      lbImg.alt        = rawCaption.slice(0, 80);
+      lbCap.innerHTML  = formatCaption(rawCaption);
+
+      /* Find the post date from the date-overlay */
+      const dateEl = document.getElementById('date-overlay-' + id);
+      lbDate.textContent = dateEl ? dateEl.textContent : '';
+
+      lb.classList.add('lb-active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById('img-lightbox');
+      if (!lb) return;
+      lb.classList.remove('lb-active');
+      document.body.style.overflow = '';
+      /* Clear src so previous image doesn't flash */
+      setTimeout(() => { document.getElementById('lb-img').src = ''; }, 250);
     }
 
     /* Auth UI */
@@ -918,7 +986,7 @@
       if (!email || !pass) { window.toast('Enter email and password.', 'error'); return; }
 
       const btn = document.getElementById('auth-signin-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in…'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing inâ€¦'; }
 
       const { error } = await sb.auth.signInWithPassword({ email, password: pass });
       if (error) {
@@ -936,7 +1004,7 @@
       if (pass.length < 6) { window.toast('Password must be at least 6 characters.', 'error'); return; }
 
       const btn = document.getElementById('auth-signup-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing up…'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing upâ€¦'; }
 
       const { error } = await sb.auth.signUp({ email, password: pass });
       if (error) {
@@ -962,7 +1030,7 @@
       }
       try {
         const { error } = await sb.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/projects.html'
+          redirectTo: window.location.origin + '/services.html'
         });
         if (error) {
           window.toast(error.message, 'error');
@@ -1019,7 +1087,7 @@
       }
 
       const btn = document.getElementById('reset-submit-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating…'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updatingâ€¦'; }
 
       try {
         const { error } = await sb.auth.updateUser({ password: newPass });
@@ -1073,7 +1141,7 @@
     /* Listen for auth changes */
     sb.auth.onAuthStateChange((_event, session) => {
       if (_event === 'PASSWORD_RECOVERY') {
-        /* User arrived via password reset link — show reset modal */
+        /* User arrived via password reset link â€” show reset modal */
         openResetModal();
         return;
       }
@@ -1129,7 +1197,7 @@
         if (!projects || projects.length === 0) {
           loading.style.display = 'none';
           empty.style.display = 'block';
-          const catLabel = activeTab === 'tech' ? 'Tech Infrastructure' : 'Projects';
+          const catLabel = activeTab === 'tech' ? 'Tech Infrastructure' : 'Engineering Hub';
           label.textContent = `No ${catLabel} yet`;
           return;
         }
@@ -1156,7 +1224,10 @@
         feed.style.display = 'grid';
 
         /* Store raw captions for edit modal */
-        projects.forEach(p => { captionStore[p.id] = p.caption; });
+        projects.forEach(p => { 
+          captionStore[p.id] = p.caption; 
+          categoryStore[p.id] = p.category;
+        });
 
         feed.innerHTML = projects.map(p => {
           const liked = likedSet.has(p.id);
@@ -1201,13 +1272,14 @@
 
           return `
       <article class="project-card" data-id="${p.id}">
-        <div class="project-media" onclick="handleMediaTap('${p.id}', '${escHtml(p.file_url)}', event)" style="cursor:pointer;">
+        <div class="project-media" ondblclick="openLightbox('${p.id}','${escHtml(p.file_url)}')" onclick="handleMediaTap('${p.id}', '${escHtml(p.file_url)}', event)" style="cursor:pointer;">
           ${mediaHTML}
           <div class="date-overlay" id="date-overlay-${p.id}">Posted ${fmt(p.created_at)}</div>
         </div>
         <div class="project-body">
           <div class="project-caption-outer">
-            <p class="project-caption clamped" id="caption-${p.id}">${formatCaption(p.caption)}</p>
+            <p class="project-caption" id="caption-${p.id}"
+               data-words="${escHtml(p.caption)}" data-shown="30">${formatCaptionWords(p.caption, 30)}</p>
             <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="toggleCaption('${p.id}')" style="display:none;">More</button>
           </div>
         </div>
@@ -1227,7 +1299,7 @@
           <div id="clist-${p.id}"><div class="loading-spinner" style="padding:20px;"><div class="spinner"></div></div></div>
           <div class="comment-input-row">
             ${nameInputHTML}
-            <textarea placeholder="Write a comment…" id="ctext-${p.id}" maxlength="280" rows="1"
+            <textarea placeholder="Write a commentâ€¦" id="ctext-${p.id}" maxlength="280" rows="1"
               class="comment-text-input"
               onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitComment('${p.id}')}"
               oninput="autoGrowTextarea(this)"></textarea>
@@ -1248,27 +1320,31 @@
       }
     }
 
-    /* Caption More / Less */
+    /* Progressive caption reveal — 30 words at a time */
     function toggleCaption(id) {
       const cap = document.getElementById('caption-' + id);
       const btn = document.getElementById('caption-toggle-' + id);
       if (!cap || !btn) return;
-      const isClipped = cap.classList.contains('clamped');
-      cap.classList.toggle('clamped', !isClipped);
-      btn.textContent = isClipped ? 'Less' : 'More';
-      /* When showing Less, make it a normal block below the text */
-      btn.style.position = isClipped ? 'static' : '';
+      const raw   = cap.dataset.words || '';
+      const words = raw.trim().split(/\s+/);
+      let shown   = parseInt(cap.dataset.shown) || 30;
+      shown       = Math.min(shown + 30, words.length);
+      cap.dataset.shown = shown;
+      cap.innerHTML = formatCaptionWords(raw, shown);
+      if (shown >= words.length) {
+        btn.style.display = 'none';
+      }
     }
 
     function initCaptionToggles() {
-      document.querySelectorAll('.project-caption.clamped').forEach(el => {
-        const id = el.id.replace('caption-', '');
-        const btn = document.getElementById('caption-toggle-' + id);
+      document.querySelectorAll('.project-caption[data-words]').forEach(el => {
+        const id    = el.id.replace('caption-', '');
+        const btn   = document.getElementById('caption-toggle-' + id);
         if (!btn) return;
-        /* Show toggle only if text is actually overflowing */
-        if (el.scrollHeight > el.clientHeight + 2) {
+        const total = (el.dataset.words || '').trim().split(/\s+/).length;
+        const shown = parseInt(el.dataset.shown) || 30;
+        if (total > shown) {
           btn.style.display = 'block';
-          btn.textContent = 'More';
         }
       });
     }
@@ -1529,9 +1605,9 @@
       const status = document.getElementById('upload-status');
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading…';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploadingâ€¦';
       progWrap.style.display = 'block';
-      status.textContent = 'Saving project…';
+      status.textContent = 'Saving projectâ€¦';
 
       try {
         let fileUrl = '';
@@ -1543,7 +1619,7 @@
         }
 
         if (pendingFile) {
-          status.textContent = 'Uploading file to storage…';
+          status.textContent = 'Uploading file to storageâ€¦';
           const ext = pendingFile.name.split('.').pop() || (pendingFileType === 'video' ? 'mp4' : 'jpg');
           const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
           progBar.style.width = '30%';
@@ -1553,7 +1629,7 @@
             .upload(fileName, pendingFile, { cacheControl: '3600', upsert: false });
           if (upErr) throw new Error('Storage upload failed: ' + upErr.message);
           progBar.style.width = '65%';
-          status.textContent = 'Saving project details…';
+          status.textContent = 'Saving project detailsâ€¦';
 
           const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fileName);
           fileUrl = urlData.publicUrl;
@@ -1588,8 +1664,11 @@
     function openEditModal(id) {
       if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
       const currentText = captionStore[id] || '';
+      const currentCategory = categoryStore[id] || 'projects';
       document.getElementById('edit-project-id').value = id;
       document.getElementById('edit-caption-input').value = currentText;
+      const catInput = document.getElementById('edit-category-input');
+      if (catInput) catInput.value = currentCategory;
       document.getElementById('edit-status').textContent = '';
       const btn = document.getElementById('edit-save-btn');
       btn.disabled = false;
@@ -1609,15 +1688,16 @@
       if (!isAdmin) { window.toast('Admin access required.', 'error'); return; }
       const id = document.getElementById('edit-project-id').value;
       const newCaption = document.getElementById('edit-caption-input').value.trim();
+      const newCategory = document.getElementById('edit-category-input')?.value || 'projects';
       if (!newCaption) { window.toast('Caption cannot be empty.', 'error'); return; }
 
       const btn = document.getElementById('edit-save-btn');
       const status = document.getElementById('edit-status');
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
-      status.textContent = 'Updating…';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Savingâ€¦';
+      status.textContent = 'Updatingâ€¦';
 
-      const { error } = await sb.from('projects').update({ caption: newCaption }).eq('id', id);
+      const { error } = await sb.from('projects').update({ caption: newCaption, category: newCategory }).eq('id', id);
       if (error) {
         window.toast('Could not save changes.', 'error');
         status.textContent = 'Save failed. Try again.';
@@ -1626,8 +1706,9 @@
         return;
       }
 
-      window.toast('Caption updated!', 'success');
+      window.toast('Project updated!', 'success');
       captionStore[id] = newCaption;
+      categoryStore[id] = newCategory;
       closeEditModal();
       loadFeed();
     }
@@ -1636,7 +1717,7 @@
     let _pendingDeleteId = null;
 
     async function deleteProject(id) {
-      /* Re-verify admin from live session — fixes Spck session persistence issues */
+      /* Re-verify admin from live session â€” fixes Spck session persistence issues */
       const { data: { session } } = await sb.auth.getSession();
       if (!session?.user || !ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
         window.toast('Admin access required. Please sign in again.', 'error');
@@ -1661,7 +1742,7 @@
       closeDeleteConfirm();
 
       const btn = document.getElementById('delete-confirm-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deletingâ€¦'; }
 
       /* Get file_url before deleting */
       const { data: proj, error: fetchErr } = await sb.from('projects').select('file_url').eq('id', id).single();
@@ -1732,6 +1813,31 @@
     <i class="fab fa-whatsapp"></i>
     <span class="wa-float-label">Chat on WhatsApp</span>
   </a>
+
+  <!-- Full-screen Image Lightbox -->
+  <div id="img-lightbox" class="img-lightbox" role="dialog" aria-modal="true" aria-label="Image viewer"
+       onclick="if(event.target===this)closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close image viewer">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="lb-inner">
+      <div class="lb-img-wrap">
+        <img id="lb-img" src="" alt="" />
+      </div>
+      <div class="lb-details">
+        <p class="lb-date" id="lb-date"></p>
+        <p class="lb-caption" id="lb-caption"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Keyboard close for lightbox */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
 </body>
 
 </html>
