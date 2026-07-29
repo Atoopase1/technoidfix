@@ -1,0 +1,36 @@
+{
+  "name": "TechnoidFix",
+  "short_name": "TechnoidFix",
+  "description": "Fast, professional repair services for smartphones, tablets, laptops and home appliances in Kumasi, Ghana.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0088CC",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "assets/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
