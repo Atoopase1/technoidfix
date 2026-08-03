@@ -392,6 +392,188 @@
       color: #e5e7eb !important;
       border: 1px solid #2a2a3a !important;
     }
+
+    /* ═══════════════════════════════════════════════
+       Post Reader — Full-Screen Overlay
+       Opens when tapping "More" on a long post caption
+    ═══════════════════════════════════════════════ */
+    #post-reader {
+      position: fixed;
+      inset: 0;
+      z-index: 10100;
+      background: #07070f;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    #post-reader.pr-active {
+      display: flex;
+      opacity: 1;
+      animation: pr-appear .28s ease forwards;
+    }
+    @keyframes pr-appear {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Close button — fixed top-right */
+    .pr-close {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 10200;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .18s, transform .18s;
+      box-shadow: 0 3px 14px rgba(0,0,0,.5);
+    }
+    .pr-close:hover { background: rgba(255,255,255,.28); transform: scale(1.08); }
+
+    /* Floating control bar — bottom-center */
+    #pr-controls {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10200;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(18,18,30,.88);
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 40px;
+      padding: 8px 16px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 6px 28px rgba(0,0,0,.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+      white-space: nowrap;
+    }
+    #pr-controls.pr-ctrl-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .pr-ctrl-label {
+      font-size: .68rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: 0 2px;
+    }
+    .pr-ctrl-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      font-size: .95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .16s, transform .15s;
+      flex-shrink: 0;
+    }
+    .pr-ctrl-btn:hover  { background: rgba(99,102,241,.45); transform: scale(1.12); }
+    .pr-ctrl-btn:active { transform: scale(.93); }
+    .pr-ctrl-sep {
+      width: 1px;
+      height: 22px;
+      background: rgba(255,255,255,.16);
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* Sticky image / video block */
+    #pr-img-wrap {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #07070f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,.75);
+      transition: height .38s cubic-bezier(.4,0,.2,1);
+      cursor: pointer;
+    }
+    #pr-img-wrap.pr-no-media { display: none; }
+    #pr-img-wrap img,
+    #pr-img-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: opacity .2s;
+    }
+
+    /* Tap-to-expand hint badge */
+    #pr-img-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.6);
+      color: rgba(255,255,255,.75);
+      font-size: .67rem;
+      padding: 3px 12px;
+      border-radius: 20px;
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: .04em;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    #pr-img-wrap.pr-shrunk #pr-img-hint { opacity: 1; }
+
+    /* Reading body */
+    #pr-body {
+      padding: 22px 20px 130px;
+      max-width: 740px;
+      width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    #pr-meta {
+      font-size: .7rem;
+      color: rgba(255,255,255,.35);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin: 0 0 14px;
+    }
+    #pr-caption-text {
+      font-size: 1rem;
+      line-height: 1.78;
+      color: #e2e4eb;
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition: font-size .18s ease;
+    }
+    #pr-caption-text a { color: #818cf8; word-break: break-all; }
+
+    @media (max-width: 600px) {
+      #pr-body { padding: 18px 16px 130px; }
+    }
   </style>
   <script>
     if ("serviceWorker" in navigator) {
@@ -1280,7 +1462,7 @@
           <div class="project-caption-outer">
             <p class="project-caption" id="caption-${p.id}"
                data-words="${escHtml(p.caption)}" data-shown="30">${formatCaptionWords(p.caption, 30)}</p>
-            <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="toggleCaption('${p.id}')" style="display:none;">More</button>
+            <button class="caption-toggle" id="caption-toggle-${p.id}" onclick="openPostReader('${p.id}', '${escHtml(p.file_url)}', '${escHtml(p.file_type || 'image')}', '${escHtml(fmt(p.created_at))}')" style="display:none;font-weight:700;">More</button>
           </div>
         </div>
         <div class="project-actions">
@@ -1320,20 +1502,171 @@
       }
     }
 
-    /* Progressive caption reveal — 30 words at a time */
-    function toggleCaption(id) {
-      const cap = document.getElementById('caption-' + id);
-      const btn = document.getElementById('caption-toggle-' + id);
-      if (!cap || !btn) return;
-      const raw   = cap.dataset.words || '';
-      const words = raw.trim().split(/\s+/);
-      let shown   = parseInt(cap.dataset.shown) || 30;
-      shown       = Math.min(shown + 30, words.length);
-      cap.dataset.shown = shown;
-      cap.innerHTML = formatCaptionWords(raw, shown);
-      if (shown >= words.length) {
-        btn.style.display = 'none';
+    /* ═══════════════════════════════════════════════
+       Post Reader — full-screen view opened by "more"
+    ═══════════════════════════════════════════════ */
+    let prCurrentFontSize = 1.0;  // rem
+    const PR_FONT_MIN = 0.78;
+    const PR_FONT_MAX = 1.6;
+    const PR_FONT_STEP = 0.1;
+
+    let prCurrentImgScale = 1.0;  // 1.0 = natural full size, clamped 0.5–1.5
+    const PR_IMG_MIN = 0.5;
+    const PR_IMG_MAX = 1.5;
+    const PR_IMG_STEP = 0.1;
+
+    /* State: is image currently in full (tall) mode vs shrunk (1/3) mode */
+    let prImageIsShrunk = false;
+
+    function openPostReader(id, fileUrl, fileType, dateStr) {
+      const reader = document.getElementById('post-reader');
+      if (!reader) return;
+
+      const rawCaption = captionStore[id] || '';
+      const imgWrap    = document.getElementById('pr-img-wrap');
+      const imgEl      = document.getElementById('pr-img');
+      const videoEl    = document.getElementById('pr-video');
+      const capEl      = document.getElementById('pr-caption-text');
+      const metaEl     = document.getElementById('pr-meta');
+
+      /* Reset state */
+      prImageIsShrunk = false;
+      prCurrentFontSize = 1.0;
+      prCurrentImgScale = 1.0;
+      reader.scrollTop = 0;
+      reader.classList.remove('pr-scrolled');
+      imgWrap.classList.remove('pr-shrunk');
+      _prSetImgHeight(false);
+
+      /* Fill caption */
+      capEl.innerHTML = formatCaption(rawCaption);
+      capEl.style.fontSize = prCurrentFontSize + 'rem';
+      if (metaEl) metaEl.textContent = dateStr || '';
+
+      /* Fill media */
+      imgEl.style.display  = 'none';
+      videoEl.style.display = 'none';
+      imgEl.src  = '';
+      videoEl.src = '';
+
+      const hasMedia = fileUrl && fileUrl !== 'undefined' && fileUrl !== '';
+      if (!hasMedia) {
+        imgWrap.classList.add('pr-no-media');
+      } else {
+        imgWrap.classList.remove('pr-no-media');
+        if (fileType === 'video') {
+          videoEl.src = fileUrl.includes('#') ? fileUrl : fileUrl + '#t=0.001';
+          videoEl.style.display = 'block';
+        } else {
+          imgEl.src = fileUrl;
+          imgEl.style.display = 'block';
+        }
       }
+
+      /* Show controls in full-image mode initially (image controls) */
+      _prUpdateControls();
+
+      reader.classList.add('pr-active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePostReader() {
+      const reader = document.getElementById('post-reader');
+      if (!reader) return;
+      reader.classList.remove('pr-active');
+      document.body.style.overflow = '';
+      /* Pause video if playing */
+      const videoEl = document.getElementById('pr-video');
+      if (videoEl) { videoEl.pause(); videoEl.src = ''; }
+      const imgEl = document.getElementById('pr-img');
+      if (imgEl) imgEl.src = '';
+    }
+
+    /* Set image container height based on shrunk/expanded state and scale */
+    function _prSetImgHeight(shrunk) {
+      const imgWrap = document.getElementById('pr-img-wrap');
+      const reader  = document.getElementById('post-reader');
+      if (!imgWrap || !reader) return;
+
+      const vh = window.innerHeight;
+      if (shrunk) {
+        /* 1/3 of screen height, adjusted by scale */
+        const base = Math.round(vh * 0.333);
+        const scaled = Math.round(base * prCurrentImgScale);
+        imgWrap.style.height = Math.max(80, scaled) + 'px';
+        imgWrap.classList.add('pr-shrunk');
+        reader.classList.add('pr-scrolled');
+      } else {
+        /* Full size — up to 80vh, adjusted by scale */
+        const base = Math.round(vh * 0.78);
+        const scaled = Math.round(base * prCurrentImgScale);
+        imgWrap.style.height = Math.min(scaled, Math.round(vh * 0.95)) + 'px';
+        imgWrap.classList.remove('pr-shrunk');
+        reader.classList.remove('pr-scrolled');
+      }
+    }
+
+    /* Show the correct control bar: font controls in reading mode, image controls in full mode */
+    function _prUpdateControls() {
+      const fontCtrl = document.getElementById('pr-font-controls');
+      const imgCtrl  = document.getElementById('pr-img-controls');
+      const controls = document.getElementById('pr-controls');
+      const sep      = document.getElementById('pr-ctrl-sep');
+      if (!fontCtrl || !imgCtrl || !controls) return;
+
+      const hasMedia = !document.getElementById('pr-img-wrap').classList.contains('pr-no-media');
+
+      if (prImageIsShrunk) {
+        /* Reading mode — show font controls */
+        fontCtrl.style.display = 'flex';
+        imgCtrl.style.display  = hasMedia ? 'flex' : 'none';
+        if (sep) sep.style.display = hasMedia ? 'block' : 'none';
+        controls.classList.add('pr-ctrl-visible');
+      } else {
+        /* Full image mode — show image size controls only if media present */
+        fontCtrl.style.display = 'none';
+        imgCtrl.style.display  = hasMedia ? 'flex' : 'none';
+        if (sep) sep.style.display = 'none';
+        
+        /* Show controls only when there's media to resize */
+        if (hasMedia) controls.classList.add('pr-ctrl-visible');
+        else controls.classList.remove('pr-ctrl-visible');
+      }
+    }
+
+    window.prFontIncrease = function() {
+      prCurrentFontSize = Math.min(PR_FONT_MAX, +(prCurrentFontSize + PR_FONT_STEP).toFixed(2));
+      const capEl = document.getElementById('pr-caption-text');
+      if (capEl) capEl.style.fontSize = prCurrentFontSize + 'rem';
+    };
+    window.prFontDecrease = function() {
+      prCurrentFontSize = Math.max(PR_FONT_MIN, +(prCurrentFontSize - PR_FONT_STEP).toFixed(2));
+      const capEl = document.getElementById('pr-caption-text');
+      if (capEl) capEl.style.fontSize = prCurrentFontSize + 'rem';
+    };
+    window.prImgIncrease = function() {
+      prCurrentImgScale = Math.min(PR_IMG_MAX, +(prCurrentImgScale + PR_IMG_STEP).toFixed(2));
+      _prSetImgHeight(prImageIsShrunk);
+    };
+    window.prImgDecrease = function() {
+      prCurrentImgScale = Math.max(PR_IMG_MIN, +(prCurrentImgScale - PR_IMG_STEP).toFixed(2));
+      _prSetImgHeight(prImageIsShrunk);
+    };
+
+    /* Tap image to toggle between full and shrunk */
+    window.prToggleImgSize = function() {
+      prImageIsShrunk = !prImageIsShrunk;
+      _prSetImgHeight(prImageIsShrunk);
+      _prUpdateControls();
+      /* If expanding, scroll reader back to top */
+      if (!prImageIsShrunk) {
+        document.getElementById('post-reader').scrollTop = 0;
+      }
+    };
+    
+    /* Progressive caption reveal fallback */
+    function toggleCaption(id) {
+        // Fallback placeholder (no longer used since button opens Post Reader)
     }
 
     function initCaptionToggles() {
@@ -1806,6 +2139,24 @@
       document.addEventListener('click', () => {
         document.querySelectorAll('.date-overlay.visible').forEach(el => el.classList.remove('visible'));
       });
+
+      /* Post-reader scroll → shrink image */
+      const postReader = document.getElementById('post-reader');
+      if (postReader) {
+        postReader.addEventListener('scroll', function() {
+          if (!this.classList.contains('pr-active')) return;
+          const body = document.getElementById('pr-body');
+          if (!body) return;
+          const rect = body.getBoundingClientRect();
+          /* Trigger shrink when reading body top enters upper 40% of viewport */
+          const shouldShrink = rect.top < window.innerHeight * 0.4;
+          if (shouldShrink !== prImageIsShrunk) {
+            prImageIsShrunk = shouldShrink;
+            _prSetImgHeight(prImageIsShrunk);
+            _prUpdateControls();
+          }
+        }, { passive: true });
+      }
     });
   </script>
   <!-- WhatsApp Floating Button -->
@@ -1829,6 +2180,58 @@
         <p class="lb-caption" id="lb-caption"></p>
       </div>
     </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ 
+       Post Reader — Full-Screen Reader Overlay 
+       (opened by "More" button on post) 
+  ═══════════════════════════════════════════════ -->
+  <div id="post-reader" role="dialog" aria-modal="true" aria-label="Post reader">
+
+    <!-- Close button -->
+    <button class="pr-close" onclick="closePostReader()" aria-label="Close post reader">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <!-- Image / Video block (sticky) -->
+    <div class="pr-img-wrap" id="pr-img-wrap" onclick="prToggleImgSize()">
+      <img id="pr-img" src="" alt="" />
+      <video id="pr-video" controls playsinline preload="metadata" style="display:none;"></video>
+      <span class="pr-img-hint" id="pr-img-hint">Tap to expand image</span>
+    </div>
+
+    <!-- Text body -->
+    <div class="pr-body" id="pr-body">
+      <p class="pr-meta" id="pr-meta"></p>
+      <p class="pr-caption-text" id="pr-caption-text"></p>
+    </div>
+
+    <!-- Floating controls bar -->
+    <div id="pr-controls">
+      <!-- Image size controls (visible in full-image mode) -->
+      <div id="pr-img-controls" style="display:flex;align-items:center;gap:6px;">
+        <span class="pr-ctrl-label"><i class="fas fa-image" style="font-size:.7rem;"></i></span>
+        <button class="pr-ctrl-btn" onclick="prImgDecrease()" title="Shrink image" aria-label="Decrease image size">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button class="pr-ctrl-btn" onclick="prImgIncrease()" title="Enlarge image" aria-label="Increase image size">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <!-- Separator (shown when both groups visible) -->
+      <div class="pr-ctrl-sep" id="pr-ctrl-sep"></div>
+      <!-- Font size controls (visible in reading/shrunk mode) -->
+      <div id="pr-font-controls" style="display:none;align-items:center;gap:6px;">
+        <span class="pr-ctrl-label"><i class="fas fa-font" style="font-size:.7rem;"></i></span>
+        <button class="pr-ctrl-btn" onclick="prFontDecrease()" title="Decrease font size" aria-label="Decrease font size">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button class="pr-ctrl-btn" onclick="prFontIncrease()" title="Increase font size" aria-label="Increase font size">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <script>
