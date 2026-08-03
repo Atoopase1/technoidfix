@@ -393,10 +393,7 @@
       border: 1px solid #2a2a3a !important;
     }
 
-    /* ═══════════════════════════════════════════════
-       Post Reader — Full-Screen Overlay
-       Opens when tapping "More" on a long post caption
-    ═══════════════════════════════════════════════ */
+    /* Post Reader overlay — full-screen dark background */
     #post-reader {
       position: fixed;
       inset: 0;
@@ -404,8 +401,7 @@
       background: #07070f;
       display: none;
       flex-direction: column;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;     /* reader itself doesn't scroll — inner container does */
       opacity: 0;
       transition: opacity .25s ease;
     }
@@ -453,13 +449,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(18,18,30,.88);
+      background: rgba(18,18,30,.92);
       border: 1px solid rgba(255,255,255,.13);
       border-radius: 40px;
       padding: 8px 16px;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 6px 28px rgba(0,0,0,.6);
+      box-shadow: 0 6px 28px rgba(0,0,0,.65);
       opacity: 0;
       pointer-events: none;
       transition: opacity .25s ease;
@@ -478,13 +474,13 @@
       padding: 0 2px;
     }
     .pr-ctrl-btn {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       border: none;
       background: rgba(255,255,255,.1);
       color: #fff;
-      font-size: .95rem;
+      font-size: 1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -492,8 +488,8 @@
       transition: background .16s, transform .15s;
       flex-shrink: 0;
     }
-    .pr-ctrl-btn:hover  { background: rgba(99,102,241,.45); transform: scale(1.12); }
-    .pr-ctrl-btn:active { transform: scale(.93); }
+    .pr-ctrl-btn:hover  { background: rgba(99,102,241,.5); transform: scale(1.12); }
+    .pr-ctrl-btn:active { transform: scale(.9); }
     .pr-ctrl-sep {
       width: 1px;
       height: 22px;
@@ -502,21 +498,19 @@
       flex-shrink: 0;
     }
 
-    /* Sticky image / video block */
+    /* Image block — normal flow at top, transitions height */
     #pr-img-wrap {
-      position: fixed;
-      left: 0;
-      right: 0;
-      top: 0;
-      z-index: 50;
+      flex-shrink: 0;
+      width: 100%;
       background: #07070f;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0,0,0,.75);
-      transition: height .38s cubic-bezier(.4,0,.2,1);
+      transition: height .35s cubic-bezier(.4,0,.2,1);
       cursor: pointer;
+      position: relative;
     }
     #pr-img-wrap.pr-no-media { display: none; }
     #pr-img-wrap img,
@@ -525,29 +519,16 @@
       height: 100%;
       object-fit: contain;
       display: block;
-      transition: opacity .2s;
     }
 
-    /* Tap-to-expand hint badge */
-    #pr-img-hint {
-      position: absolute;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.6);
-      color: rgba(255,255,255,.75);
-      font-size: .67rem;
-      padding: 3px 12px;
-      border-radius: 20px;
-      pointer-events: none;
-      white-space: nowrap;
-      letter-spacing: .04em;
-      opacity: 0;
-      transition: opacity .3s;
+    /* Scrollable text area — grows to fill remaining space */
+    #pr-scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    #pr-img-wrap.pr-shrunk #pr-img-hint { opacity: 1; }
 
-    /* Reading body */
+    /* Reading body inside scroll container */
     #pr-body {
       padding: 22px 20px 130px;
       max-width: 740px;
@@ -571,6 +552,25 @@
       transition: font-size .18s ease;
     }
     #pr-caption-text a { color: #818cf8; word-break: break-all; }
+
+    /* Tap-to-expand hint badge */
+    #pr-img-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.6);
+      color: rgba(255,255,255,.75);
+      font-size: .67rem;
+      padding: 3px 12px;
+      border-radius: 20px;
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: .04em;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    #pr-img-wrap.pr-shrunk #pr-img-hint { opacity: 1; }
 
     @media (max-width: 600px) {
       #pr-body { padding: 18px 16px 130px; }
@@ -1084,12 +1084,12 @@
         tapMap[id] = setTimeout(() => {
           tapMap[id] = null;
 
-          /* Look for a link inside the caption */
-          const captionEl = document.getElementById('caption-' + id);
-          const firstLink = captionEl ? captionEl.querySelector('a') : null;
+          /* Extract first URL from the RAW (full) caption, not the truncated DOM element */
+          const rawCaption = captionStore[id] || '';
+          const urlMatch = rawCaption.match(/(https?:\/\/[^\s<&"]+)/);
 
-          if (firstLink && firstLink.href) {
-            window.open(firstLink.href, '_blank', 'noopener,noreferrer');
+          if (urlMatch && urlMatch[1]) {
+            window.open(urlMatch[1], '_blank', 'noopener,noreferrer');
           } else {
             /* Show the date overlay */
             const overlay = document.getElementById('date-overlay-' + id);
@@ -1521,7 +1521,7 @@
     let prLastScrollTop = 0;
 
     function openPostReader(id, fileUrl, fileType, dateStr) {
-      const reader = document.getElementById('post-reader');
+      const reader     = document.getElementById('post-reader');
       if (!reader) return;
 
       const rawCaption = captionStore[id] || '';
@@ -1533,14 +1533,13 @@
 
       /* Reset state */
       prImageIsShrunk = false;
-      prManualExpand = false;
+      prManualExpand  = false;
       prLastScrollTop = 0;
       prCurrentFontSize = 1.0;
       prCurrentImgScale = 1.0;
-      reader.scrollTop = 0;
-      reader.classList.remove('pr-scrolled');
+      const scrollBody = document.getElementById('pr-scroll-body');
+      if (scrollBody) scrollBody.scrollTop = 0;
       imgWrap.classList.remove('pr-shrunk');
-      _prSetImgHeight(false);
 
       /* Fill caption */
       capEl.innerHTML = formatCaption(rawCaption);
@@ -1548,22 +1547,16 @@
       if (metaEl) metaEl.textContent = dateStr || '';
 
       /* Fill media */
-      imgEl.style.display  = 'none';
+      imgEl.style.display   = 'none';
       videoEl.style.display = 'none';
       imgEl.src  = '';
       videoEl.src = '';
 
       const hasMedia = fileUrl && fileUrl !== 'undefined' && fileUrl !== '';
-      const bodyEl = document.getElementById('pr-body');
       if (!hasMedia) {
         imgWrap.classList.add('pr-no-media');
-        if (bodyEl) bodyEl.style.marginTop = '0px';
       } else {
         imgWrap.classList.remove('pr-no-media');
-        if (bodyEl) {
-          const baseHeight = Math.round(window.innerHeight * 0.78);
-          bodyEl.style.marginTop = baseHeight + 'px';
-        }
         if (fileType === 'video') {
           videoEl.src = fileUrl.includes('#') ? fileUrl : fileUrl + '#t=0.001';
           videoEl.style.display = 'block';
@@ -1573,7 +1566,8 @@
         }
       }
 
-      /* Show controls in full-image mode initially (image controls) */
+      /* Set initial height then show controls */
+      _prSetImgHeight(false);
       _prUpdateControls();
 
       reader.classList.add('pr-active');
@@ -1595,24 +1589,21 @@
     /* Set image container height based on shrunk/expanded state and scale */
     function _prSetImgHeight(shrunk) {
       const imgWrap = document.getElementById('pr-img-wrap');
-      const reader  = document.getElementById('post-reader');
-      if (!imgWrap || !reader) return;
+      if (!imgWrap) return;
 
       const vh = window.innerHeight;
       if (shrunk) {
-        /* 1/3 of screen height, adjusted by scale */
-        const base = Math.round(vh * 0.333);
+        /* Exactly 1/3 of screen height, adjusted by user scale */
+        const base   = Math.round(vh / 3);
         const scaled = Math.round(base * prCurrentImgScale);
         imgWrap.style.height = Math.max(80, scaled) + 'px';
         imgWrap.classList.add('pr-shrunk');
-        reader.classList.add('pr-scrolled');
       } else {
-        /* Full size — up to 80vh, adjusted by scale */
-        const base = Math.round(vh * 0.78);
+        /* Full size — 78% of viewport height, adjusted by user scale */
+        const base   = Math.round(vh * 0.78);
         const scaled = Math.round(base * prCurrentImgScale);
         imgWrap.style.height = Math.min(scaled, Math.round(vh * 0.95)) + 'px';
         imgWrap.classList.remove('pr-shrunk');
-        reader.classList.remove('pr-scrolled');
       }
     }
 
@@ -2149,28 +2140,27 @@
 
       /* Post-reader scroll → shrink image */
       const postReader = document.getElementById('post-reader');
-      if (postReader) {
-        postReader.addEventListener('scroll', function() {
-          if (!this.classList.contains('pr-active')) return;
-          
+      const prScrollBody = document.getElementById('pr-scroll-body');
+      if (prScrollBody) {
+        prScrollBody.addEventListener('scroll', function() {
+          if (!postReader.classList.contains('pr-active')) return;
           const currentScroll = this.scrollTop;
-          
-          // If manually expanded, any new scroll action should shrink it again
-          if (prManualExpand && Math.abs(currentScroll - prLastScrollTop) > 5) {
-            prManualExpand = false;
+
+          if (prManualExpand && Math.abs(currentScroll - prLastScrollTop) > 8) {
+            /* User scrolled after manually expanding → shrink again */
+            prManualExpand  = false;
             prImageIsShrunk = true;
             _prSetImgHeight(true);
             _prUpdateControls();
-          } else {
-             // Normal scroll logic
-             const shouldShrink = currentScroll > 50;
-             if (shouldShrink !== prImageIsShrunk && !prManualExpand) {
-               prImageIsShrunk = shouldShrink;
-               _prSetImgHeight(prImageIsShrunk);
-               _prUpdateControls();
-             }
+          } else if (!prManualExpand) {
+            const shouldShrink = currentScroll > 40;
+            if (shouldShrink !== prImageIsShrunk) {
+              prImageIsShrunk = shouldShrink;
+              _prSetImgHeight(prImageIsShrunk);
+              _prUpdateControls();
+            }
           }
-          
+
           prLastScrollTop = currentScroll;
         }, { passive: true });
       }
@@ -2210,17 +2200,19 @@
       <i class="fas fa-times"></i>
     </button>
 
-    <!-- Image / Video block (sticky) -->
-    <div class="pr-img-wrap" id="pr-img-wrap" onclick="prToggleImgSize()">
+    <!-- Image / Video block (flex child, transitions height, sits at top) -->
+    <div id="pr-img-wrap" onclick="prToggleImgSize()">
       <img id="pr-img" src="" alt="" />
       <video id="pr-video" controls playsinline preload="metadata" style="display:none;"></video>
-      <span class="pr-img-hint" id="pr-img-hint">Tap to expand image</span>
+      <span id="pr-img-hint">Tap to expand</span>
     </div>
 
-    <!-- Text body -->
-    <div class="pr-body" id="pr-body">
-      <p class="pr-meta" id="pr-meta"></p>
-      <p class="pr-caption-text" id="pr-caption-text"></p>
+    <!-- Scrollable reading area fills remaining height -->
+    <div id="pr-scroll-body">
+      <div id="pr-body">
+        <p id="pr-meta"></p>
+        <p id="pr-caption-text"></p>
+      </div>
     </div>
 
     <!-- Floating controls bar -->
@@ -2252,9 +2244,12 @@
   </div>
 
   <script>
-    /* Keyboard close for lightbox */
+    /* Keyboard close for lightbox and post reader */
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape') {
+        closeLightbox();
+        closePostReader();
+      }
     });
   </script>
 
