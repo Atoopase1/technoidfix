@@ -290,3 +290,17 @@ window.toast = function(msg, type) {
     if (modal && e.target === modal) modal.style.display = 'none';
   });
 })();
+
+// Global Preloader logic
+window.addEventListener('load', () => {
+  const loader = document.getElementById('global-loader');
+  if (loader) {
+    // Add a tiny delay so the beautiful animation is seen even on fast connections
+    setTimeout(() => {
+      loader.classList.add('tf-fade-out');
+      setTimeout(() => {
+        loader.remove(); // Remove from DOM after fade out
+      }, 800); // Matches CSS transition duration
+    }, 400); 
+  }
+});
