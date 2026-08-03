@@ -55,7 +55,8 @@ window.toggleTheme = function() {
 
 // Nav active state
 (function highlightNav() {
-  const page = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+  let page = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+  if (location.pathname.includes('/electrical-estimator')) page = 'estimator';
   document.querySelectorAll('header.nav a[data-page]').forEach(a => {
     const match = a.getAttribute('data-page');
     if ((page === 'index' && match === 'home') || match === page) a.classList.add('active');
