@@ -32,55 +32,35 @@
 
 <body>
   <!-- Page Transition Loader -->
-  <style id="tf-loader-style">
-    #tf-nav-loader{position:fixed;inset:0;z-index:9999999;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease;}
-    #tf-nav-loader.tf-out{opacity:0!important;visibility:hidden!important;}
+  <div id="tf-nav-loader" style="position:fixed;inset:0;z-index:9999999;background:#f8fafc;display:flex;align-items:center;justify-content:center;opacity:1;visibility:visible;transition:opacity .6s ease,visibility .6s ease;">
+    <div style="position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;top:50%;left:50%;width:100px;height:100px;margin:-50px 0 0 -50px;border-radius:50%;border:3px solid transparent;border-top-color:#0088CC;border-bottom-color:rgba(0,136,204,.15);animation:tfOS 1.4s linear infinite;"></div>
+      <div style="position:absolute;top:50%;left:50%;width:126px;height:126px;margin:-63px 0 0 -63px;border-radius:50%;border:3px solid transparent;border-right-color:#F59E0B;border-left-color:rgba(245,158,11,.12);animation:tfOR 2.0s linear infinite;"></div>
+      <img src="assets/icon-192.png" alt="" style="width:58px;height:58px;object-fit:contain;position:relative;z-index:2;animation:tfLP 1.6s cubic-bezier(.65,0,.35,1) infinite alternate;" />
+    </div>
+  </div>
+  <style>
     @keyframes tfOS{to{transform:rotate(360deg)}}
     @keyframes tfOR{to{transform:rotate(-360deg)}}
-    @keyframes tfLP{
-      0%  {transform:scale(.86);filter:drop-shadow(0 0 0 rgba(0,136,204,0));}
-      100%{transform:scale(1.12);filter:drop-shadow(0 0 16px rgba(0,136,204,.5));}
-    }
+    @keyframes tfLP{0%{transform:scale(.86);filter:drop-shadow(0 0 0 rgba(0,136,204,0))}100%{transform:scale(1.12);filter:drop-shadow(0 0 16px rgba(0,136,204,.5))}}
   </style>
   <script>
-    /* Loader: run before anything else so bg is correct */
+    /* Fix dark mode bg + hide loader after page loads */
     (function(){
-      var isDark = localStorage.getItem('technoid-theme')==='dark';
-      var bg = isDark ? '#0a0a0f' : '#f8fafc';
-      var d = document.createElement('div');
-      d.id = 'tf-nav-loader';
-      d.style.cssText = 'background:' + bg + ';opacity:1;visibility:visible;';
-      d.innerHTML = '<div style="position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;">'
-        + '<div style="position:absolute;top:50%;left:50%;width:100px;height:100px;margin:-50px 0 0 -50px;border-radius:50%;border:3px solid transparent;border-top-color:#0088CC;border-bottom-color:rgba(0,136,204,.15);animation:tfOS 1.4s linear infinite;"></div>'
-        + '<div style="position:absolute;top:50%;left:50%;width:126px;height:126px;margin:-63px 0 0 -63px;border-radius:50%;border:3px solid transparent;border-right-color:#F59E0B;border-left-color:rgba(245,158,11,.12);animation:tfOR 2.0s linear infinite;"></div>'
-        + '<img src="assets/icon-192.png" alt="" style="width:58px;height:58px;object-fit:contain;position:relative;z-index:2;animation:tfLP 1.6s cubic-bezier(.65,0,.35,1) infinite alternate;" />'
-        + '</div>';
-      /* Insert as first child of <body> as soon as possible */
-      var ins = function(){ if(document.body) document.body.insertBefore(d, document.body.firstChild); };
-      if(document.body) ins(); else document.addEventListener('DOMContentLoaded', ins);
-
-      /* Hide with guaranteed minimum display time of 700ms */
-      var shown = Date.now();
-      var MIN = 700;
-      var hidden = false;
+      var l=document.getElementById('tf-nav-loader');
+      if(l && localStorage.getItem('technoid-theme')==='dark') l.style.background='#0a0a0f';
+      var shown=Date.now(), MIN=700, done=false;
       function hide(){
-        if(hidden) return;
-        hidden = true;
-        var elapsed = Date.now() - shown;
-        var delay = Math.max(0, MIN - elapsed);
+        if(done)return; done=true;
+        var wait=Math.max(0,MIN-(Date.now()-shown));
         setTimeout(function(){
-          d.classList.add('tf-out');
-          setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 650);
-        }, delay);
+          var el=document.getElementById('tf-nav-loader');
+          if(el){el.style.opacity='0';el.style.visibility='hidden';setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},650);}
+        },wait);
       }
-      /* Hide on load — works for all scenarios including PWA/offline */
-      if(document.readyState === 'complete'){ hide(); }
-      else {
-        document.addEventListener('DOMContentLoaded', hide);
-        window.addEventListener('load', hide);
-      }
-      /* Absolute safety net: hide after 6s no matter what */
-      setTimeout(hide, 6000);
+      if(document.readyState==='complete'){hide();}
+      else{document.addEventListener('DOMContentLoaded',hide);window.addEventListener('load',hide);}
+      setTimeout(hide,6000);
     })();
   </script>
   
