@@ -447,6 +447,26 @@
 </head>
 
 <body>
+  <!-- Page Transition Loader -->
+  <div id="tf-nav-loader" style="position:fixed;inset:0;z-index:9999999;background:inherit;display:flex;align-items:center;justify-content:center;opacity:1;visibility:visible;transition:opacity .5s ease,visibility .5s ease;">
+    <div style="position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;top:50%;left:50%;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;border:2.5px solid transparent;border-top-color:#0088CC;border-bottom-color:rgba(0,136,204,.15);animation:tfOS 1.5s linear infinite;"></div>
+      <div style="position:absolute;top:50%;left:50%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:2.5px solid transparent;border-right-color:#F59E0B;border-left-color:rgba(245,158,11,.12);animation:tfOR 2.2s linear infinite;"></div>
+      <img src="assets/icon-192.png" alt="" style="width:54px;height:54px;object-fit:contain;position:relative;z-index:2;animation:tfLP 1.6s cubic-bezier(.65,0,.35,1) infinite alternate;" />
+    </div>
+  </div>
+  <style>
+    @keyframes tfOS{to{transform:rotate(360deg)}}
+    @keyframes tfOR{to{transform:rotate(-360deg)}}
+    @keyframes tfLP{0%{transform:scale(.88);filter:drop-shadow(0 0 0 rgba(0,136,204,0))}100%{transform:scale(1.1);filter:drop-shadow(0 0 14px rgba(0,136,204,.45))}}
+  </style>
+  <script>
+    (function(){
+      function hide(){var l=document.getElementById('tf-nav-loader');if(l){l.style.opacity='0';l.style.visibility='hidden';setTimeout(function(){if(l.parentNode)l.parentNode.removeChild(l);},500);}}
+      if(document.readyState==='complete'){setTimeout(hide,200);}
+      else{window.addEventListener('load',function(){setTimeout(hide,200);});}
+    })();
+  </script>
   
 
   <!-- Navigation -->
