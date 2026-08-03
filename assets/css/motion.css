@@ -1,0 +1,526 @@
+/* ═══════════════════════════════════════════════════════════════
+   TECHNOID — Motion & Micro-Interaction Design System
+   motion.css  |  Does NOT override layout or colour, only motion
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 0. Respect reduced-motion preference ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* ── 1. Global easing tokens ─────────────────────────────────── */
+:root {
+  --ease-out-expo  : cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-back  : cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out    : cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring    : cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --dur-fast       : 160ms;
+  --dur-base       : 280ms;
+  --dur-slow       : 500ms;
+}
+
+/* ── 2. Page entrance — fade + lift ─────────────────────────── */
+@keyframes tfPageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+body {
+  animation: tfPageIn var(--dur-slow) var(--ease-out-expo) both;
+}
+
+/* ── 3. Scroll-reveal — elements animate in when visible ─────── */
+/*  JS in motion.js adds .tf-reveal to elements, then .is-visible  */
+.tf-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-slow) var(--ease-out-expo),
+              transform var(--dur-slow) var(--ease-out-expo);
+}
+.tf-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* Staggered children delay */
+.tf-reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--dur-slow) var(--ease-out-expo),
+              transform var(--dur-slow) var(--ease-out-expo);
+}
+.tf-reveal-stagger.is-visible > *:nth-child(1)  { opacity:1; transform:none; transition-delay:  0ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(2)  { opacity:1; transform:none; transition-delay: 80ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(3)  { opacity:1; transform:none; transition-delay:160ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(4)  { opacity:1; transform:none; transition-delay:240ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(5)  { opacity:1; transform:none; transition-delay:320ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(6)  { opacity:1; transform:none; transition-delay:400ms; }
+.tf-reveal-stagger.is-visible > *:nth-child(n+7){ opacity:1; transform:none; transition-delay:480ms; }
+
+/* ── 4. Navigation ───────────────────────────────────────────── */
+/* Smooth underline slide on nav links */
+.nav-inline a,
+.nav nav a {
+  position: relative;
+}
+.nav-inline a::after,
+.nav nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  width: 0; height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: width var(--dur-fast) var(--ease-out-expo),
+              left   var(--dur-fast) var(--ease-out-expo);
+}
+.nav-inline a:hover::after,
+.nav nav a:hover::after {
+  width: 60%;
+  left: 20%;
+}
+.nav-inline a.active::after,
+.nav nav a.active::after {
+  width: 60%;
+  left: 20%;
+}
+
+/* Logo subtle float */
+@keyframes tfLogoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
+}
+.nav-logo:hover .brand-img {
+  animation: tfLogoFloat 1.8s var(--ease-in-out) infinite;
+}
+.nav-logo {
+  transition: opacity var(--dur-fast);
+}
+.nav-logo:active { opacity: 0.7; }
+
+/* Hamburger bar morph (existing span anim, just smoothed) */
+.nav-hamburger span {
+  transition: transform 260ms var(--ease-out-back),
+              opacity   180ms ease,
+              background 160ms ease !important;
+}
+
+/* Theme toggle icon spin on click — class added by JS */
+.theme-toggle.tf-spin i {
+  animation: tfSpin 360ms var(--ease-out-expo);
+}
+@keyframes tfSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── 5. Buttons — press feedback + glow ─────────────────────── */
+.btn {
+  transition: transform  var(--dur-fast) var(--ease-out-back),
+              box-shadow var(--dur-fast) ease,
+              filter     var(--dur-fast) ease,
+              background var(--dur-base) ease !important;
+  will-change: transform;
+}
+.btn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 6px 20px rgba(0, 136, 204, .28) !important;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.97) !important;
+  box-shadow: 0 2px 6px rgba(0, 136, 204, .18) !important;
+  transition-duration: 80ms !important;
+}
+
+/* Ripple on click — injected by JS */
+.btn {
+  overflow: hidden;
+}
+.tf-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255, 255, 255, 0.35);
+  animation: tfRippleAnim 550ms linear;
+  pointer-events: none;
+}
+@keyframes tfRippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* btn-light specific hover */
+.btn-light:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.08) !important;
+}
+
+/* ── 6. Cards — lift + border-glow ──────────────────────────── */
+.card,
+.testi-card,
+.case-study {
+  transition: transform  var(--dur-base) var(--ease-out-expo),
+              box-shadow var(--dur-base) var(--ease-out-expo),
+              border-color var(--dur-base) ease !important;
+  will-change: transform;
+}
+.card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 16px 40px rgba(0,136,204,.13) !important;
+  border-color: rgba(0,136,204,.3) !important;
+}
+.testi-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.10) !important;
+}
+
+/* Card icon bounce on card hover */
+.card:hover .card-icon,
+.card:hover .card-icon i {
+  animation: tfIconBounce 500ms var(--ease-out-back);
+}
+@keyframes tfIconBounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22) rotate(-6deg); }
+  70%  { transform: scale(0.95) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ── 7. Footer social icons ──────────────────────────────────── */
+.footer-socials a {
+  transition: transform  var(--dur-fast) var(--ease-out-back),
+              box-shadow var(--dur-fast) ease,
+              background var(--dur-fast) ease !important;
+}
+.footer-socials a:hover {
+  transform: translateY(-4px) scale(1.15) !important;
+  box-shadow: 0 8px 20px rgba(0,136,204,.25) !important;
+}
+.footer-socials a:active {
+  transform: scale(0.9) !important;
+  transition-duration: 80ms !important;
+}
+
+/* Footer links slide-right */
+.footer-links a,
+.footer-explore a,
+.footer-contact-item a {
+  transition: color       var(--dur-fast) ease,
+              transform   var(--dur-fast) var(--ease-out-expo),
+              padding-left var(--dur-fast) var(--ease-out-expo) !important;
+}
+.footer-links a:hover,
+.footer-explore a:hover {
+  padding-left: 6px !important;
+}
+
+/* Footer status dot pulse */
+.footer-status-dot {
+  animation: tfPulse 2.4s ease infinite;
+}
+@keyframes tfPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); }
+  50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+
+/* ── 8. Project / post cards in services.html ───────────────── */
+/* Media inside post cards */
+.card img,
+.card video {
+  transition: transform var(--dur-slow) var(--ease-out-expo) !important;
+}
+.card:hover img,
+.card:hover video {
+  transform: scale(1.04) !important;
+}
+
+/* "More" / action buttons on post cards */
+.card .btn,
+.card button {
+  transition: opacity     var(--dur-fast) ease,
+              transform   var(--dur-fast) var(--ease-out-back) !important;
+}
+.card:hover .btn,
+.card:hover button {
+  opacity: 1;
+}
+
+/* Like / comment icon buttons */
+[class*="action-btn"],
+button[onclick*="like"],
+button[onclick*="comment"],
+button[onclick*="share"] {
+  transition: transform  var(--dur-fast) var(--ease-out-back),
+              color      var(--dur-fast) ease !important;
+}
+[class*="action-btn"]:hover,
+button[onclick*="like"]:hover,
+button[onclick*="comment"]:hover,
+button[onclick*="share"]:hover {
+  transform: scale(1.18) !important;
+}
+[class*="action-btn"]:active,
+button[onclick*="like"]:active {
+  transform: scale(0.88) !important;
+  transition-duration: 60ms !important;
+}
+
+/* ── 9. Modals — scale + fade ────────────────────────────────── */
+@keyframes tfModalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(14px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes tfOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.modal-overlay.open,
+.modal-overlay[style*="flex"],
+.modal-overlay[style*="block"] {
+  animation: tfOverlayIn var(--dur-base) ease both;
+}
+.modal-box,
+#post-reader .reader-inner,
+#reader-lightbox > div,
+#cv-modal .cv-modal-content,
+#settings-panel {
+  animation: tfModalIn var(--dur-base) var(--ease-out-back) both;
+}
+
+/* ── 10. Toast notification ──────────────────────────────────── */
+@keyframes tfToastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tfToastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(10px) scale(0.95); }
+}
+.toast.show {
+  animation: tfToastIn var(--dur-base) var(--ease-out-back) both;
+}
+.toast:not(.show) {
+  animation: tfToastOut var(--dur-fast) ease forwards;
+}
+
+/* ── 11. Loading spinner ─────────────────────────────────────── */
+@keyframes tfSpinSm {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  animation: tfSpinSm 800ms linear infinite !important;
+}
+
+/* ── 12. Tab / pill bar ──────────────────────────────────────── */
+/* Tab slide-in indicator */
+.tab-btn,
+[class*="tab-"],
+[id*="-tab"] {
+  transition: color       var(--dur-fast) ease,
+              background  var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              transform   var(--dur-fast) var(--ease-out-back) !important;
+}
+.tab-btn:hover,
+[class*="tab-"]:hover {
+  transform: translateY(-1px) !important;
+}
+.tab-btn:active {
+  transform: scale(0.96) !important;
+}
+
+/* Pill / sub-category bar */
+.pill-btn,
+[class*="pill-"],
+[class*="sub-cat"] {
+  transition: all var(--dur-fast) var(--ease-out-back) !important;
+}
+.pill-btn:hover {
+  transform: scale(1.06) !important;
+}
+
+/* ── 13. Input focus glow ────────────────────────────────────── */
+input, textarea, select {
+  transition: border-color var(--dur-fast) ease,
+              box-shadow   var(--dur-fast) ease !important;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(0,136,204,.18) !important;
+  border-color: var(--brand) !important;
+  outline: none !important;
+}
+
+/* ── 14. Skill tags — pop on hover ───────────────────────────── */
+.skill-tag {
+  transition: transform   var(--dur-fast) var(--ease-out-back),
+              box-shadow  var(--dur-fast) ease,
+              background  var(--dur-fast) ease !important;
+  cursor: default;
+}
+.skill-tag:hover {
+  transform: translateY(-2px) scale(1.06) !important;
+  box-shadow: 0 4px 12px rgba(0,136,204,.18) !important;
+}
+
+/* ── 15. Hero section entrance ───────────────────────────────── */
+@keyframes tfHeroText {
+  from { opacity: 0; transform: translateX(-18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes tfHeroImg {
+  from { opacity: 0; transform: translateX(18px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-text {
+  animation: tfHeroText 700ms var(--ease-out-expo) 120ms both;
+}
+.hero-img {
+  animation: tfHeroImg 700ms var(--ease-out-expo) 200ms both;
+}
+
+/* ── 16. Section headings — letter-spacing settle ────────────── */
+.section-header h2,
+.hero h1 {
+  transition: letter-spacing var(--dur-slow) ease;
+}
+
+/* ── 17. Stats — count-up shimmer placeholder ────────────────── */
+.stat-num {
+  transition: color var(--dur-base) ease;
+}
+.stat-num.tf-counting {
+  color: var(--accent);
+}
+
+/* ── 18. Footer brand hover flare ────────────────────────────── */
+.footer-brand {
+  transition: letter-spacing var(--dur-base) ease;
+}
+.footer-brand:hover {
+  letter-spacing: .04em;
+}
+
+/* ── 19. Nav-logo brand-text shimmer ─────────────────────────── */
+@keyframes tfBrandShimmer {
+  0%, 100% { text-shadow: 0 2px 10px rgba(0,136,204,.2); }
+  50%       { text-shadow: 0 2px 22px rgba(0,136,204,.5); }
+}
+.brand-text {
+  animation: tfBrandShimmer 3.5s ease infinite;
+}
+
+/* ── 20. Post-reader transitions ─────────────────────────────── */
+#post-reader {
+  transition: opacity var(--dur-base) ease !important;
+}
+#post-reader.open {
+  animation: tfOverlayIn var(--dur-base) ease both;
+}
+#pr-img-wrap {
+  transition: height 350ms var(--ease-out-expo) !important;
+}
+#pr-img {
+  transition: transform var(--dur-slow) var(--ease-out-expo) !important;
+}
+#pr-controls-bar {
+  transition: opacity var(--dur-base) ease,
+              transform var(--dur-base) var(--ease-out-back) !important;
+}
+
+/* ── 21. Image lightbox zoom ─────────────────────────────────── */
+#reader-lightbox {
+  animation: tfOverlayIn var(--dur-fast) ease both;
+}
+#reader-lightbox img {
+  animation: tfModalIn var(--dur-base) var(--ease-out-back) both;
+}
+
+/* ── 22. Social links in page body ───────────────────────────── */
+.social-links a {
+  transition: transform  var(--dur-fast) var(--ease-out-back),
+              box-shadow var(--dur-fast) ease,
+              color      var(--dur-fast) ease !important;
+}
+.social-links a:hover {
+  transform: translateY(-3px) scale(1.12) !important;
+}
+.social-links a:active {
+  transform: scale(0.9) !important;
+  transition-duration: 60ms !important;
+}
+
+/* ── 23. Progress / upload bar ───────────────────────────────── */
+[class*="prog-bar"],
+#prog-bar,
+.progress-bar {
+  transition: width 400ms var(--ease-out-expo) !important;
+}
+
+/* ── 24. Page-leave fade (applied by JS on anchor click) ──────── */
+body.tf-leaving {
+  animation: tfPageOut var(--dur-base) var(--ease-in-out) forwards;
+}
+@keyframes tfPageOut {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ── 25. Keyboard focus ring (Tab navigation) ────────────────── */
+body:not(.tf-using-keyboard) *:focus {
+  outline: none !important;
+}
+body.tf-using-keyboard *:focus {
+  outline: 3px solid rgba(0, 136, 204, 0.6) !important;
+  outline-offset: 3px !important;
+  border-radius: 4px !important;
+}
+
+/* ── 26. Skeleton shimmer for loading cards ──────────────────── */
+@keyframes tfSkeleton {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.tf-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: tfSkeleton 1.4s ease infinite;
+  border-radius: 8px;
+}
+[data-theme="dark"] .tf-skeleton {
+  background: linear-gradient(90deg, #1e1e2a 25%, #252535 50%, #1e1e2a 75%);
+  background-size: 800px 100%;
+}
+
+/* ── 27. Hover shimmer on primary buttons ────────────────────── */
+.btn:not(.btn-light):not(.btn-outline) {
+  background-image: linear-gradient(
+    120deg, transparent 0%, transparent 40%,
+    rgba(255,255,255,.18) 50%, transparent 60%, transparent 100%
+  );
+  background-size: 250% 100%;
+  background-position: 200% center;
+  transition: background-position 600ms var(--ease-out-expo),
+              transform var(--dur-fast) var(--ease-out-back),
+              box-shadow var(--dur-fast) ease !important;
+}
+.btn:not(.btn-light):not(.btn-outline):hover {
+  background-position: -50% center;
+}
+
+/* ── 28. Scroll-to-top smooth reveal ─────────────────────────── */
+.wa-float {
+  transition: transform  var(--dur-fast) var(--ease-out-back),
+              box-shadow var(--dur-fast) ease,
+              opacity    var(--dur-base) ease !important;
+}
+.wa-float:hover {
+  transform: translateY(-4px) scale(1.08) !important;
+  box-shadow: 0 12px 32px rgba(37,211,102,.35) !important;
+}
+.wa-float:active {
+  transform: scale(0.94) !important;
+  transition-duration: 80ms !important;
+}
+
