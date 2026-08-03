@@ -23,14 +23,9 @@
   --dur-slow       : 500ms;
 }
 
-/* ── 2. Page entrance — fade + lift ─────────────────────────── */
-@keyframes tfPageIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-body {
-  animation: tfPageIn var(--dur-slow) var(--ease-out-expo) both;
-}
+/* ── 2. Page entrance handled by loader — no body fade needed ─── */
+/* body fade removed: it made the #tf-nav-loader invisible (opacity inherited) */
+
 
 /* ── 3. Scroll-reveal — elements animate in when visible ─────── */
 /*  JS in motion.js adds .tf-reveal to elements, then .is-visible  */
