@@ -1517,8 +1517,10 @@
     const PR_IMG_STEP = 0.1;
 
     let prImageIsShrunk = false;
-    let prManualExpand = false;
+    let prManualExpand  = false;
     let prLastScrollTop = 0;
+    let prResizeLock    = false;  /* blocks scroll handler during programmatic height changes */
+    let prResizeLockTimer = null;
 
     function openPostReader(id, fileUrl, fileType, dateStr) {
       const reader     = document.getElementById('post-reader');
@@ -1587,19 +1589,23 @@
     }
 
     /* Set image container height based on shrunk/expanded state and scale */
-    function _prSetImgHeight(shrunk) {
+    /* Set image height — shrunk = exactly 1/3 vh, expanded = 78% vh */
+    function _prSetImgHeight(shrunk, instant) {
       const imgWrap = document.getElementById('pr-img-wrap');
       if (!imgWrap) return;
 
+      /* Lock scroll handler to prevent oscillation during transition */
+      clearTimeout(prResizeLockTimer);
+      prResizeLock = true;
+      prResizeLockTimer = setTimeout(() => { prResizeLock = false; }, 450);
+
       const vh = window.innerHeight;
       if (shrunk) {
-        /* Exactly 1/3 of screen height, adjusted by user scale */
         const base   = Math.round(vh / 3);
         const scaled = Math.round(base * prCurrentImgScale);
         imgWrap.style.height = Math.max(80, scaled) + 'px';
         imgWrap.classList.add('pr-shrunk');
       } else {
-        /* Full size — 78% of viewport height, adjusted by user scale */
         const base   = Math.round(vh * 0.78);
         const scaled = Math.round(base * prCurrentImgScale);
         imgWrap.style.height = Math.min(scaled, Math.round(vh * 0.95)) + 'px';
@@ -2144,10 +2150,11 @@
       if (prScrollBody) {
         prScrollBody.addEventListener('scroll', function() {
           if (!postReader.classList.contains('pr-active')) return;
+          if (prResizeLock) return;  /* ignore scroll events during height transitions */
+
           const currentScroll = this.scrollTop;
 
           if (prManualExpand && Math.abs(currentScroll - prLastScrollTop) > 8) {
-            /* User scrolled after manually expanding → shrink again */
             prManualExpand  = false;
             prImageIsShrunk = true;
             _prSetImgHeight(true);
