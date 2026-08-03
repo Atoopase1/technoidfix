@@ -291,21 +291,61 @@ window.toast = function(msg, type) {
   });
 })();
 
-// Global Preloader logic
-function hideLoader() {
-  const loader = document.getElementById('global-loader');
-  if (loader) {
-    setTimeout(() => {
-      loader.classList.add('tf-fade-out');
-      setTimeout(() => {
-        loader.remove(); // Remove from DOM after fade out
-      }, 800);
-    }, 400); 
-  }
-}
+// Page-transition loader — shows ONLY during slow navigation between pages
+(function initNavLoader() {
+  const LOGO = (function() {
+    const s = document.querySelector('script[src*="app.js"]');
+    if (s) {
+      const base = s.src.replace(/assets\/js\/app\.js.*/, '');
+      return base + 'assets/icon-192.png';
+    }
+    return 'assets/icon-192.png';
+  })();
 
-if (document.readyState === 'complete') {
-  hideLoader();
-} else {
+  // Build overlay once and hide it immediately
+  const loader = document.createElement('div');
+  loader.id = 'tf-nav-loader';
+  loader.innerHTML = `
+    <div class="tf-loader-inner">
+      <div class="tf-loader-orbit-1"></div>
+      <div class="tf-loader-orbit-2"></div>
+      <img src="${LOGO}" alt="Loading" class="tf-loader-logo" />
+    </div>`;
+  document.body.appendChild(loader);
+
+  let hideTimer = null;
+
+  function showLoader() {
+    clearTimeout(hideTimer);
+    loader.classList.add('tf-nav-loading');
+  }
+  function hideLoader() {
+    loader.classList.remove('tf-nav-loading');
+  }
+
+  // Show on internal link click
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (
+      !href ||
+      href.startsWith('#') ||
+      href.startsWith('javascript') ||
+      href.startsWith('mailto') ||
+      href.startsWith('tel') ||
+      a.target === '_blank' ||
+      e.ctrlKey || e.metaKey || e.shiftKey
+    ) return;
+    showLoader();
+  });
+
+  // Hide as soon as the new page loads
   window.addEventListener('load', hideLoader);
-}
+  // Safety net: force hide after 5s max
+  document.addEventListener('click', () => {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideLoader, 5000);
+  });
+})();
+
