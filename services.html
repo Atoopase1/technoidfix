@@ -5,9 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services   Technoid Portfolio | Kumasi, Ghana</title>
-  <meta name="description" content="Browse Technoid projects â€” repairs, designs, websites." />
-  <meta property="og:title" content="Services â€” Technoid Portfolio" />
-  <meta property="og:description" content="Browse Technoid projects â€” repairs, designs, websites." />
+  <meta name="description" content="Browse Technoid projects — repairs, designs, websites." />
+  <meta property="og:title" content="Services — Technoid Portfolio" />
+  <meta property="og:description" content="Browse Technoid projects — repairs, designs, websites." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://technoid.gh/assets/icon-512.png" />
   <meta property="og:image:width" content="512" />
@@ -179,7 +179,7 @@
       }
     }
 
-    /* â•â•â• Activity Log hero â€” mobile-only layout â•â•â• */
+    /* === Activity Log hero — mobile-only layout === */
     @media (max-width: 600px) {
       /* Wrapper switches from flex-row to block */
       .activity-hero {
@@ -191,7 +191,7 @@
         display: none !important;
       }
 
-      /* Description paragraph â€” show only the first sentence on mobile */
+      /* Description paragraph — show only the first sentence on mobile */
       .activity-hero .hero-desc-full {
         display: none;
       }
@@ -201,7 +201,7 @@
         display: block !important;
       }
 
-      /* Divider â€” only visible on mobile */
+      /* Divider — only visible on mobile */
       .activity-hero-divider {
         display: block !important;
       }
@@ -228,7 +228,7 @@
       }
     }
 
-    /* â•â•â• Tab Row â•â•â• */
+    /* === Tab Row === */
     .tabs-wrapper {
       margin-bottom: 0;
     }
@@ -285,7 +285,7 @@
     .win-menu-btn.menu-active  { background: rgba(var(--brand-rgb, 99,102,241),.15); }
     .win-menu-btn svg          { display: block; }
 
-    /* â•â•â• Sub-category pill bar (slides down below the tab row) â•â•â• */
+    /* === Sub-category pill bar (slides down below the tab row) === */
     .subcat-bar {
       display: none;           /* hidden by default */
       flex-wrap: wrap;
@@ -611,7 +611,7 @@
 
   <main class="container" style="padding-top:32px;padding-bottom:60px;">
 
-    <!-- â”€â”€ Activity Log hero â”€â”€ -->
+    <!-- -- Activity Log hero -- -->
     <div class="section-header anim activity-hero" style="margin-bottom:32px; display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:nowrap; text-align:left;">
 
       <!-- LEFT: text block (desktop shows all; mobile shows pill + h1 + short desc only) -->
@@ -621,14 +621,14 @@
         <!-- Full paragraph visible on desktop; hidden on mobile via CSS -->
         <p class="hero-desc-full" style="color:var(--muted);font-size:1rem;margin:0;">Projects executed by TechnoidFix include device repair, brand identity, web engineering, electrical installations, and related technical services. Browse completed client work under <strong>Engineering Hub</strong> or explore system builds and setups under <strong>Tech Infrastructure</strong>.</p>
 
-        <!-- â”€â”€ Mobile-only section (hidden on desktop via CSS) â”€â”€ -->
+        <!-- -- Mobile-only section (hidden on desktop via CSS) -- -->
         <!-- Short description (first sentence only) -->
         <p class="hero-desc-mobile" style="display:none; color:var(--muted);font-size:1rem;margin:0 0 16px 0;">Projects executed by TechnoidFix include device repair, brand identity, web engineering, electrical installations, and related technical services.</p>
 
-        <!-- Divider â€” hidden on desktop -->
+        <!-- Divider — hidden on desktop -->
         <hr class="activity-hero-divider" style="display:none; border:none; border-top:1px solid var(--border); margin:0 0 16px 0;" />
 
-        <!-- Bottom row: browse text + lottie â€” hidden on desktop -->
+        <!-- Bottom row: browse text + lottie — hidden on desktop -->
         <div class="activity-hero-bottom" style="display:none;">
           <p class="hero-browse-text">Browse completed client work under <strong style="color:var(--text);">Projects</strong> or explore system builds and setups under <strong style="color:var(--text);">Tech Infrastructure</strong>.</p>
           <div class="hero-lottie-mobile">
@@ -656,7 +656,7 @@
       <!-- Add Project button rendered only for admins via JS -->
     </div>
 
-    <!-- â”€â”€ Tab Row â”€â”€ -->
+    <!-- -- Tab Row -- -->
     <div class="tabs-wrapper">
       <div class="category-tabs" role="tablist" aria-label="Project categories">
 
@@ -694,7 +694,7 @@
 
       </div><!-- /category-tabs -->
 
-      <!-- â”€â”€ Projects sub-category pill bar (hidden until menu pressed) â”€â”€ -->
+      <!-- -- Projects sub-category pill bar (hidden until menu pressed) -- -->
       <div class="subcat-bar" id="subcat-projects" role="group" aria-label="Project filters">
         <span class="subcat-label">Engineering Hub &mdash; filter by type</span>
         <button class="subcat-pill active" id="pill-projects-all"      onclick="selectSubCat(event,'projects','all')">
@@ -717,7 +717,7 @@
         </button>
       </div>
 
-      <!-- â”€â”€ Tech sub-category pill bar (hidden until menu pressed) â”€â”€ -->
+      <!-- -- Tech sub-category pill bar (hidden until menu pressed) -- -->
       <div class="subcat-bar" id="subcat-tech" role="group" aria-label="Tech Infrastructure filters">
         <span class="subcat-label">Tech Infrastructure &mdash; filter by type</span>
         <button class="subcat-pill active" id="pill-tech-all"          onclick="selectSubCat(event,'tech','all')">
@@ -793,7 +793,7 @@
       <div style="margin-top:16px;">
         <label style="font-weight:700;font-size:.9rem;display:block;margin-bottom:6px;">Caption / Project Description
           <span style="color:#ef4444">*</span></label>
-        <textarea id="post-caption" rows="3" placeholder="Describe this project â€” what was done, tools used, outcomeâ€¦"
+        <textarea id="post-caption" rows="3" placeholder="Describe this project — what was done, tools used, outcome..."
           style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;"></textarea>
       </div>
 
@@ -807,7 +807,7 @@
 
     <!-- Feed -->
     <div id="feed-loading" class="loading-spinner">
-      <div class="spinner"></div> Loading projectsâ€¦
+      <div class="spinner"></div> Loading projects...
     </div>
     <div class="projects-feed" id="projects-feed" style="display:none;"></div>
     <div class="empty-state" id="empty-state" style="display:none;">
@@ -821,7 +821,7 @@
   <!-- Share Modal -->
   <div class="modal-overlay" id="share-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:380px;">
-      <button class="modal-close" onclick="closeShareModal()">âœ•</button>
+      <button class="modal-close" onclick="closeShareModal()">&times;</button>
       <h3><i class="fas fa-share-alt"></i> Share This Project</h3>
       <p>Copy the link or share on social media.</p>
       <div id="share-url-box" class="share-url-box-styled">
@@ -841,7 +841,7 @@
   <!-- Edit Project Modal -->
   <div class="modal-overlay" id="edit-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:480px;">
-      <button class="modal-close" onclick="closeEditModal()">âœ•</button>
+      <button class="modal-close" onclick="closeEditModal()">&times;</button>
       <h3><i class="fas fa-pencil-alt"></i> Edit Project Caption</h3>
       <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;">Update the description, tools used, or outcome for this project.</p>
       <input type="hidden" id="edit-project-id" />
@@ -868,7 +868,7 @@
       </div>
       <textarea id="edit-caption-input" rows="6"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;font-family:inherit;resize:vertical;background:var(--white);color:inherit;box-sizing:border-box;"
-        placeholder="Describe this project â€” what was done, tools used, outcomeâ€¦"></textarea>
+        placeholder="Describe this project — what was done, tools used, outcome..."></textarea>
       <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;">
         <button class="btn" id="edit-save-btn" onclick="saveEditCaption()"><i class="fas fa-check-circle"></i> Save Changes</button>
         <button class="btn btn-light" onclick="closeEditModal()">Cancel</button>
@@ -895,7 +895,7 @@
   <!-- Password Reset Modal -->
   <div class="modal-overlay" id="reset-password-modal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:420px;">
-      <button class="modal-close" onclick="closeResetModal()">âœ•</button>
+      <button class="modal-close" onclick="closeResetModal()">&times;</button>
       <h3><i class="fas fa-key"></i> Set New Password</h3>
       <p>Enter your new password below to complete the reset.</p>
       <div style="display:flex;flex-direction:column;gap:14px;">
@@ -931,7 +931,7 @@
   <footer class="footer" role="contentinfo">
     <div class="container">
       <div class="footer-brand">Technoid<span style="color:var(--brand)">Fix</span></div>
-      <div class="footer-tagline">Expert Repair Â· Creative Design Â· Web Development Â· Kumasi, Ghana</div>
+      <div class="footer-tagline">Expert Repair · Creative Design · Web Development · Kumasi, Ghana</div>
       <div class="social-links" style="justify-content:center;margin:20px 0;">
         <a href="https://www.tiktok.com/@technoid_chris_atoopase" target="_blank" rel="noopener" aria-label="TikTok"><i
             class="fab fa-tiktok"></i></a>
@@ -959,7 +959,7 @@
   <div class="toast" aria-live="polite" role="status"></div>
 
   <script>
-    /* TECHNOID PROJECTS â€” Supabase v2 + Auth */
+    /* TECHNOID PROJECTS — Supabase v2 + Auth */
     const SUPABASE_URL = 'https://xhaoerrcbnqtlzigwqjt.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_1xE8KwCC9AqRUcCGdEQbAg_yjgeM8at';
     const BUCKET = 'project-media';
@@ -971,7 +971,7 @@
     let activeTab = 'projects';    // 'projects' | 'tech'
     let activeSubCat = 'all';      // 'all' | 'design' | 'web' | 'electrical' | 'embedded'
 
-    /* â”€â”€ Sub-category pill bar toggle â”€â”€ */
+    /* -- Sub-category pill bar toggle -- */
     function toggleSubBar(e, barId, btnId, otherBarId, otherBtnId) {
       e.stopPropagation();
       const bar      = document.getElementById(barId);
@@ -1169,7 +1169,7 @@
       if (!email || !pass) { window.toast('Enter email and password.', 'error'); return; }
 
       const btn = document.getElementById('auth-signin-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing inâ€¦'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...'; }
 
       const { error } = await sb.auth.signInWithPassword({ email, password: pass });
       if (error) {
@@ -1187,7 +1187,7 @@
       if (pass.length < 6) { window.toast('Password must be at least 6 characters.', 'error'); return; }
 
       const btn = document.getElementById('auth-signup-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing upâ€¦'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing up...'; }
 
       const { error } = await sb.auth.signUp({ email, password: pass });
       if (error) {
@@ -1270,7 +1270,7 @@
       }
 
       const btn = document.getElementById('reset-submit-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updatingâ€¦'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...'; }
 
       try {
         const { error } = await sb.auth.updateUser({ password: newPass });
@@ -1324,7 +1324,7 @@
     /* Listen for auth changes */
     sb.auth.onAuthStateChange((_event, session) => {
       if (_event === 'PASSWORD_RECOVERY') {
-        /* User arrived via password reset link â€” show reset modal */
+        /* User arrived via password reset link — show reset modal */
         openResetModal();
         return;
       }
@@ -1482,7 +1482,7 @@
           <div id="clist-${p.id}"><div class="loading-spinner" style="padding:20px;"><div class="spinner"></div></div></div>
           <div class="comment-input-row">
             ${nameInputHTML}
-            <textarea placeholder="Write a commentâ€¦" id="ctext-${p.id}" maxlength="280" rows="1"
+            <textarea placeholder="Write a comment..." id="ctext-${p.id}" maxlength="280" rows="1"
               class="comment-text-input"
               onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitComment('${p.id}')}"
               oninput="autoGrowTextarea(this)"></textarea>
@@ -1942,9 +1942,9 @@
       const status = document.getElementById('upload-status');
 
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploadingâ€¦';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
       progWrap.style.display = 'block';
-      status.textContent = 'Saving projectâ€¦';
+      status.textContent = 'Saving project...';
 
       try {
         let fileUrl = '';
@@ -1956,7 +1956,7 @@
         }
 
         if (pendingFile) {
-          status.textContent = 'Uploading file to storageâ€¦';
+          status.textContent = 'Uploading file to storage...';
           const ext = pendingFile.name.split('.').pop() || (pendingFileType === 'video' ? 'mp4' : 'jpg');
           const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
           progBar.style.width = '30%';
@@ -1966,7 +1966,7 @@
             .upload(fileName, pendingFile, { cacheControl: '3600', upsert: false });
           if (upErr) throw new Error('Storage upload failed: ' + upErr.message);
           progBar.style.width = '65%';
-          status.textContent = 'Saving project detailsâ€¦';
+          status.textContent = 'Saving project details...';
 
           const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fileName);
           fileUrl = urlData.publicUrl;
@@ -2031,8 +2031,8 @@
       const btn = document.getElementById('edit-save-btn');
       const status = document.getElementById('edit-status');
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Savingâ€¦';
-      status.textContent = 'Updatingâ€¦';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+      status.textContent = 'Updating...';
 
       const { error } = await sb.from('projects').update({ caption: newCaption, category: newCategory }).eq('id', id);
       if (error) {
@@ -2054,7 +2054,7 @@
     let _pendingDeleteId = null;
 
     async function deleteProject(id) {
-      /* Re-verify admin from live session â€” fixes Spck session persistence issues */
+      /* Re-verify admin from live session — fixes Spck session persistence issues */
       const { data: { session } } = await sb.auth.getSession();
       if (!session?.user || !ADMIN_EMAILS.includes(session.user.email.toLowerCase())) {
         window.toast('Admin access required. Please sign in again.', 'error');
@@ -2079,7 +2079,7 @@
       closeDeleteConfirm();
 
       const btn = document.getElementById('delete-confirm-btn');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deletingâ€¦'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; }
 
       /* Get file_url before deleting */
       const { data: proj, error: fetchErr } = await sb.from('projects').select('file_url').eq('id', id).single();
