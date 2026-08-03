@@ -292,15 +292,20 @@ window.toast = function(msg, type) {
 })();
 
 // Global Preloader logic
-window.addEventListener('load', () => {
+function hideLoader() {
   const loader = document.getElementById('global-loader');
   if (loader) {
-    // Add a tiny delay so the beautiful animation is seen even on fast connections
     setTimeout(() => {
       loader.classList.add('tf-fade-out');
       setTimeout(() => {
         loader.remove(); // Remove from DOM after fade out
-      }, 800); // Matches CSS transition duration
+      }, 800);
     }, 400); 
   }
-});
+}
+
+if (document.readyState === 'complete') {
+  hideLoader();
+} else {
+  window.addEventListener('load', hideLoader);
+}
